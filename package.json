@@ -1,0 +1,34 @@
+{
+  "name": "manifold",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UniversalViewer/manifold.git"
+  },
+  "author": "Edward Silverton <e.silverton@gmail.com> (http://edsilv.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UniversalViewer/manifold/issues"
+  },
+  "homepage": "https://github.com/UniversalViewer/manifold#readme",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-bump": "^2.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-typescript": "^2.13.4",
+    "gulp-utils": "git://github.com/edsilv/gulp-utils.git",
+    "manifesto": "git://github.com/universalviewer/manifesto.git#dev",
+    "merge2": "^1.0.2",
+    "path": "^0.12.7",
+    "require-dir": "^0.3.0",
+    "run-sequence": "^1.2.1",
+    "yargs": "^4.7.1"
+  }
+}
