@@ -18,9 +18,11 @@
   "homepage": "https://github.com/UniversalViewer/manifold#readme",
   "devDependencies": {
     "del": "^2.2.0",
+    "extensions": "git://github.com/edsilv/extensions.git",
     "gulp": "^3.9.1",
     "gulp-bump": "^2.1.0",
     "gulp-concat": "^2.6.0",
+    "gulp-connect": "^4.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-typescript": "^2.13.4",
     "gulp-utils": "git://github.com/edsilv/gulp-utils.git",

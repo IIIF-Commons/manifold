@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>manifold: test</title>
+    <meta charset="utf-8">
+    <script src="js/extensions.js"></script>
+    <script src="js/manifesto.js"></script>
+    <script src="js/manifold.js"></script>
+</head>
+<body>
+    
+    <script>
+        Manifesto.loadManifest('http://wellcomelibrary.org/iiif/b18035723/manifest').then(function(manifest){  
+            var m = Manifesto.create(manifest);
+            var helper = new Manifold.IIIFHelper(m);
+            
+            var tree = helper.getTree();
+            
+            console.log(tree);
+        });
+    </script>
+</body>
+</html>

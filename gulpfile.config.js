@@ -5,6 +5,7 @@ var GulpConfig = (function () {
         this.name = metadata.name;
         // libs that must be included in a consuming app for this component to work
         this.deps = [
+            'node_modules/extensions/dist/extensions.js',
             'node_modules/manifesto.js/dist/client/manifesto.js'
         ];
         // libs used for testing purposes, but not needed in a consuming app
@@ -13,6 +14,7 @@ var GulpConfig = (function () {
         this.testDepsDir = './test/js';
         // ts definitions to copy to the typings dir
         this.typings = [
+            'node_modules/extensions/dist/extensions.d.ts',
             'node_modules/manifesto.js/dist/manifesto.d.ts'
         ];
         this.typingsDir = './typings';
@@ -24,7 +26,8 @@ var GulpConfig = (function () {
             'src/_references.ts',
             'src/*.ts',
             'typings/*.ts',
-            'typings/**/*.ts'];
+            'typings/**/*.ts'
+        ];
         this.tsConfig = {
             declarationFiles: true,
             noExternalResolve: true,
