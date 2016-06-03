@@ -67,6 +67,7 @@ declare namespace Manifold {
         getLicense(): string;
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;
+        getMultiSelectState(): Manifold.MultiSelectState;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
         isCanvasIndexOutOfRange(index: number): boolean;

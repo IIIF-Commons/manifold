@@ -108,6 +108,13 @@ namespace Manifold {
             return manifestType;
         }
 
+        public getMultiSelectState(): Manifold.MultiSelectState {
+            var m: Manifold.MultiSelectState = new Manifold.MultiSelectState();
+            m.ranges = this.getRanges();
+            m.canvases = this.getCurrentSequence().getCanvases();
+            return m;
+        }
+
         public getSeeAlso(): any {
             return this.manifest.getSeeAlso();
         }

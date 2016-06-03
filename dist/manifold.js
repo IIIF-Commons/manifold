@@ -94,6 +94,12 @@ var Manifold;
             }
             return manifestType;
         };
+        ManifestHelper.prototype.getMultiSelectState = function () {
+            var m = new Manifold.MultiSelectState();
+            m.ranges = this.getRanges();
+            m.canvases = this.getCurrentSequence().getCanvases();
+            return m;
+        };
         ManifestHelper.prototype.getSeeAlso = function () {
             return this.manifest.getSeeAlso();
         };
