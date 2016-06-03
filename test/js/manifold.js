@@ -214,6 +214,9 @@ var Manifold;
 (function (Manifold) {
     var MultiSelectState = (function () {
         function MultiSelectState() {
+            this.enabled = false;
+            this.ranges = [];
+            this.canvases = [];
         }
         return MultiSelectState;
     }());
