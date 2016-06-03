@@ -6,6 +6,23 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
+    interface IManifestHelperOptions {
+        manifest: Manifesto.IManifest;
+        licenseMap: Object;
+        sequenceIndex: number;
+        canvasIndex: number;
+    }
+}
+
+declare namespace Manifold {
+    interface IMetadataItem {
+        label: string;
+        value: string | IMetadataItem[];
+        isRootLevel: boolean;
+    }
+}
+
+declare namespace Manifold {
     interface IRange extends Manifesto.IRange {
         multiSelected: boolean;
     }
@@ -28,9 +45,51 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    class IIIFHelper {
-        iiifResource: Manifesto.IIIIFResource;
-        constructor(iiifResource: Manifesto.IIIIFResource);
+    class ManifestHelper {
+        manifest: Manifesto.IManifest;
+        canvasIndex: number;
+        sequenceIndex: number;
+        private _licenseFormatter;
+        constructor(options: IManifestHelperOptions);
+        getAttribution(): string;
+        getCanvases(): Manifesto.ICanvas[];
+        getCanvasById(id: string): Manifesto.ICanvas;
+        getCanvasesById(ids: string[]): Manifesto.ICanvas[];
+        getCanvasByIndex(index: number): Manifesto.ICanvas;
+        getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange;
+        getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
+        getCurrentCanvas(): Manifesto.ICanvas;
+        getCurrentSequence(): Manifesto.ISequence;
+        getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
+        getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
+        getLabel(): string;
+        getLastCanvasLabel(alphanumeric?: boolean): string;
+        getLicense(): string;
+        getLogo(): string;
+        getManifestType(): Manifesto.ManifestType;
+        getSeeAlso(): any;
+        getSequenceByIndex(index: number): Manifesto.ISequence;
+        isCanvasIndexOutOfRange(index: number): boolean;
+        isFirstCanvas(index?: number): boolean;
+        isLastCanvas(index?: number): boolean;
+        isMultiSequence(): boolean;
+        isTotalCanvasesEven(): boolean;
+        getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+        getTotalCanvases(): number;
+        isMultiCanvas(): boolean;
+        isUIEnabled(name: string): boolean;
+        getInfoUri(canvas: Manifesto.ICanvas): string;
+        getPagedIndices(canvasIndex?: number): number[];
+        getViewingDirection(): Manifesto.ViewingDirection;
+        getViewingHint(): Manifesto.ViewingHint;
+        getFirstPageIndex(): number;
+        getLastPageIndex(): number;
+        getStartCanvasIndex(): number;
+        getThumbs(width: number, height: number): Manifesto.IThumb[];
+        getRangeByPath(path: string): any;
+        getCanvasIndexById(id: string): number;
+        getCanvasIndexByLabel(label: string): number;
+        getRanges(): IRange[];
         getTree(): Manifesto.ITreeNode;
         getSortedTree(sortType: TreeSortType): ITreeNode;
         getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void;
@@ -49,6 +108,24 @@ declare namespace Manifold {
         getNodeMonth(node: ITreeNode): number;
         getNodeDisplayMonth(node: ITreeNode): string;
         getNodeDisplayDate(node: ITreeNode): string;
+        getMetadata(): Manifold.IMetadataItem[];
+        getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[];
+        getCurrentElement(): Manifesto.IElement;
+        getResources(): Manifesto.IAnnotation[];
+        hasParentCollection(): boolean;
+        hasResources(): boolean;
+        isContinuous(): boolean;
+        isPaged(): boolean;
+        isBottomToTop(): boolean;
+        isTopToBottom(): boolean;
+        isLeftToRight(): boolean;
+        isRightToLeft(): boolean;
+        isHorizontallyAligned(): boolean;
+        isVerticallyAligned(): boolean;
+        isPagingAvailable(): boolean;
+        isPagingEnabled(): boolean;
+        getAutoCompleteService(): Manifesto.IService;
+        getSearchWithinService(): Manifesto.IService;
     }
 }
 
@@ -64,5 +141,13 @@ declare namespace Manifold {
     enum TreeSortType {
         date = 0,
         none = 1,
+    }
+}
+
+declare namespace Manifold {
+    class UriLabeller {
+        labels: Object;
+        constructor(labels: Object);
+        format(url: any): string;
     }
 }
