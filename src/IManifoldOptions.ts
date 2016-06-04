@@ -1,7 +1,8 @@
 namespace Manifold {
     export interface IManifoldOptions {
-        manifest: Manifesto.IManifest;
-        manifestUri: string;
+        iiifResourceUri: string;
+        iiifResource: Manifesto.IIIIFResource;
+        manifest: Manifesto.IManifest; // may be a nested manifest, or the IIIFResource itself
         licenseMap: Object;
         collectionIndex: number;
         manifestIndex: number;
