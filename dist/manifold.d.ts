@@ -125,7 +125,7 @@ declare namespace Manifold {
 declare namespace Manifold {
     interface IMultiSelectable {
         multiSelected: boolean;
-        multiSelectionEnabled: boolean;
+        multiSelectEnabled: boolean;
     }
 }
 

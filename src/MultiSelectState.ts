@@ -91,7 +91,7 @@ namespace Manifold {
 
             for (var i = 0; i < items.length; i++){
                 var item: IMultiSelectable = items[i];
-                item.multiSelectionEnabled = this.enabled;
+                item.multiSelectEnabled = this.enabled;
             }
         }
     }
