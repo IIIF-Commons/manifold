@@ -3,16 +3,17 @@ namespace Manifold {
     export class Helper {
         
         public manifest: Manifesto.IManifest;
-        // public collectionIndex: number;
-        // public manifestIndex: number;
+        public collectionIndex: number;
+        public manifestIndex: number;
         public canvasIndex: number;
         public sequenceIndex: number;        
         private _licenseFormatter: Manifold.UriLabeller;
         
         constructor(options: IManifoldOptions){
+            this.manifest = options.manifest;
             this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
-            // this.collectionIndex = options.collectionIndex || 0;
-            // this.manifestIndex = options.manifestIndex || 0;
+            this.collectionIndex = options.collectionIndex || 0;
+            this.manifestIndex = options.manifestIndex || 0;
             this.sequenceIndex = options.sequenceIndex || 0;
             this.canvasIndex = options.canvasIndex || 0;
         }
@@ -607,9 +608,3 @@ namespace Manifold {
     }
     
 }
-
-(function(w) {
-    if (!w.Manifold){
-        w.Manifold = Manifold;
-    }
-})(window);

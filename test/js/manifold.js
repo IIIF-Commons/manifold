@@ -60,9 +60,10 @@ var Manifold;
 (function (Manifold) {
     var Helper = (function () {
         function Helper(options) {
+            this.manifest = options.manifest;
             this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
-            // this.collectionIndex = options.collectionIndex || 0;
-            // this.manifestIndex = options.manifestIndex || 0;
+            this.collectionIndex = options.collectionIndex || 0;
+            this.manifestIndex = options.manifestIndex || 0;
             this.sequenceIndex = options.sequenceIndex || 0;
             this.canvasIndex = options.canvasIndex || 0;
         }
@@ -536,11 +537,6 @@ var Manifold;
     }());
     Manifold.Helper = Helper;
 })(Manifold || (Manifold = {}));
-(function (w) {
-    if (!w.Manifold) {
-        w.Manifold = Manifold;
-    }
-})(window);
 
 
 
@@ -562,6 +558,11 @@ var Manifold;
     }
     Manifold.loadManifest = loadManifest;
 })(Manifold || (Manifold = {}));
+// (function(w) {
+//     if (!w.Manifold){
+//         w.Manifold = Manifold;
+//     }
+// })(window); 
 
 var Manifold;
 (function (Manifold) {

@@ -11,6 +11,8 @@ declare namespace Manifold {
 declare namespace Manifold {
     class Helper {
         manifest: Manifesto.IManifest;
+        collectionIndex: number;
+        manifestIndex: number;
         canvasIndex: number;
         sequenceIndex: number;
         private _licenseFormatter;
