@@ -558,11 +558,11 @@ var Manifold;
     }
     Manifold.loadManifest = loadManifest;
 })(Manifold || (Manifold = {}));
-// (function(w) {
-//     if (!w.Manifold){
-//         w.Manifold = Manifold;
-//     }
-// })(window); 
+(function (w) {
+    if (!w.Manifold) {
+        w.Manifold = Manifold;
+    }
+})(window);
 
 var Manifold;
 (function (Manifold) {

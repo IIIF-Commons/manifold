@@ -6,8 +6,8 @@ namespace Manifold {
     } 
 }
 
-// (function(w) {
-//     if (!w.Manifold){
-//         w.Manifold = Manifold;
-//     }
-// })(window);
+(function(w) {
+    if (!w.Manifold){
+        w.Manifold = Manifold;
+    }
+})(window);
