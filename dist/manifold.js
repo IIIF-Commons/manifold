@@ -623,6 +623,9 @@ var Manifold;
             var c = this.canvases.en().where(function (c) { return c.id === canvas.id; }).first();
             c.multiSelected = selected;
         };
+        MultiSelectState.prototype.selectAllCanvases = function (selected) {
+            this.selectCanvases(this.canvases, selected);
+        };
         MultiSelectState.prototype.selectCanvases = function (canvases, selected) {
             for (var j = 0; j < canvases.length; j++) {
                 var canvas = canvases[j];
@@ -634,6 +637,9 @@ var Manifold;
             r.multiSelected = selected;
             var canvases = this.getRangeCanvases(r);
             this.selectCanvases(canvases, selected);
+        };
+        MultiSelectState.prototype.selectAllRanges = function (selected) {
+            this.selectRanges(this.ranges, selected);
         };
         MultiSelectState.prototype.selectRanges = function (ranges, selected) {
             for (var i = 0; i < ranges.length; i++) {

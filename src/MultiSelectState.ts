@@ -59,6 +59,10 @@ namespace Manifold {
             c.multiSelected = selected;
         }
         
+        public selectAllCanvases(selected: boolean): void {
+            this.selectCanvases(this.canvases, selected);
+        }
+        
         public selectCanvases(canvases: ICanvas[], selected: boolean): void {
             for(var j = 0; j < canvases.length; j++) {
                 var canvas: ICanvas = canvases[j];
@@ -73,6 +77,10 @@ namespace Manifold {
             var canvases: ICanvas[] = <ICanvas[]>this.getRangeCanvases(r);
 
             this.selectCanvases(canvases, selected);
+        }
+        
+        public selectAllRanges(selected: boolean): void {
+            this.selectRanges(this.ranges, selected);
         }
         
         public selectRanges(ranges: IRange[], selected: boolean): void {

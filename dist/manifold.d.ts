@@ -168,8 +168,10 @@ declare namespace Manifold {
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
         selectAll(selected: boolean): void;
         selectCanvas(canvas: ICanvas, selected: boolean): void;
+        selectAllCanvases(selected: boolean): void;
         selectCanvases(canvases: ICanvas[], selected: boolean): void;
         selectRange(range: IRange, selected: boolean): void;
+        selectAllRanges(selected: boolean): void;
         selectRanges(ranges: IRange[], selected: boolean): void;
         setEnabled(enabled: boolean): void;
     }
