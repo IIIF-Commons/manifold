@@ -1,56 +1,20 @@
 // manifold v1.0.0 https://github.com/UniversalViewer/manifold#readme
 declare namespace Manifold {
-    interface ICanvas extends Manifesto.ICanvas {
-        multiSelected: boolean;
+    class Bootstrapper {
+        private _options;
+        private _iiifResource;
+        constructor(options: Manifold.IManifoldOptions);
+        bootstrap(): Promise<Manifold.Helper>;
     }
 }
 
 declare namespace Manifold {
-    interface IManifestHelperOptions {
-        manifest: Manifesto.IManifest;
-        licenseMap: Object;
-        sequenceIndex: number;
-        canvasIndex: number;
-    }
-}
-
-declare namespace Manifold {
-    interface IMetadataItem {
-        label: string;
-        value: string | IMetadataItem[];
-        isRootLevel: boolean;
-    }
-}
-
-declare namespace Manifold {
-    interface IRange extends Manifesto.IRange {
-        multiSelected: boolean;
-    }
-}
-
-declare namespace Manifold {
-    interface IThumb extends Manifesto.IThumb {
-        initialWidth: number;
-        initialHeight: number;
-        multiSelectionEnabled: boolean;
-        multiSelected: boolean;
-    }
-}
-
-declare namespace Manifold {
-    interface ITreeNode extends Manifesto.ITreeNode {
-        multiSelectionEnabled: boolean;
-        multiSelected: boolean;
-    }
-}
-
-declare namespace Manifold {
-    class ManifestHelper {
+    class Helper {
         manifest: Manifesto.IManifest;
         canvasIndex: number;
         sequenceIndex: number;
         private _licenseFormatter;
-        constructor(options: IManifestHelperOptions);
+        constructor(options: IManifoldOptions);
         getAttribution(): string;
         getCanvases(): Manifesto.ICanvas[];
         getCanvasById(id: string): Manifesto.ICanvas;
@@ -128,6 +92,58 @@ declare namespace Manifold {
         getAutoCompleteService(): Manifesto.IService;
         getSearchWithinService(): Manifesto.IService;
     }
+}
+
+declare namespace Manifold {
+    interface ICanvas extends Manifesto.ICanvas {
+        multiSelected: boolean;
+    }
+}
+
+declare namespace Manifold {
+    interface IManifoldOptions {
+        manifest: Manifesto.IManifest;
+        manifestUri: string;
+        licenseMap: Object;
+        collectionIndex: number;
+        manifestIndex: number;
+        sequenceIndex: number;
+        canvasIndex: number;
+    }
+}
+
+declare namespace Manifold {
+    interface IMetadataItem {
+        label: string;
+        value: string | IMetadataItem[];
+        isRootLevel: boolean;
+    }
+}
+
+declare namespace Manifold {
+    interface IRange extends Manifesto.IRange {
+        multiSelected: boolean;
+    }
+}
+
+declare namespace Manifold {
+    interface IThumb extends Manifesto.IThumb {
+        initialWidth: number;
+        initialHeight: number;
+        multiSelectionEnabled: boolean;
+        multiSelected: boolean;
+    }
+}
+
+declare namespace Manifold {
+    interface ITreeNode extends Manifesto.ITreeNode {
+        multiSelectionEnabled: boolean;
+        multiSelected: boolean;
+    }
+}
+
+declare namespace Manifold {
+    function loadManifest(options: any): Promise<Helper>;
 }
 
 declare namespace Manifold {

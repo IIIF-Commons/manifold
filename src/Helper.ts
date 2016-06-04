@@ -1,17 +1,20 @@
 namespace Manifold {
     
-    export class ManifestHelper {
+    export class Helper {
         
-        public manifest: Manifesto.IManifest;        
+        public manifest: Manifesto.IManifest;
+        // public collectionIndex: number;
+        // public manifestIndex: number;
         public canvasIndex: number;
         public sequenceIndex: number;        
         private _licenseFormatter: Manifold.UriLabeller;
         
-        constructor(options: IManifestHelperOptions){
-            this.manifest = options.manifest;
+        constructor(options: IManifoldOptions){
             this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
-            this.canvasIndex = options.canvasIndex || 0;
+            // this.collectionIndex = options.collectionIndex || 0;
+            // this.manifestIndex = options.manifestIndex || 0;
             this.sequenceIndex = options.sequenceIndex || 0;
+            this.canvasIndex = options.canvasIndex || 0;
         }
 
         public getAttribution(): string {
@@ -111,7 +114,7 @@ namespace Manifold {
         public getMultiSelectState(): Manifold.MultiSelectState {
             var m: Manifold.MultiSelectState = new Manifold.MultiSelectState();
             m.ranges = this.getRanges();
-            m.canvases = this.getCurrentSequence().getCanvases();
+            m.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases();
             return m;
         }
 

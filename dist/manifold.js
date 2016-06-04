@@ -1,36 +1,81 @@
 // manifold v1.0.0 https://github.com/UniversalViewer/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-
-
-
-
-
-
-
-
-
-
-
+var Manifold;
+(function (Manifold) {
+    var Bootstrapper = (function () {
+        function Bootstrapper(options) {
+            this._options = options;
+        }
+        Bootstrapper.prototype.bootstrap = function () {
+            var that = this;
+            return new Promise(function (resolve, reject) {
+                manifesto.loadManifest(that._options.manifestUri).then(function (iiifResource) {
+                    var _this = this;
+                    that._iiifResource = manifesto.create(iiifResource);
+                    if (that._iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
+                        // if it's a collection and has child collections, get the collection by index
+                        if (that._iiifResource.collections && that._iiifResource.collections.length) {
+                            that._iiifResource.getCollectionByIndex(that._options.collectionIndex).then(function (collection) {
+                                if (!collection) {
+                                    reject();
+                                }
+                                // Special case: we're trying to load the first manifest of the
+                                // collection, but the collection has no manifests but does have
+                                // subcollections. Thus, we should dive in until we find something
+                                // we can display!
+                                if (collection.getTotalManifests() === 0 && _this.manifestIndex === 0 && collection.getTotalCollections() > 0) {
+                                    that._options.collectionIndex = 0;
+                                    that._options.manifestUri = collection.id;
+                                    that.bootstrap();
+                                }
+                                collection.getManifestByIndex(that._options.manifestIndex).then(function (manifest) {
+                                    that._options.manifest = manifest;
+                                    var helper = new Manifold.Helper(that._options);
+                                    resolve(helper);
+                                });
+                            });
+                        }
+                        else {
+                            that._iiifResource.getManifestByIndex(that._options.manifestIndex).then(function (manifest) {
+                                that._options.manifest = manifest;
+                                var helper = new Manifold.Helper(that._options);
+                                resolve(helper);
+                            });
+                        }
+                    }
+                    else {
+                        that._options.manifest = that._iiifResource;
+                        var helper = new Manifold.Helper(that._options);
+                        resolve(helper);
+                    }
+                });
+            });
+        };
+        return Bootstrapper;
+    }());
+    Manifold.Bootstrapper = Bootstrapper;
+})(Manifold || (Manifold = {}));
 
 var Manifold;
 (function (Manifold) {
-    var ManifestHelper = (function () {
-        function ManifestHelper(options) {
-            this.manifest = options.manifest;
+    var Helper = (function () {
+        function Helper(options) {
             this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
-            this.canvasIndex = options.canvasIndex || 0;
+            // this.collectionIndex = options.collectionIndex || 0;
+            // this.manifestIndex = options.manifestIndex || 0;
             this.sequenceIndex = options.sequenceIndex || 0;
+            this.canvasIndex = options.canvasIndex || 0;
         }
-        ManifestHelper.prototype.getAttribution = function () {
+        Helper.prototype.getAttribution = function () {
             return this.manifest.getAttribution();
         };
-        ManifestHelper.prototype.getCanvases = function () {
+        Helper.prototype.getCanvases = function () {
             return this.getCurrentSequence().getCanvases();
         };
-        ManifestHelper.prototype.getCanvasById = function (id) {
+        Helper.prototype.getCanvasById = function (id) {
             return this.getCurrentSequence().getCanvasById(id);
         };
-        ManifestHelper.prototype.getCanvasesById = function (ids) {
+        Helper.prototype.getCanvasesById = function (ids) {
             var canvases = [];
             for (var i = 0; i < ids.length; i++) {
                 var id = ids[i];
@@ -38,14 +83,14 @@ var Manifold;
             }
             return canvases;
         };
-        ManifestHelper.prototype.getCanvasByIndex = function (index) {
+        Helper.prototype.getCanvasByIndex = function (index) {
             return this.getCurrentSequence().getCanvasByIndex(index);
         };
-        ManifestHelper.prototype.getCanvasRange = function (canvas) {
+        Helper.prototype.getCanvasRange = function (canvas) {
             // get ranges that contain the canvas id. return the last.
             return this.getCanvasRanges(canvas).last();
         };
-        ManifestHelper.prototype.getCanvasRanges = function (canvas) {
+        Helper.prototype.getCanvasRanges = function (canvas) {
             if (canvas.ranges) {
                 return canvas.ranges;
             }
@@ -54,13 +99,13 @@ var Manifold;
             }
             return canvas.ranges;
         };
-        ManifestHelper.prototype.getCurrentCanvas = function () {
+        Helper.prototype.getCurrentCanvas = function () {
             return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
         };
-        ManifestHelper.prototype.getCurrentSequence = function () {
+        Helper.prototype.getCurrentSequence = function () {
             return this.getSequenceByIndex(this.sequenceIndex);
         };
-        ManifestHelper.prototype.getCollectionIndex = function (iiifResource) {
+        Helper.prototype.getCollectionIndex = function (iiifResource) {
             // todo: support nested collections. walk up parents adding to array and return csv string.
             var index;
             if (iiifResource.parentCollection) {
@@ -68,25 +113,25 @@ var Manifold;
             }
             return index;
         };
-        ManifestHelper.prototype.getElementType = function (element) {
+        Helper.prototype.getElementType = function (element) {
             if (!element) {
                 element = this.getCurrentCanvas();
             }
             return element.getType();
         };
-        ManifestHelper.prototype.getLabel = function () {
+        Helper.prototype.getLabel = function () {
             return this.manifest.getLabel();
         };
-        ManifestHelper.prototype.getLastCanvasLabel = function (alphanumeric) {
+        Helper.prototype.getLastCanvasLabel = function (alphanumeric) {
             return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
         };
-        ManifestHelper.prototype.getLicense = function () {
+        Helper.prototype.getLicense = function () {
             return this.manifest.getLicense();
         };
-        ManifestHelper.prototype.getLogo = function () {
+        Helper.prototype.getLogo = function () {
             return this.manifest.getLogo();
         };
-        ManifestHelper.prototype.getManifestType = function () {
+        Helper.prototype.getManifestType = function () {
             var manifestType = this.manifest.getManifestType();
             // default to monograph
             if (manifestType.toString() === "") {
@@ -94,44 +139,44 @@ var Manifold;
             }
             return manifestType;
         };
-        ManifestHelper.prototype.getMultiSelectState = function () {
+        Helper.prototype.getMultiSelectState = function () {
             var m = new Manifold.MultiSelectState();
             m.ranges = this.getRanges();
             m.canvases = this.getCurrentSequence().getCanvases();
             return m;
         };
-        ManifestHelper.prototype.getSeeAlso = function () {
+        Helper.prototype.getSeeAlso = function () {
             return this.manifest.getSeeAlso();
         };
-        ManifestHelper.prototype.getSequenceByIndex = function (index) {
+        Helper.prototype.getSequenceByIndex = function (index) {
             return this.manifest.getSequenceByIndex(index);
         };
-        ManifestHelper.prototype.isCanvasIndexOutOfRange = function (index) {
+        Helper.prototype.isCanvasIndexOutOfRange = function (index) {
             return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
         };
-        ManifestHelper.prototype.isFirstCanvas = function (index) {
+        Helper.prototype.isFirstCanvas = function (index) {
             return this.getCurrentSequence().isFirstCanvas(index);
         };
-        ManifestHelper.prototype.isLastCanvas = function (index) {
+        Helper.prototype.isLastCanvas = function (index) {
             return this.getCurrentSequence().isLastCanvas(index);
         };
-        ManifestHelper.prototype.isMultiSequence = function () {
+        Helper.prototype.isMultiSequence = function () {
             return this.manifest.isMultiSequence();
         };
-        ManifestHelper.prototype.isTotalCanvasesEven = function () {
+        Helper.prototype.isTotalCanvasesEven = function () {
             return this.getCurrentSequence().isTotalCanvasesEven();
         };
-        ManifestHelper.prototype.getRangeCanvases = function (range) {
+        Helper.prototype.getRangeCanvases = function (range) {
             var ids = range.getCanvasIds();
             return this.getCanvasesById(ids);
         };
-        ManifestHelper.prototype.getTotalCanvases = function () {
+        Helper.prototype.getTotalCanvases = function () {
             return this.getCurrentSequence().getTotalCanvases();
         };
-        ManifestHelper.prototype.isMultiCanvas = function () {
+        Helper.prototype.isMultiCanvas = function () {
             return this.getCurrentSequence().isMultiCanvas();
         };
-        ManifestHelper.prototype.isUIEnabled = function (name) {
+        Helper.prototype.isUIEnabled = function (name) {
             var uiExtensions = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
             if (uiExtensions) {
                 var disableUI = uiExtensions.getProperty('disableUI');
@@ -143,7 +188,7 @@ var Manifold;
             }
             return true;
         };
-        ManifestHelper.prototype.getInfoUri = function (canvas) {
+        Helper.prototype.getInfoUri = function (canvas) {
             // default to IxIF
             var service = canvas.getService(manifesto.ServiceProfile.ixif());
             if (service) {
@@ -152,58 +197,58 @@ var Manifold;
             // return the canvas id.
             return canvas.id;
         };
-        ManifestHelper.prototype.getPagedIndices = function (canvasIndex) {
+        Helper.prototype.getPagedIndices = function (canvasIndex) {
             if (typeof (canvasIndex) === 'undefined')
                 canvasIndex = this.canvasIndex;
             return [canvasIndex];
         };
-        ManifestHelper.prototype.getViewingDirection = function () {
+        Helper.prototype.getViewingDirection = function () {
             var viewingDirection = this.getCurrentSequence().getViewingDirection();
             if (!viewingDirection.toString()) {
                 viewingDirection = this.manifest.getViewingDirection();
             }
             return viewingDirection;
         };
-        ManifestHelper.prototype.getViewingHint = function () {
+        Helper.prototype.getViewingHint = function () {
             var viewingHint = this.getCurrentSequence().getViewingHint();
             if (!viewingHint.toString()) {
                 viewingHint = this.manifest.getViewingHint();
             }
             return viewingHint;
         };
-        ManifestHelper.prototype.getFirstPageIndex = function () {
+        Helper.prototype.getFirstPageIndex = function () {
             return 0;
         };
-        ManifestHelper.prototype.getLastPageIndex = function () {
+        Helper.prototype.getLastPageIndex = function () {
             return this.getTotalCanvases() - 1;
         };
-        ManifestHelper.prototype.getStartCanvasIndex = function () {
+        Helper.prototype.getStartCanvasIndex = function () {
             return this.getCurrentSequence().getStartCanvasIndex();
         };
-        ManifestHelper.prototype.getThumbs = function (width, height) {
+        Helper.prototype.getThumbs = function (width, height) {
             return this.getCurrentSequence().getThumbs(width, height);
         };
-        ManifestHelper.prototype.getRangeByPath = function (path) {
+        Helper.prototype.getRangeByPath = function (path) {
             return this.manifest.getRangeByPath(path);
         };
-        ManifestHelper.prototype.getCanvasIndexById = function (id) {
+        Helper.prototype.getCanvasIndexById = function (id) {
             return this.getCurrentSequence().getCanvasIndexById(id);
         };
-        ManifestHelper.prototype.getCanvasIndexByLabel = function (label) {
+        Helper.prototype.getCanvasIndexByLabel = function (label) {
             var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
             return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
         };
-        ManifestHelper.prototype.getRanges = function () {
+        Helper.prototype.getRanges = function () {
             return this.manifest.getRanges();
         };
-        ManifestHelper.prototype.getTree = function () {
+        Helper.prototype.getTree = function () {
             return this.manifest.getTree();
         };
         // returns a list of treenodes for each decade.
         // expanding a decade generates a list of years
         // expanding a year gives a list of months containing issues
         // expanding a month gives a list of issues.
-        ManifestHelper.prototype.getSortedTree = function (sortType) {
+        Helper.prototype.getSortedTree = function (sortType) {
             var tree = this.manifest.getTree();
             var sortedTree = manifesto.getTreeNode();
             if (sortType === Manifold.TreeSortType.date) {
@@ -214,7 +259,7 @@ var Manifold;
             }
             return sortedTree;
         };
-        ManifestHelper.prototype.getSortedTreeNodesByDate = function (sortedTree, tree) {
+        Helper.prototype.getSortedTreeNodesByDate = function (sortedTree, tree) {
             var all = tree.nodes.en().traverseUnique(function (node) { return node.nodes; })
                 .where(function (n) { return n.data.type === manifesto.TreeNodeType.collection().toString() ||
                 n.data.type === manifesto.TreeNodeType.manifest().toString(); }).toArray();
@@ -231,7 +276,7 @@ var Manifold;
             this.createDateNodes(sortedTree, manifests);
             this.pruneDecadeNodes(sortedTree);
         };
-        ManifestHelper.prototype.createDecadeNodes = function (rootNode, nodes) {
+        Helper.prototype.createDecadeNodes = function (rootNode, nodes) {
             var decadeNode;
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
@@ -249,7 +294,7 @@ var Manifold;
             }
         };
         // delete any empty decades
-        ManifestHelper.prototype.pruneDecadeNodes = function (rootNode) {
+        Helper.prototype.pruneDecadeNodes = function (rootNode) {
             var pruned = [];
             for (var i = 0; i < rootNode.nodes.length; i++) {
                 var n = rootNode.nodes[i];
@@ -262,12 +307,12 @@ var Manifold;
                 rootNode.nodes.remove(p);
             }
         };
-        ManifestHelper.prototype.sortDecadeNodes = function (rootNode) {
+        Helper.prototype.sortDecadeNodes = function (rootNode) {
             rootNode.nodes = rootNode.nodes.sort(function (a, b) {
                 return a.data.startYear - b.data.startYear;
             });
         };
-        ManifestHelper.prototype.getDecadeNode = function (rootNode, year) {
+        Helper.prototype.getDecadeNode = function (rootNode, year) {
             for (var i = 0; i < rootNode.nodes.length; i++) {
                 var n = rootNode.nodes[i];
                 if (year >= n.data.startYear && year <= n.data.endYear)
@@ -275,7 +320,7 @@ var Manifold;
             }
             return null;
         };
-        ManifestHelper.prototype.createYearNodes = function (rootNode, nodes) {
+        Helper.prototype.createYearNodes = function (rootNode, nodes) {
             var yearNode;
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
@@ -290,7 +335,7 @@ var Manifold;
                 }
             }
         };
-        ManifestHelper.prototype.sortYearNodes = function (rootNode) {
+        Helper.prototype.sortYearNodes = function (rootNode) {
             var _this = this;
             for (var i = 0; i < rootNode.nodes.length; i++) {
                 var decadeNode = rootNode.nodes[i];
@@ -299,7 +344,7 @@ var Manifold;
                 });
             }
         };
-        ManifestHelper.prototype.getYearNode = function (decadeNode, year) {
+        Helper.prototype.getYearNode = function (decadeNode, year) {
             for (var i = 0; i < decadeNode.nodes.length; i++) {
                 var n = decadeNode.nodes[i];
                 if (year === this.getNodeYear(n))
@@ -307,7 +352,7 @@ var Manifold;
             }
             return null;
         };
-        ManifestHelper.prototype.createMonthNodes = function (rootNode, nodes) {
+        Helper.prototype.createMonthNodes = function (rootNode, nodes) {
             var monthNode;
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
@@ -325,7 +370,7 @@ var Manifold;
                 }
             }
         };
-        ManifestHelper.prototype.sortMonthNodes = function (rootNode) {
+        Helper.prototype.sortMonthNodes = function (rootNode) {
             var _this = this;
             for (var i = 0; i < rootNode.nodes.length; i++) {
                 var decadeNode = rootNode.nodes[i];
@@ -337,7 +382,7 @@ var Manifold;
                 }
             }
         };
-        ManifestHelper.prototype.getMonthNode = function (yearNode, month) {
+        Helper.prototype.getMonthNode = function (yearNode, month) {
             for (var i = 0; i < yearNode.nodes.length; i++) {
                 var n = yearNode.nodes[i];
                 if (month === this.getNodeMonth(n))
@@ -345,7 +390,7 @@ var Manifold;
             }
             return null;
         };
-        ManifestHelper.prototype.createDateNodes = function (rootNode, nodes) {
+        Helper.prototype.createDateNodes = function (rootNode, nodes) {
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
                 var year = this.getNodeYear(node);
@@ -369,20 +414,20 @@ var Manifold;
                 }
             }
         };
-        ManifestHelper.prototype.getNodeYear = function (node) {
+        Helper.prototype.getNodeYear = function (node) {
             return node.navDate.getFullYear();
         };
-        ManifestHelper.prototype.getNodeMonth = function (node) {
+        Helper.prototype.getNodeMonth = function (node) {
             return node.navDate.getMonth();
         };
-        ManifestHelper.prototype.getNodeDisplayMonth = function (node) {
+        Helper.prototype.getNodeDisplayMonth = function (node) {
             var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             return months[node.navDate.getMonth()];
         };
-        ManifestHelper.prototype.getNodeDisplayDate = function (node) {
+        Helper.prototype.getNodeDisplayDate = function (node) {
             return node.navDate.toDateString();
         };
-        ManifestHelper.prototype.getMetadata = function () {
+        Helper.prototype.getMetadata = function () {
             var result = [];
             var metadata = this.manifest.getMetadata();
             if (metadata) {
@@ -422,7 +467,7 @@ var Manifold;
             }
             return result;
         };
-        ManifestHelper.prototype.getCanvasMetadata = function (canvas) {
+        Helper.prototype.getCanvasMetadata = function (canvas) {
             var result = [];
             var metadata = canvas.getMetadata();
             if (metadata) {
@@ -434,68 +479,89 @@ var Manifold;
             }
             return result;
         };
-        ManifestHelper.prototype.getCurrentElement = function () {
+        Helper.prototype.getCurrentElement = function () {
             return this.getCanvasByIndex(this.canvasIndex);
         };
-        ManifestHelper.prototype.getResources = function () {
+        Helper.prototype.getResources = function () {
             var element = this.getCurrentElement();
             return element.getResources();
         };
-        ManifestHelper.prototype.hasParentCollection = function () {
+        Helper.prototype.hasParentCollection = function () {
             return !!this.manifest.parentCollection;
         };
-        ManifestHelper.prototype.hasResources = function () {
+        Helper.prototype.hasResources = function () {
             return this.getResources().length > 0;
         };
-        ManifestHelper.prototype.isContinuous = function () {
+        Helper.prototype.isContinuous = function () {
             return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
         };
-        ManifestHelper.prototype.isPaged = function () {
+        Helper.prototype.isPaged = function () {
             return this.getViewingHint().toString() === manifesto.ViewingHint.paged().toString();
         };
-        ManifestHelper.prototype.isBottomToTop = function () {
+        Helper.prototype.isBottomToTop = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString();
         };
-        ManifestHelper.prototype.isTopToBottom = function () {
+        Helper.prototype.isTopToBottom = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.topToBottom().toString();
         };
-        ManifestHelper.prototype.isLeftToRight = function () {
+        Helper.prototype.isLeftToRight = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
         };
-        ManifestHelper.prototype.isRightToLeft = function () {
+        Helper.prototype.isRightToLeft = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
         };
-        ManifestHelper.prototype.isHorizontallyAligned = function () {
+        Helper.prototype.isHorizontallyAligned = function () {
             return this.isLeftToRight() || this.isRightToLeft();
         };
-        ManifestHelper.prototype.isVerticallyAligned = function () {
+        Helper.prototype.isVerticallyAligned = function () {
             return this.isTopToBottom() || this.isBottomToTop();
         };
-        ManifestHelper.prototype.isPagingAvailable = function () {
+        Helper.prototype.isPagingAvailable = function () {
             // paged mode is useless unless you have at least 3 pages...
             return this.isPagingEnabled() && this.getTotalCanvases() > 2;
         };
-        ManifestHelper.prototype.isPagingEnabled = function () {
+        Helper.prototype.isPagingEnabled = function () {
             return this.getCurrentSequence().isPagingEnabled();
         };
-        ManifestHelper.prototype.getAutoCompleteService = function () {
+        Helper.prototype.getAutoCompleteService = function () {
             var service = this.getSearchWithinService();
             if (!service)
                 return null;
             return service.getService(manifesto.ServiceProfile.autoComplete());
         };
-        ManifestHelper.prototype.getSearchWithinService = function () {
+        Helper.prototype.getSearchWithinService = function () {
             return this.manifest.getService(manifesto.ServiceProfile.searchWithin());
         };
-        return ManifestHelper;
+        return Helper;
     }());
-    Manifold.ManifestHelper = ManifestHelper;
+    Manifold.Helper = Helper;
 })(Manifold || (Manifold = {}));
 (function (w) {
     if (!w.Manifold) {
         w.Manifold = Manifold;
     }
 })(window);
+
+
+
+
+
+
+
+
+
+
+
+
+
+var Manifold;
+(function (Manifold) {
+    function loadManifest(options) {
+        var bootstrapper = new Manifold.Bootstrapper(options);
+        return bootstrapper.bootstrap();
+    }
+    Manifold.loadManifest = loadManifest;
+})(Manifold || (Manifold = {}));
 
 var Manifold;
 (function (Manifold) {
