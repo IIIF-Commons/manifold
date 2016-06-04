@@ -1,7 +1,7 @@
 namespace Manifold {
 
-    export interface ICanvas extends Manifesto.ICanvas {
-        multiSelected: boolean;
+    export interface ICanvas extends IMultiSelectable, Manifesto.ICanvas {
+  
     }
     
 }

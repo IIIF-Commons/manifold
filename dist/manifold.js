@@ -558,6 +558,8 @@ var Manifold;
 
 
 
+
+
 var Manifold;
 (function (Manifold) {
     function loadManifest(options) {
@@ -588,6 +590,9 @@ var Manifold;
         };
         MultiSelectState.prototype.allSelected = function () {
             return this.allRangesSelected() && this.allCanvasesSelected();
+        };
+        MultiSelectState.prototype.getAll = function () {
+            return this.canvases.concat(this.ranges);
         };
         MultiSelectState.prototype.getAllSelectedCanvases = function () {
             return this.canvases.en().where(function (c) { return c.multiSelected; }).toArray();

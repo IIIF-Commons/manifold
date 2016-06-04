@@ -97,8 +97,7 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    interface ICanvas extends Manifesto.ICanvas {
-        multiSelected: boolean;
+    interface ICanvas extends IMultiSelectable, Manifesto.ICanvas {
     }
 }
 
@@ -124,17 +123,21 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    interface IRange extends Manifesto.IRange {
+    interface IMultiSelectable {
         multiSelected: boolean;
+        multiSelectionEnabled: boolean;
     }
 }
 
 declare namespace Manifold {
-    interface IThumb extends Manifesto.IThumb {
+    interface IRange extends IMultiSelectable, Manifesto.IRange {
+    }
+}
+
+declare namespace Manifold {
+    interface IThumb extends IMultiSelectable, Manifesto.IThumb {
         initialWidth: number;
         initialHeight: number;
-        multiSelectionEnabled: boolean;
-        multiSelected: boolean;
     }
 }
 
@@ -157,6 +160,7 @@ declare namespace Manifold {
         allCanvasesSelected(): boolean;
         allRangesSelected(): boolean;
         allSelected(): boolean;
+        getAll(): IMultiSelectable[];
         getAllSelectedCanvases(): ICanvas[];
         getAllSelectedRanges(): IRange[];
         getCanvasById(id: string): ICanvas;

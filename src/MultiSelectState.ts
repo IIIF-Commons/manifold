@@ -16,7 +16,11 @@ namespace Manifold {
         public allSelected(): boolean {
             return this.allRangesSelected() && this.allCanvasesSelected();
         }
-
+        
+        public getAll(): IMultiSelectable[] {
+            return (<IMultiSelectable[]>this.canvases).concat(<IMultiSelectable[]>this.ranges);
+        }
+        
         public getAllSelectedCanvases(): ICanvas[] {
             return this.canvases.en().where(c => c.multiSelected).toArray();
         }
