@@ -292,7 +292,7 @@ var Manifold;
         Helper.prototype.getTree = function (sortType) {
             var tree = this.iiifResource.getTree();
             var sortedTree = manifesto.getTreeNode();
-            if (!sortType || sortType === Manifold.TreeSortType.none) {
+            if (!sortType.isInteger() || sortType === Manifold.TreeSortType.none) {
                 sortedTree = tree;
             }
             else if (sortType === Manifold.TreeSortType.date) {

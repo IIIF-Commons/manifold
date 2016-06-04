@@ -303,7 +303,7 @@ namespace Manifold {
             var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
             var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
             
-            if (!sortType || sortType === TreeSortType.none){
+            if (!sortType.isInteger() || sortType === TreeSortType.none){
                 sortedTree = tree;
             } else if (sortType === TreeSortType.date){
                 // returns a list of treenodes for each decade.
