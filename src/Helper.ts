@@ -262,24 +262,6 @@ namespace Manifold {
         public getSequenceByIndex(index: number): Manifesto.ISequence {
             return this.manifest.getSequenceByIndex(index);
         }
-        
-        // returns a list of treenodes for each decade.
-        // expanding a decade generates a list of years
-        // expanding a year gives a list of months containing issues
-        // expanding a month gives a list of issues.
-        public getSortedTree(sortType: TreeSortType): ITreeNode {
-
-            var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
-            var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
-
-            if (sortType === TreeSortType.date){
-                this.getSortedTreeNodesByDate(sortedTree, tree);
-            } else if (sortType === TreeSortType.none) {
-                sortedTree = tree;
-            }
-
-            return sortedTree;
-        }
 
         public getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
 
@@ -316,8 +298,22 @@ namespace Manifold {
             return this.getCurrentSequence().getTotalCanvases();
         }
         
-        public getTree(): Manifesto.ITreeNode{
-            return this.iiifResource.getTree();
+        public getTree(sortType?: TreeSortType): ITreeNode {
+
+            var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
+            var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
+            
+            if (!sortType || sortType === TreeSortType.none){
+                sortedTree = tree;
+            } else if (sortType === TreeSortType.date){
+                // returns a list of treenodes for each decade.
+                // expanding a decade generates a list of years
+                // expanding a year gives a list of months containing issues
+                // expanding a month gives a list of issues.
+                this.getSortedTreeNodesByDate(sortedTree, tree);
+            }
+
+            return sortedTree;
         }
         
         public getViewingDirection(): Manifesto.ViewingDirection {

@@ -263,21 +263,6 @@ var Manifold;
         Helper.prototype.getSequenceByIndex = function (index) {
             return this.manifest.getSequenceByIndex(index);
         };
-        // returns a list of treenodes for each decade.
-        // expanding a decade generates a list of years
-        // expanding a year gives a list of months containing issues
-        // expanding a month gives a list of issues.
-        Helper.prototype.getSortedTree = function (sortType) {
-            var tree = this.iiifResource.getTree();
-            var sortedTree = manifesto.getTreeNode();
-            if (sortType === Manifold.TreeSortType.date) {
-                this.getSortedTreeNodesByDate(sortedTree, tree);
-            }
-            else if (sortType === Manifold.TreeSortType.none) {
-                sortedTree = tree;
-            }
-            return sortedTree;
-        };
         Helper.prototype.getSortedTreeNodesByDate = function (sortedTree, tree) {
             var all = tree.nodes.en().traverseUnique(function (node) { return node.nodes; })
                 .where(function (n) { return n.data.type === manifesto.TreeNodeType.collection().toString() ||
@@ -304,8 +289,20 @@ var Manifold;
         Helper.prototype.getTotalCanvases = function () {
             return this.getCurrentSequence().getTotalCanvases();
         };
-        Helper.prototype.getTree = function () {
-            return this.iiifResource.getTree();
+        Helper.prototype.getTree = function (sortType) {
+            var tree = this.iiifResource.getTree();
+            var sortedTree = manifesto.getTreeNode();
+            if (!sortType || sortType === Manifold.TreeSortType.none) {
+                sortedTree = tree;
+            }
+            else if (sortType === Manifold.TreeSortType.date) {
+                // returns a list of treenodes for each decade.
+                // expanding a decade generates a list of years
+                // expanding a year gives a list of months containing issues
+                // expanding a month gives a list of issues.
+                this.getSortedTreeNodesByDate(sortedTree, tree);
+            }
+            return sortedTree;
         };
         Helper.prototype.getViewingDirection = function () {
             var viewingDirection = this.getCurrentSequence().getViewingDirection();
