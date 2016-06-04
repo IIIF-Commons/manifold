@@ -643,6 +643,14 @@ var Manifold;
                 this.selectCanvases(canvases, selected);
             }
         };
+        MultiSelectState.prototype.setEnabled = function (enabled) {
+            this.enabled = enabled;
+            var items = this.getAll();
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                item.multiSelectionEnabled = this.enabled;
+            }
+        };
         return MultiSelectState;
     }());
     Manifold.MultiSelectState = MultiSelectState;

@@ -83,6 +83,17 @@ namespace Manifold {
                 this.selectCanvases(canvases, selected);
             }
         }
+        
+        public setEnabled(enabled: boolean): void {
+            this.enabled = enabled;
+            
+            var items: IMultiSelectable[] = this.getAll();
+
+            for (var i = 0; i < items.length; i++){
+                var item: IMultiSelectable = items[i];
+                item.multiSelectionEnabled = this.enabled;
+            }
+        }
     }
 
 }

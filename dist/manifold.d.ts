@@ -171,6 +171,7 @@ declare namespace Manifold {
         selectCanvases(canvases: ICanvas[], selected: boolean): void;
         selectRange(range: IRange, selected: boolean): void;
         selectRanges(ranges: IRange[], selected: boolean): void;
+        setEnabled(enabled: boolean): void;
     }
 }
 
