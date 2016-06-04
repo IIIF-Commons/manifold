@@ -154,6 +154,19 @@ declare namespace Manifold {
         enabled: boolean;
         ranges: IRange[];
         canvases: ICanvas[];
+        allCanvasesSelected(): boolean;
+        allRangesSelected(): boolean;
+        allSelected(): boolean;
+        getAllSelectedCanvases(): ICanvas[];
+        getAllSelectedRanges(): IRange[];
+        getCanvasById(id: string): ICanvas;
+        getCanvasesByIds(ids: string[]): ICanvas[];
+        getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+        selectAll(selected: boolean): void;
+        selectCanvas(canvas: ICanvas, selected: boolean): void;
+        selectCanvases(canvases: ICanvas[], selected: boolean): void;
+        selectRange(range: IRange, selected: boolean): void;
+        selectRanges(ranges: IRange[], selected: boolean): void;
     }
 }
 
