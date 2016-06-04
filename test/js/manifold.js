@@ -305,7 +305,7 @@ var Manifold;
             return this.getCurrentSequence().getTotalCanvases();
         };
         Helper.prototype.getTree = function () {
-            return this.manifest.getTree();
+            return this.iiifResource.getTree();
         };
         Helper.prototype.getViewingDirection = function () {
             var viewingDirection = this.getCurrentSequence().getViewingDirection();

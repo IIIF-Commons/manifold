@@ -317,7 +317,7 @@ namespace Manifold {
         }
         
         public getTree(): Manifesto.ITreeNode{
-            return this.manifest.getTree();
+            return this.iiifResource.getTree();
         }
         
         public getViewingDirection(): Manifesto.ViewingDirection {
