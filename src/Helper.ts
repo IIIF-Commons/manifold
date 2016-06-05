@@ -321,7 +321,7 @@ namespace Manifold {
         }
         
         private _treeHasNavDates(tree: ITreeNode): boolean {
-            var nodes: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !!n.navDate).toArray();
+            var nodes: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).toArray();
             return nodes.length > 0;
         }
         

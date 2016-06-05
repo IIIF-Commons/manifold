@@ -308,7 +308,7 @@ var Manifold;
             return sortedTree;
         };
         Helper.prototype._treeHasNavDates = function (tree) {
-            var nodes = tree.nodes.en().traverseUnique(function (node) { return node.nodes; }).where(function (n) { return !!n.navDate; }).toArray();
+            var nodes = tree.nodes.en().traverseUnique(function (node) { return node.nodes; }).where(function (n) { return !isNaN(n.navDate); }).toArray();
             return nodes.length > 0;
         };
         Helper.prototype.getViewingDirection = function () {
