@@ -2,11 +2,12 @@ var c = require('../gulpfile.config');
 var config = new c();
 var gulp = require('gulp');
 var utils = require('gulp-utils');
+var path = require('path');
 
 gulp.task('copy:build', function() {
     return gulp.src([
-        config.dist + '/' + config.jsOut,
-        config.dist + '/' + config.name + '.min.js'
+        path.join(config.dist, config.jsOut),
+        path.join(config.dist, config.jsMinOut)
     ]).pipe(gulp.dest(config.testDepsDir));
 });
 

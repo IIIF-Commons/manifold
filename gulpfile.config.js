@@ -3,11 +3,11 @@ var metadata = require('./package');
 var GulpConfig = (function () {
     function GulpConfig() {
         this.name = metadata.name;
-        // libs that must be included in a consuming app for this component to work
+        // libs that MUST be included in a consuming app for this component to work
         this.deps = [
             'node_modules/manifesto.js/dist/client/manifesto.bundle.js'
         ];
-        // libs used for testing purposes, but not needed in a consuming app
+        // libs that MAY be included in a consuming app but are used here for testing purposes
         this.testDeps = [
         ];
         this.testDepsDir = './test/js';
