@@ -6,7 +6,7 @@ var merge = require('merge2');
 
 gulp.task('bundle:deps', function(cb) {
     return merge([
-        gulp.src(config.deps)
+        gulp.src(config.deps.concat([config.dist + '/' + config.jsMinOut]))
             .pipe(concat(config.jsBundleOut))
             .pipe(gulp.dest(config.dist))
     ]);

@@ -20,6 +20,7 @@ var GulpConfig = (function () {
         this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
         this.jsOut = this.name + '.js';
         this.jsBundleOut = this.name + '.bundle.js';
+        this.jsMinOut = this.name + '.min.js';
         this.dtsOut = this.name + '.d.ts';
         this.dtsBundleOut = this.name + '.bundle.d.ts';
         this.tsSrc = [
