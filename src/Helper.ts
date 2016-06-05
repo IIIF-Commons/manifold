@@ -309,13 +309,20 @@ namespace Manifold {
                     // expanding a decade generates a list of years
                     // expanding a year gives a list of months containing issues
                     // expanding a month gives a list of issues.
-                    this.getSortedTreeNodesByDate(sortedTree, tree);
-                    break;
+                    if (this._treeHasNavDates(tree)){
+                        this.getSortedTreeNodesByDate(sortedTree, tree);
+                        break;
+                    }                    
                 default:
                     sortedTree = tree;
             }
             
             return sortedTree;
+        }
+        
+        private _treeHasNavDates(tree: ITreeNode): boolean {
+            var nodes: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes).where((n) => n.data.navDate).toArray();
+            return nodes.length > 0;
         }
         
         public getViewingDirection(): Manifesto.ViewingDirection {

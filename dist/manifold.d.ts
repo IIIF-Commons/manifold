@@ -56,6 +56,7 @@ declare namespace Manifold {
         getThumbs(width: number, height: number): Manifesto.IThumb[];
         getTotalCanvases(): number;
         getTree(sortType?: TreeSortType): ITreeNode;
+        private _treeHasNavDates(tree);
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         hasParentCollection(): boolean;
@@ -141,9 +142,7 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    interface ITreeNode extends Manifesto.ITreeNode {
-        multiSelectionEnabled: boolean;
-        multiSelected: boolean;
+    interface ITreeNode extends IMultiSelectable, Manifesto.ITreeNode {
     }
 }
 

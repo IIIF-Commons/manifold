@@ -1,8 +1,7 @@
 namespace Manifold {
 
-    export interface ITreeNode extends Manifesto.ITreeNode {
-        multiSelectionEnabled: boolean;
-        multiSelected: boolean;
+    export interface ITreeNode extends IMultiSelectable, Manifesto.ITreeNode {
+
     }
 
 }

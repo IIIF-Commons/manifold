@@ -298,12 +298,18 @@ var Manifold;
                     // expanding a decade generates a list of years
                     // expanding a year gives a list of months containing issues
                     // expanding a month gives a list of issues.
-                    this.getSortedTreeNodesByDate(sortedTree, tree);
-                    break;
+                    if (this._treeHasNavDates(tree)) {
+                        this.getSortedTreeNodesByDate(sortedTree, tree);
+                        break;
+                    }
                 default:
                     sortedTree = tree;
             }
             return sortedTree;
+        };
+        Helper.prototype._treeHasNavDates = function (tree) {
+            var nodes = tree.nodes.en().traverseUnique(function (node) { return node.nodes; }).where(function (n) { return n.data.navDate; }).toArray();
+            return nodes.length > 0;
         };
         Helper.prototype.getViewingDirection = function () {
             var viewingDirection = this.getCurrentSequence().getViewingDirection();
