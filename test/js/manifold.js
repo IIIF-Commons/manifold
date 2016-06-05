@@ -587,10 +587,10 @@ var Manifold;
             this.canvases = [];
         }
         MultiSelectState.prototype.allCanvasesSelected = function () {
-            return this.getAllSelectedCanvases().length === this.canvases.length;
+            return this.canvases.length > 0 && this.getAllSelectedCanvases().length === this.canvases.length;
         };
         MultiSelectState.prototype.allRangesSelected = function () {
-            return this.getAllSelectedRanges().length === this.ranges.length;
+            return this.ranges.length > 0 && this.getAllSelectedRanges().length === this.ranges.length;
         };
         MultiSelectState.prototype.allSelected = function () {
             return this.allRangesSelected() && this.allCanvasesSelected();

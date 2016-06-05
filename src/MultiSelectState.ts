@@ -6,11 +6,11 @@ namespace Manifold {
         canvases: ICanvas[] = [];
         
         public allCanvasesSelected(): boolean {
-            return this.getAllSelectedCanvases().length === this.canvases.length;
+            return this.canvases.length > 0 && this.getAllSelectedCanvases().length === this.canvases.length;
         }
         
         public allRangesSelected(): boolean {
-            return this.getAllSelectedRanges().length === this.ranges.length;
+            return this.ranges.length > 0 && this.getAllSelectedRanges().length === this.ranges.length;
         }
         
         public allSelected(): boolean {
