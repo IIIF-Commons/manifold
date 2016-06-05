@@ -292,15 +292,16 @@ var Manifold;
         Helper.prototype.getTree = function (sortType) {
             var tree = this.iiifResource.getTree();
             var sortedTree = manifesto.getTreeNode();
-            if (!sortType.isInteger() || sortType === Manifold.TreeSortType.none) {
-                sortedTree = tree;
-            }
-            else if (sortType === Manifold.TreeSortType.date) {
-                // returns a list of treenodes for each decade.
-                // expanding a decade generates a list of years
-                // expanding a year gives a list of months containing issues
-                // expanding a month gives a list of issues.
-                this.getSortedTreeNodesByDate(sortedTree, tree);
+            switch (sortType) {
+                case Manifold.TreeSortType.date:
+                    // returns a list of treenodes for each decade.
+                    // expanding a decade generates a list of years
+                    // expanding a year gives a list of months containing issues
+                    // expanding a month gives a list of issues.
+                    this.getSortedTreeNodesByDate(sortedTree, tree);
+                    break;
+                default:
+                    sortedTree = tree;
             }
             return sortedTree;
         };

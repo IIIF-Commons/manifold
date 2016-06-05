@@ -303,16 +303,18 @@ namespace Manifold {
             var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
             var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
             
-            if (!sortType.isInteger() || sortType === TreeSortType.none){
-                sortedTree = tree;
-            } else if (sortType === TreeSortType.date){
-                // returns a list of treenodes for each decade.
-                // expanding a decade generates a list of years
-                // expanding a year gives a list of months containing issues
-                // expanding a month gives a list of issues.
-                this.getSortedTreeNodesByDate(sortedTree, tree);
+            switch (sortType){
+                case TreeSortType.date:
+                    // returns a list of treenodes for each decade.
+                    // expanding a decade generates a list of years
+                    // expanding a year gives a list of months containing issues
+                    // expanding a month gives a list of issues.
+                    this.getSortedTreeNodesByDate(sortedTree, tree);
+                    break;
+                default:
+                    sortedTree = tree;
             }
-
+            
             return sortedTree;
         }
         
