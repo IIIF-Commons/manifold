@@ -89,7 +89,7 @@ namespace Manifold {
         public getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[] {
 
             if (canvas.ranges){
-                return canvas.ranges;
+                return canvas.ranges; // cache
             } else {
                 canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
             }
@@ -321,8 +321,8 @@ namespace Manifold {
         }
         
         private _treeHasNavDates(tree: ITreeNode): boolean {
-            var nodes: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).toArray();
-            return nodes.length > 0;
+            var node: Manifesto.ITreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
+            return (node)? true : false;
         }
         
         public getViewingDirection(): Manifesto.ViewingDirection {

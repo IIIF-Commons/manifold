@@ -124,7 +124,7 @@ var Manifold;
         };
         Helper.prototype.getCanvasRanges = function (canvas) {
             if (canvas.ranges) {
-                return canvas.ranges;
+                return canvas.ranges; // cache
             }
             else {
                 canvas.ranges = this.manifest.getRanges().en().where(function (range) { return (range.getCanvasIds().en().any(function (c) { return c === canvas.id; })); }).toArray();
@@ -308,8 +308,8 @@ var Manifold;
             return sortedTree;
         };
         Helper.prototype._treeHasNavDates = function (tree) {
-            var nodes = tree.nodes.en().traverseUnique(function (node) { return node.nodes; }).where(function (n) { return !isNaN(n.navDate); }).toArray();
-            return nodes.length > 0;
+            var node = tree.nodes.en().traverseUnique(function (node) { return node.nodes; }).where(function (n) { return !isNaN(n.navDate); }).first();
+            return (node) ? true : false;
         };
         Helper.prototype.getViewingDirection = function () {
             var viewingDirection = this.getCurrentSequence().getViewingDirection();
