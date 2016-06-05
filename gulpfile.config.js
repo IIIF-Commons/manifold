@@ -5,8 +5,7 @@ var GulpConfig = (function () {
         this.name = metadata.name;
         // libs that must be included in a consuming app for this component to work
         this.deps = [
-            'node_modules/extensions/dist/extensions.js',
-            'node_modules/manifesto.js/dist/client/manifesto.js'
+            'node_modules/manifesto.js/dist/client/manifesto.bundle.js'
         ];
         // libs used for testing purposes, but not needed in a consuming app
         this.testDeps = [
@@ -14,14 +13,15 @@ var GulpConfig = (function () {
         this.testDepsDir = './test/js';
         // ts definitions to copy to the typings dir
         this.typings = [
-            'node_modules/extensions/dist/extensions.d.ts',
-            'node_modules/manifesto.js/dist/manifesto.d.ts'
+            'node_modules/manifesto.js/dist/manifesto.bundle.d.ts'
         ];
         this.typingsDir = './typings';
         this.dist = './dist';
         this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
         this.jsOut = this.name + '.js';
+        this.jsBundleOut = this.name + '.bundle.js';
         this.dtsOut = this.name + '.d.ts';
+        this.dtsBundleOut = this.name + '.bundle.d.ts';
         this.tsSrc = [
             'src/_references.ts',
             'src/*.ts',
