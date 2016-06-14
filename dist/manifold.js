@@ -231,8 +231,8 @@ var Manifold;
         };
         Helper.prototype.getMultiSelectState = function () {
             var m = new Manifold.MultiSelectState();
-            m.ranges = this.getRanges();
-            m.canvases = this.getCurrentSequence().getCanvases();
+            m.ranges = this.getRanges().clone();
+            m.canvases = this.getCurrentSequence().getCanvases().clone();
             return m;
         };
         Helper.prototype.getPagedIndices = function (canvasIndex) {

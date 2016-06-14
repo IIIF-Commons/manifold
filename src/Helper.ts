@@ -222,11 +222,11 @@ namespace Manifold {
         
         public getMultiSelectState(): Manifold.MultiSelectState {
             var m: Manifold.MultiSelectState = new Manifold.MultiSelectState();
-            m.ranges = this.getRanges();
-            m.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases();
+            m.ranges = this.getRanges().clone();
+            m.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases().clone();
             return m;
         }
-        
+
         public getPagedIndices(canvasIndex?: number): number[]{
             if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
 
