@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>manifold: test</title>
+    <title>examples</title>
     <meta charset="utf-8">
-    <script src="js/extensions.js"></script>
-    <script src="js/manifesto.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="js/manifesto.bundle.js"></script>
     <script src="js/manifold.js"></script>
 </head>
 <body>
     
     <script>
-        Manifesto.loadManifest('http://wellcomelibrary.org/iiif/b18035723/manifest').then(function(manifest){  
-            // var m = Manifesto.create(manifest);
-            // var helper = new Manifold.IIIFHelper(m);
+
+        var helper, multiSelectState;
+        
+        $(function() {
             
-            // var tree = helper.getTree();
-            
-            // console.log(tree);
+            // http://wellcomelibrary.org/iiif/b18035723/manifest (Wunder der Vererbung)
+            // http://wellcomelibrary.org/iiif/collection/b19974760 (Chemist and Druggist)
+            // http://wellcomelibrary.org/iiif/collection/b18031511 (Biological Basis of Medicine)
+            // http://digital.library.villanova.edu/Collection/vudl:3/IIIF (Villanova Collection)
+            // http://dams.llgc.org.uk/iiif/newspapers/4651124.json (Abergele and Pensarn Visitor 1909-1910)
+
+            Manifold.loadManifest({
+                iiifResourceUri: 'http://wellcomelibrary.org/iiif/b18035723/manifest',
+                licenseMap: {},
+                collectionIndex: 0,
+                manifestIndex: 0,
+                sequenceIndex: 0,
+                canvasIndex: 0
+            }).then(function(h){                
+                helper = h;                
+                multiSelectState = helper.getMultiSelectState();  
+            }).catch(function() {
+                console.error('failed to load manifest');
+            });
+
         });
     </script>
 </body>

@@ -9,6 +9,8 @@ var GulpConfig = (function () {
         ];
         // libs that MAY be included in a consuming app but are used here for examples purposes
         this.examplesDeps = [
+            'dist/manifold.js',
+            'node_modules/manifesto.js/dist/client/manifesto.bundle.js'
         ];
         this.examplesDir = './examples';
         this.examplesDepsDir = './examples/js';
