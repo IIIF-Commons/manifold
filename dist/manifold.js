@@ -659,6 +659,9 @@ var Manifold;
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 item.multiSelectEnabled = this.enabled;
+                if (!enabled) {
+                    item.multiSelected = false;
+                }
             }
         };
         return MultiSelectState;
