@@ -118,9 +118,20 @@ var Manifold;
             }
             return result;
         };
-        Helper.prototype.getCanvasRange = function (canvas) {
-            // get ranges that contain the canvas id. return the last.
-            return this.getCanvasRanges(canvas).last();
+        Helper.prototype.getCanvasRange = function (canvas, path) {
+            var ranges = this.getCanvasRanges(canvas);
+            if (path) {
+                for (var i = 0; i < ranges.length; i++) {
+                    var range = ranges[i];
+                    if (range.path === path) {
+                        return range;
+                    }
+                }
+                return null;
+            }
+            else {
+                return ranges[0]; // else return the first range
+            }
         };
         Helper.prototype.getCanvasRanges = function (canvas) {
             if (canvas.ranges) {

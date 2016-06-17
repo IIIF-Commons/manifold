@@ -1213,7 +1213,7 @@ declare namespace Manifold {
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string): number;
         getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[];
-        getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange;
+        getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
         getCurrentCanvas(): Manifesto.ICanvas;

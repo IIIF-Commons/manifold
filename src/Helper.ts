@@ -81,9 +81,22 @@ namespace Manifold {
             return result;
         }
         
-        public getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange {
-            // get ranges that contain the canvas id. return the last.
-            return this.getCanvasRanges(canvas).last();
+        getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange {
+            var ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
+            
+            if (path){
+                for (var i = 0; i < ranges.length; i++) {
+                    var range: Manifesto.IRange = ranges[i];
+
+                    if (range.path === path){
+                        return range;
+                    }
+                }
+
+                return null;
+            } else {
+                return ranges[0]; // else return the first range
+            }
         }
 
         public getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[] {
