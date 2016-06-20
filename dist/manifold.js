@@ -63,11 +63,9 @@ var Manifold;
 var Manifold;
 (function (Manifold) {
     var Helper = (function () {
-        //private _licenseFormatter: Manifold.UriLabeller;
         function Helper(options) {
             this.iiifResource = options.iiifResource;
             this.manifest = options.manifest;
-            //this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
             this.collectionIndex = options.collectionIndex || 0;
             this.manifestIndex = options.manifestIndex || 0;
             this.sequenceIndex = options.sequenceIndex || 0;
@@ -201,7 +199,7 @@ var Manifold;
             }
             return manifestType;
         };
-        Helper.prototype.getMetadata = function () {
+        Helper.prototype.getMetadata = function (licenseFormatter) {
             var result = [];
             var metadata = this.manifest.getMetadata();
             if (metadata) {
@@ -228,8 +226,7 @@ var Manifold;
             if (this.manifest.getLicense()) {
                 result.push({
                     label: "license",
-                    //value: this._licenseFormatter.format(this.manifest.getLicense()),
-                    value: this.manifest.getLicense(),
+                    value: licenseFormatter ? licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense(),
                     isRootLevel: true
                 });
             }
