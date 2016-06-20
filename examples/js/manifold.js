@@ -63,10 +63,11 @@ var Manifold;
 var Manifold;
 (function (Manifold) {
     var Helper = (function () {
+        //private _licenseFormatter: Manifold.UriLabeller;
         function Helper(options) {
             this.iiifResource = options.iiifResource;
             this.manifest = options.manifest;
-            this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
+            //this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
             this.collectionIndex = options.collectionIndex || 0;
             this.manifestIndex = options.manifestIndex || 0;
             this.sequenceIndex = options.sequenceIndex || 0;
@@ -227,7 +228,8 @@ var Manifold;
             if (this.manifest.getLicense()) {
                 result.push({
                     label: "license",
-                    value: this._licenseFormatter.format(this.manifest.getLicense()),
+                    //value: this._licenseFormatter.format(this.manifest.getLicense()),
+                    value: this.manifest.getLicense(),
                     isRootLevel: true
                 });
             }

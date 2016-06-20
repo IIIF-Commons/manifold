@@ -3,7 +3,7 @@ namespace Manifold {
         iiifResourceUri: string;
         iiifResource: Manifesto.IIIIFResource;
         manifest: Manifesto.IManifest; // may be a nested manifest, or the IIIFResource itself
-        licenseMap: Object;
+        //licenseMap: Object;
         collectionIndex: number;
         manifestIndex: number;
         sequenceIndex: number;

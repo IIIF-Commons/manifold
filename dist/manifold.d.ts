@@ -15,7 +15,6 @@ declare namespace Manifold {
         manifestIndex: number;
         canvasIndex: number;
         sequenceIndex: number;
-        private _licenseFormatter;
         constructor(options: IManifoldOptions);
         getAutoCompleteService(): Manifesto.IService;
         getAttribution(): string;
@@ -179,7 +178,6 @@ declare namespace Manifold {
         iiifResourceUri: string;
         iiifResource: Manifesto.IIIIFResource;
         manifest: Manifesto.IManifest;
-        licenseMap: Object;
         collectionIndex: number;
         manifestIndex: number;
         sequenceIndex: number;

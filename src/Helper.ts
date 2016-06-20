@@ -8,12 +8,12 @@ namespace Manifold {
         public manifestIndex: number;
         public canvasIndex: number;
         public sequenceIndex: number;        
-        private _licenseFormatter: Manifold.UriLabeller;
+        //private _licenseFormatter: Manifold.UriLabeller;
         
         constructor(options: IManifoldOptions){
             this.iiifResource = options.iiifResource;
             this.manifest = options.manifest;
-            this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
+            //this._licenseFormatter = new Manifold.UriLabeller(options.licenseMap || {});
             this.collectionIndex = options.collectionIndex || 0;
             this.manifestIndex = options.manifestIndex || 0;
             this.sequenceIndex = options.sequenceIndex || 0;
@@ -217,7 +217,8 @@ namespace Manifold {
             if (this.manifest.getLicense()){
                 result.push(<Manifold.IMetadataItem>{
                     label: "license",
-                    value: this._licenseFormatter.format(this.manifest.getLicense()),
+                    //value: this._licenseFormatter.format(this.manifest.getLicense()),
+                    value: this.manifest.getLicense(),
                     isRootLevel: true
                 });
             }
