@@ -65,6 +65,7 @@ var Manifold;
     var Helper = (function () {
         function Helper(options) {
             this.iiifResource = options.iiifResource;
+            this.iiifResourceUri = options.iiifResourceUri;
             this.manifest = options.manifest;
             this.collectionIndex = options.collectionIndex || 0;
             this.manifestIndex = options.manifestIndex || 0;

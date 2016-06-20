@@ -1197,6 +1197,7 @@ declare namespace Manifold {
 declare namespace Manifold {
     class Helper implements IHelper {
         iiifResource: Manifesto.IIIIFResource;
+        iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         collectionIndex: number;
         manifestIndex: number;

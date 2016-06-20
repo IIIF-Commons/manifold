@@ -3,6 +3,7 @@ namespace Manifold {
     export class Helper implements IHelper {
         
         public iiifResource: Manifesto.IIIIFResource;
+        public iiifResourceUri: string;
         public manifest: Manifesto.IManifest;
         public collectionIndex: number;
         public manifestIndex: number;
@@ -11,6 +12,7 @@ namespace Manifold {
         
         constructor(options: IManifoldOptions){
             this.iiifResource = options.iiifResource;
+            this.iiifResourceUri = options.iiifResourceUri;
             this.manifest = options.manifest;
             this.collectionIndex = options.collectionIndex || 0;
             this.manifestIndex = options.manifestIndex || 0;
