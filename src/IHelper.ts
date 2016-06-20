@@ -3,6 +3,7 @@ namespace Manifold {
     export interface IHelper {
         
         iiifResource: Manifesto.IIIIFResource;
+        iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         collectionIndex: number;
         manifestIndex: number;
