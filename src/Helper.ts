@@ -311,6 +311,10 @@ namespace Manifold {
             return this.getCurrentSequence().getTotalCanvases();
         }
         
+        public getTrackingLabel(): string {
+            return this.manifest.getTrackingLabel();
+        }
+
         public getTree(sortType?: TreeSortType): ITreeNode {
 
             var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();

@@ -300,6 +300,9 @@ var Manifold;
         Helper.prototype.getTotalCanvases = function () {
             return this.getCurrentSequence().getTotalCanvases();
         };
+        Helper.prototype.getTrackingLabel = function () {
+            return this.manifest.getTrackingLabel();
+        };
         Helper.prototype.getTree = function (sortType) {
             var tree = this.iiifResource.getTree();
             var sortedTree = manifesto.getTreeNode();

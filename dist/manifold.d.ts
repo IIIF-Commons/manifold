@@ -55,6 +55,7 @@ declare namespace Manifold {
         getStartCanvasIndex(): number;
         getThumbs(width: number, height: number): Manifesto.IThumb[];
         getTotalCanvases(): number;
+        getTrackingLabel(): string;
         getTree(sortType?: TreeSortType): ITreeNode;
         private _treeHasNavDates(tree);
         getViewingDirection(): Manifesto.ViewingDirection;
