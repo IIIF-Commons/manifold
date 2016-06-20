@@ -1,6 +1,6 @@
 namespace Manifold {
     
-    export class Helper {
+    export class Helper implements IHelper {
         
         public iiifResource: Manifesto.IIIIFResource;
         public manifest: Manifesto.IManifest;
@@ -81,7 +81,7 @@ namespace Manifold {
             return result;
         }
         
-        getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange {
+        public getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange {
             var ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
             
             if (path){
