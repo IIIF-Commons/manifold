@@ -320,8 +320,8 @@ namespace Manifold {
             var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
             var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
             
-            switch (sortType){
-                case TreeSortType.date:
+            switch (sortType.toString()){
+                case TreeSortType.DATE.toString():
                     // returns a list of treenodes for each decade.
                     // expanding a decade generates a list of years
                     // expanding a year gives a list of months containing issues

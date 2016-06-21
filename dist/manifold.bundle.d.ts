@@ -1437,9 +1437,19 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    enum TreeSortType {
-        date = 0,
-        none = 1,
+    class StringValue {
+        value: string;
+        constructor(value?: string);
+        toString(): string;
+    }
+}
+
+declare namespace Manifold {
+    class TreeSortType extends StringValue {
+        static DATE: TreeSortType;
+        static NONE: TreeSortType;
+        date(): TreeSortType;
+        none(): TreeSortType;
     }
 }
 

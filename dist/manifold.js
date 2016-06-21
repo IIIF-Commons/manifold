@@ -307,8 +307,8 @@ var Manifold;
         Helper.prototype.getTree = function (sortType) {
             var tree = this.iiifResource.getTree();
             var sortedTree = manifesto.getTreeNode();
-            switch (sortType) {
-                case Manifold.TreeSortType.date:
+            switch (sortType.toString()) {
+                case Manifold.TreeSortType.DATE.toString():
                     // returns a list of treenodes for each decade.
                     // expanding a decade generates a list of years
                     // expanding a year gives a list of months containing issues
@@ -587,13 +587,9 @@ global.manifold = global.Manifold = module.exports = {
     loadManifest: function (options) {
         var bootstrapper = new Manifold.Bootstrapper(options);
         return bootstrapper.bootstrap();
-    }
+    },
+    TreeSortType: new Manifold.TreeSortType()
 };
-// (function(w) {
-//     if (!w.Manifold){
-//         w.Manifold = Manifold;
-//     }
-// })(window); 
 
 var Manifold;
 (function (Manifold) {
@@ -688,11 +684,45 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    (function (TreeSortType) {
-        TreeSortType[TreeSortType["date"] = 0] = "date";
-        TreeSortType[TreeSortType["none"] = 1] = "none";
-    })(Manifold.TreeSortType || (Manifold.TreeSortType = {}));
-    var TreeSortType = Manifold.TreeSortType;
+    var StringValue = (function () {
+        function StringValue(value) {
+            this.value = "";
+            if (value) {
+                this.value = value.toLowerCase();
+            }
+        }
+        StringValue.prototype.toString = function () {
+            return this.value;
+        };
+        return StringValue;
+    }());
+    Manifold.StringValue = StringValue;
+})(Manifold || (Manifold = {}));
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Manifold;
+(function (Manifold) {
+    var TreeSortType = (function (_super) {
+        __extends(TreeSortType, _super);
+        function TreeSortType() {
+            _super.apply(this, arguments);
+        }
+        // todo: use getters when ES3 target is no longer required.
+        TreeSortType.prototype.date = function () {
+            return new TreeSortType(TreeSortType.DATE.toString());
+        };
+        TreeSortType.prototype.none = function () {
+            return new TreeSortType(TreeSortType.NONE.toString());
+        };
+        TreeSortType.DATE = new TreeSortType("date");
+        TreeSortType.NONE = new TreeSortType("none");
+        return TreeSortType;
+    }(Manifold.StringValue));
+    Manifold.TreeSortType = TreeSortType;
 })(Manifold || (Manifold = {}));
 
 var Manifold;

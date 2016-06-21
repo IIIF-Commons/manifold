@@ -2,11 +2,6 @@
     loadManifest: function(options) {
         var bootstrapper = new Manifold.Bootstrapper(options);
         return bootstrapper.bootstrap();
-    } 
+    },
+    TreeSortType: new Manifold.TreeSortType()
 }
-
-// (function(w) {
-//     if (!w.Manifold){
-//         w.Manifold = Manifold;
-//     }
-// })(window);
