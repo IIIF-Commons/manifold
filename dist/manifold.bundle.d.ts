@@ -1203,8 +1203,34 @@ declare module Manifold {
     }
 }
 
+declare module Manifold {
+    class MultiSelectState {
+        enabled: boolean;
+        ranges: IRange[];
+        canvases: ICanvas[];
+        allCanvasesSelected(): boolean;
+        allRangesSelected(): boolean;
+        allSelected(): boolean;
+        getAll(): IMultiSelectable[];
+        getAllSelectedCanvases(): ICanvas[];
+        getAllSelectedRanges(): IRange[];
+        getCanvasById(id: string): ICanvas;
+        getCanvasesByIds(ids: string[]): ICanvas[];
+        getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+        selectAll(selected: boolean): void;
+        selectCanvas(canvas: ICanvas, selected: boolean): void;
+        selectAllCanvases(selected: boolean): void;
+        selectCanvases(canvases: ICanvas[], selected: boolean): void;
+        selectRange(range: IRange, selected: boolean): void;
+        selectAllRanges(selected: boolean): void;
+        selectRanges(ranges: IRange[], selected: boolean): void;
+        setEnabled(enabled: boolean): void;
+    }
+}
+
 /// <reference path="StringValue.d.ts" />
 /// <reference path="TreeSortType.d.ts" />
+/// <reference path="MultiSelectState.d.ts" />
 
 declare module Manifold {
     class Bootstrapper {
@@ -1430,31 +1456,6 @@ declare module Manifold {
     }
 }
 
-
-declare module Manifold {
-    class MultiSelectState {
-        enabled: boolean;
-        ranges: IRange[];
-        canvases: ICanvas[];
-        allCanvasesSelected(): boolean;
-        allRangesSelected(): boolean;
-        allSelected(): boolean;
-        getAll(): IMultiSelectable[];
-        getAllSelectedCanvases(): ICanvas[];
-        getAllSelectedRanges(): IRange[];
-        getCanvasById(id: string): ICanvas;
-        getCanvasesByIds(ids: string[]): ICanvas[];
-        getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
-        selectAll(selected: boolean): void;
-        selectCanvas(canvas: ICanvas, selected: boolean): void;
-        selectAllCanvases(selected: boolean): void;
-        selectCanvases(canvases: ICanvas[], selected: boolean): void;
-        selectRange(range: IRange, selected: boolean): void;
-        selectAllRanges(selected: boolean): void;
-        selectRanges(ranges: IRange[], selected: boolean): void;
-        setEnabled(enabled: boolean): void;
-    }
-}
 
 declare module Manifold {
     class UriLabeller {
