@@ -257,7 +257,7 @@ declare namespace Manifold {
     }
 }
 
-declare namespace Manifold {
+declare module Manifold {
     class TreeSortType extends StringValue {
         static DATE: TreeSortType;
         static NONE: TreeSortType;
