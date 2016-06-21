@@ -1187,6 +1187,26 @@ declare module Manifesto {
 }
 
 declare module Manifold {
+    class StringValue {
+        value: string;
+        constructor(value?: string);
+        toString(): string;
+    }
+}
+
+declare module Manifold {
+    class TreeSortType extends StringValue {
+        static DATE: TreeSortType;
+        static NONE: TreeSortType;
+        date(): TreeSortType;
+        none(): TreeSortType;
+    }
+}
+
+/// <reference path="StringValue.d.ts" />
+/// <reference path="TreeSortType.d.ts" />
+
+declare module Manifold {
     class Bootstrapper {
         private _options;
         constructor(options: Manifold.IManifoldOptions);
@@ -1433,23 +1453,6 @@ declare module Manifold {
         selectAllRanges(selected: boolean): void;
         selectRanges(ranges: IRange[], selected: boolean): void;
         setEnabled(enabled: boolean): void;
-    }
-}
-
-declare module Manifold {
-    class StringValue {
-        value: string;
-        constructor(value?: string);
-        toString(): string;
-    }
-}
-
-declare module Manifold {
-    class TreeSortType extends StringValue {
-        static DATE: TreeSortType;
-        static NONE: TreeSortType;
-        date(): TreeSortType;
-        none(): TreeSortType;
     }
 }
 

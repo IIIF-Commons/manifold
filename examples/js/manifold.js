@@ -3,6 +3,52 @@
 (function (global){
 var Manifold;
 (function (Manifold) {
+    var StringValue = (function () {
+        function StringValue(value) {
+            this.value = "";
+            if (value) {
+                this.value = value.toLowerCase();
+            }
+        }
+        StringValue.prototype.toString = function () {
+            return this.value;
+        };
+        return StringValue;
+    }());
+    Manifold.StringValue = StringValue;
+})(Manifold || (Manifold = {}));
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Manifold;
+(function (Manifold) {
+    var TreeSortType = (function (_super) {
+        __extends(TreeSortType, _super);
+        function TreeSortType() {
+            _super.apply(this, arguments);
+        }
+        // todo: use getters when ES3 target is no longer required.
+        TreeSortType.prototype.date = function () {
+            return new TreeSortType(TreeSortType.DATE.toString());
+        };
+        TreeSortType.prototype.none = function () {
+            return new TreeSortType(TreeSortType.NONE.toString());
+        };
+        TreeSortType.DATE = new TreeSortType("date");
+        TreeSortType.NONE = new TreeSortType("none");
+        return TreeSortType;
+    }(Manifold.StringValue));
+    Manifold.TreeSortType = TreeSortType;
+})(Manifold || (Manifold = {}));
+
+/// <reference path="./StringValue.ts" />
+/// <reference path="./TreeSortType.ts" /> 
+
+var Manifold;
+(function (Manifold) {
     var Bootstrapper = (function () {
         function Bootstrapper(options) {
             this._options = options;
@@ -584,11 +630,11 @@ var Manifold;
 
 
 global.manifold = global.Manifold = module.exports = {
+    TreeSortType: new Manifold.TreeSortType(),
     loadManifest: function (options) {
         var bootstrapper = new Manifold.Bootstrapper(options);
         return bootstrapper.bootstrap();
-    },
-    TreeSortType: new Manifold.TreeSortType()
+    }
 };
 
 var Manifold;
@@ -680,49 +726,6 @@ var Manifold;
         return MultiSelectState;
     }());
     Manifold.MultiSelectState = MultiSelectState;
-})(Manifold || (Manifold = {}));
-
-var Manifold;
-(function (Manifold) {
-    var StringValue = (function () {
-        function StringValue(value) {
-            this.value = "";
-            if (value) {
-                this.value = value.toLowerCase();
-            }
-        }
-        StringValue.prototype.toString = function () {
-            return this.value;
-        };
-        return StringValue;
-    }());
-    Manifold.StringValue = StringValue;
-})(Manifold || (Manifold = {}));
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Manifold;
-(function (Manifold) {
-    var TreeSortType = (function (_super) {
-        __extends(TreeSortType, _super);
-        function TreeSortType() {
-            _super.apply(this, arguments);
-        }
-        // todo: use getters when ES3 target is no longer required.
-        TreeSortType.prototype.date = function () {
-            return new TreeSortType(TreeSortType.DATE.toString());
-        };
-        TreeSortType.prototype.none = function () {
-            return new TreeSortType(TreeSortType.NONE.toString());
-        };
-        TreeSortType.DATE = new TreeSortType("date");
-        TreeSortType.NONE = new TreeSortType("none");
-        return TreeSortType;
-    }(Manifold.StringValue));
-    Manifold.TreeSortType = TreeSortType;
 })(Manifold || (Manifold = {}));
 
 var Manifold;
