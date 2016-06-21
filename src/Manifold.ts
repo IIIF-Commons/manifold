@@ -3,5 +3,6 @@
     loadManifest: function(options) {
         var bootstrapper = new Manifold.Bootstrapper(options);
         return bootstrapper.bootstrap();
-    }
+    },
+    MultiSelectState: new Manifold.MultiSelectState()
 }
