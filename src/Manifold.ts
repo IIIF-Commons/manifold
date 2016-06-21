@@ -6,6 +6,8 @@ namespace Manifold {
     } 
 }
 
+(<any>global).manifold = (<any>global).Manifold = module.exports = Manifold;
+
 (function(w) {
     if (!w.Manifold){
         w.Manifold = Manifold;
