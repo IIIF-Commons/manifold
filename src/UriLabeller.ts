@@ -1,4 +1,4 @@
-namespace Manifold {
+module Manifold {
     // This class formats URIs into HTML <a> links, applying labels when available
     export class UriLabeller {
         labels: Object;

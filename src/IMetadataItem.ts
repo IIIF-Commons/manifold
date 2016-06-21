@@ -1,4 +1,4 @@
-namespace Manifold {
+module Manifold {
     export interface IMetadataItem {
         label: string;
         value: string | IMetadataItem[];

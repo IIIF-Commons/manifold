@@ -1,4 +1,4 @@
-namespace Manifold {
+module Manifold {
 
     export class MultiSelectState {
         enabled: boolean = false;

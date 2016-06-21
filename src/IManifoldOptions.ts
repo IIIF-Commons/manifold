@@ -1,4 +1,4 @@
-namespace Manifold {
+module Manifold {
     export interface IManifoldOptions {
         iiifResourceUri: string;
         iiifResource: Manifesto.IIIIFResource;
