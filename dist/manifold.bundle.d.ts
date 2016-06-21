@@ -1362,6 +1362,10 @@ declare namespace Manifold {
     }
 }
 
+interface IManifold {
+    loadManifest: (options: Manifold.IManifoldOptions) => Promise<Manifold.IHelper>;
+}
+
 declare namespace Manifold {
     interface IManifoldOptions {
         iiifResourceUri: string;
@@ -1406,9 +1410,6 @@ declare namespace Manifold {
     }
 }
 
-declare namespace Manifold {
-    function loadManifest(options: any): Promise<Helper>;
-}
 
 declare namespace Manifold {
     class MultiSelectState {

@@ -1,15 +1,12 @@
-namespace Manifold {
-
-    export function loadManifest(options) {
+(<any>global).manifold = (<any>global).Manifold = module.exports = <IManifold>{
+    loadManifest: function(options) {
         var bootstrapper = new Manifold.Bootstrapper(options);
         return bootstrapper.bootstrap();
     } 
 }
 
-(<any>global).manifold = (<any>global).Manifold = module.exports = Manifold;
-
-(function(w) {
-    if (!w.Manifold){
-        w.Manifold = Manifold;
-    }
-})(window);
+// (function(w) {
+//     if (!w.Manifold){
+//         w.Manifold = Manifold;
+//     }
+// })(window);

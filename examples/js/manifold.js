@@ -581,20 +581,19 @@ var Manifold;
 
 
 
-var Manifold;
-(function (Manifold) {
-    function loadManifest(options) {
+
+
+global.manifold = global.Manifold = module.exports = {
+    loadManifest: function (options) {
         var bootstrapper = new Manifold.Bootstrapper(options);
         return bootstrapper.bootstrap();
     }
-    Manifold.loadManifest = loadManifest;
-})(Manifold || (Manifold = {}));
-global.manifold = global.Manifold = module.exports = Manifold;
-(function (w) {
-    if (!w.Manifold) {
-        w.Manifold = Manifold;
-    }
-})(window);
+};
+// (function(w) {
+//     if (!w.Manifold){
+//         w.Manifold = Manifold;
+//     }
+// })(window); 
 
 var Manifold;
 (function (Manifold) {
