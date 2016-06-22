@@ -1250,7 +1250,6 @@ declare module Manifold {
         getManifestType(): Manifesto.ManifestType;
         getMetadata(licenseFormatter?: Manifold.UriLabeller): Manifold.IMetadataItem[];
         getMultiSelectState(): Manifold.MultiSelectState;
-        getPagedIndices(canvasIndex?: number): number[];
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];

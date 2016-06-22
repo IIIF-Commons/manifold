@@ -269,12 +269,6 @@ module Manifold {
             m.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases().clone();
             return m;
         }
-
-        public getPagedIndices(canvasIndex?: number): number[]{
-            if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
-
-            return [canvasIndex];
-        }
         
         public getRanges(): IRange[] {
             return <IRange[]>(<Manifesto.IManifest>this.manifest).getRanges();

@@ -314,11 +314,6 @@ var Manifold;
             m.canvases = this.getCurrentSequence().getCanvases().clone();
             return m;
         };
-        Helper.prototype.getPagedIndices = function (canvasIndex) {
-            if (typeof (canvasIndex) === 'undefined')
-                canvasIndex = this.canvasIndex;
-            return [canvasIndex];
-        };
         Helper.prototype.getRanges = function () {
             return this.manifest.getRanges();
         };
