@@ -216,13 +216,34 @@ var Manifold;
             return 0;
         };
         Helper.prototype.getInfoUri = function (canvas) {
-            // default to IxIF
-            var service = canvas.getService(manifesto.ServiceProfile.ixif());
-            if (service) {
-                return service.getInfoUri();
+            var images = canvas.getImages();
+            // if the canvas has images it's IIIF
+            if (images && images.length) {
+                var infoUri;
+                var firstImage = images[0];
+                var resource = firstImage.getResource();
+                var services = resource.getServices();
+                for (var i = 0; i < services.length; i++) {
+                    var service = services[i];
+                    var id = service.id;
+                    if (!id.endsWith('/')) {
+                        id += '/';
+                    }
+                    if (manifesto.isImageProfile(service.getProfile())) {
+                        infoUri = id + 'info.json';
+                    }
+                }
+                return infoUri;
             }
-            // return the canvas id.
-            return canvas.id;
+            else {
+                // IxIF
+                var service = canvas.getService(manifesto.ServiceProfile.ixif());
+                if (service) {
+                    return service.getInfoUri();
+                }
+                // return the canvas id.
+                return canvas.id;
+            }
         };
         Helper.prototype.getLabel = function () {
             return this.manifest.getLabel();
