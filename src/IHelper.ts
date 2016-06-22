@@ -37,8 +37,7 @@ module Manifold {
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;        
         getMetadata(): Manifold.IMetadataItem[];        
-        getMultiSelectState(): Manifold.MultiSelectState;
-        getPagedIndices(canvasIndex?: number): number[];        
+        getMultiSelectState(): Manifold.MultiSelectState;      
         getRanges(): IRange[];        
         getRangeByPath(path: string): any;        
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];        
