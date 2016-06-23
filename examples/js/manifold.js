@@ -375,7 +375,7 @@ var Manifold;
                     // expanding a decade generates a list of years
                     // expanding a year gives a list of months containing issues
                     // expanding a month gives a list of issues.
-                    if (this._treeHasNavDates(tree)) {
+                    if (this.treeHasNavDates(tree)) {
                         this.getSortedTreeNodesByDate(sortedTree, tree);
                         break;
                     }
@@ -384,7 +384,7 @@ var Manifold;
             }
             return sortedTree;
         };
-        Helper.prototype._treeHasNavDates = function (tree) {
+        Helper.prototype.treeHasNavDates = function (tree) {
             var node = tree.nodes.en().traverseUnique(function (node) { return node.nodes; }).where(function (n) { return !isNaN(n.navDate); }).first();
             return (node) ? true : false;
         };

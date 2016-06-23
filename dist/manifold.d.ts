@@ -76,7 +76,7 @@ declare module Manifold {
         getTotalCanvases(): number;
         getTrackingLabel(): string;
         getTree(sortType?: TreeSortType): ITreeNode;
-        private _treeHasNavDates(tree);
+        treeHasNavDates(tree: ITreeNode): boolean;
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         hasParentCollection(): boolean;
@@ -190,6 +190,7 @@ declare module Manifold {
         isTotalCanvasesEven(): boolean;
         isUIEnabled(name: string): boolean;
         isVerticallyAligned(): boolean;
+        treeHasNavDates(tree: ITreeNode): boolean;
     }
 }
 

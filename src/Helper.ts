@@ -350,7 +350,7 @@ module Manifold {
                     // expanding a decade generates a list of years
                     // expanding a year gives a list of months containing issues
                     // expanding a month gives a list of issues.
-                    if (this._treeHasNavDates(tree)){
+                    if (this.treeHasNavDates(tree)){
                         this.getSortedTreeNodesByDate(sortedTree, tree);
                         break;
                     }                    
@@ -361,7 +361,7 @@ module Manifold {
             return sortedTree;
         }
         
-        private _treeHasNavDates(tree: ITreeNode): boolean {
+        public treeHasNavDates(tree: ITreeNode): boolean {
             var node: Manifesto.ITreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
             return (node)? true : false;
         }

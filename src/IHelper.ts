@@ -75,6 +75,7 @@ module Manifold {
         isTotalCanvasesEven(): boolean;
         isUIEnabled(name: string): boolean;        
         isVerticallyAligned(): boolean;
+        treeHasNavDates(tree: ITreeNode): boolean;
     }
     
 }
