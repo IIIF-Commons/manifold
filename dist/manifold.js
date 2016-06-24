@@ -657,7 +657,7 @@ var Manifold;
 (function (Manifold) {
     var MultiSelectState = (function () {
         function MultiSelectState() {
-            this.enabled = false;
+            this.isEnabled = false;
             this.ranges = [];
             this.canvases = [];
         }
@@ -729,11 +729,11 @@ var Manifold;
             }
         };
         MultiSelectState.prototype.setEnabled = function (enabled) {
-            this.enabled = enabled;
+            this.isEnabled = enabled;
             var items = this.getAll();
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
-                item.multiSelectEnabled = this.enabled;
+                item.multiSelectEnabled = this.isEnabled;
                 if (!enabled) {
                     item.multiSelected = false;
                 }

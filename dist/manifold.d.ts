@@ -246,7 +246,7 @@ declare module Manifold {
 
 declare module Manifold {
     class MultiSelectState {
-        enabled: boolean;
+        isEnabled: boolean;
         ranges: IRange[];
         canvases: ICanvas[];
         allCanvasesSelected(): boolean;

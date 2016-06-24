@@ -1,7 +1,7 @@
 module Manifold {
 
     export class MultiSelectState {
-        enabled: boolean = false;
+        isEnabled: boolean = false;
         ranges: IRange[] = [];
         canvases: ICanvas[] = [];
         
@@ -93,13 +93,13 @@ module Manifold {
         }
         
         public setEnabled(enabled: boolean): void {
-            this.enabled = enabled;
+            this.isEnabled = enabled;
             
             var items: IMultiSelectable[] = this.getAll();
 
             for (var i = 0; i < items.length; i++){
                 var item: IMultiSelectable = items[i];
-                item.multiSelectEnabled = this.enabled;
+                item.multiSelectEnabled = this.isEnabled;
                 if (!enabled){
                     item.multiSelected = false;
                 }
