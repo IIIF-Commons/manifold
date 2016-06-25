@@ -1187,6 +1187,9 @@ declare module Manifesto {
     }
 }
 
+interface Window {
+    manifestCallback: any;
+}
 declare module Manifold {
     class StringValue {
         value: string;
