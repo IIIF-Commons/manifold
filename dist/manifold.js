@@ -56,51 +56,74 @@ var Manifold;
         Bootstrapper.prototype.bootstrap = function () {
             var that = this;
             return new Promise(function (resolve, reject) {
-                manifesto.loadManifest(that._options.iiifResourceUri).then(function (json) {
-                    var _this = this;
-                    var iiifResource = manifesto.create(json);
-                    // only set the root IIIFResource on the first load
-                    if (!that._options.iiifResource) {
-                        that._options.iiifResource = iiifResource;
-                    }
-                    if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
-                        // if it's a collection and has child collections, get the collection by index
-                        if (iiifResource.collections && iiifResource.collections.length) {
-                            iiifResource.getCollectionByIndex(that._options.collectionIndex).then(function (collection) {
-                                if (!collection) {
-                                    reject();
-                                }
-                                // Special case: we're trying to load the first manifest of the
-                                // collection, but the collection has no manifests but does have
-                                // subcollections. Thus, we should dive in until we find something
-                                // we can display!
-                                if (collection.getTotalManifests() === 0 && _this.manifestIndex === 0 && collection.getTotalCollections() > 0) {
-                                    that._options.collectionIndex = 0;
-                                    that._options.iiifResourceUri = collection.id;
-                                    that.bootstrap();
-                                }
-                                collection.getManifestByIndex(that._options.manifestIndex).then(function (manifest) {
-                                    that._options.manifest = manifest;
-                                    var helper = new Manifold.Helper(that._options);
-                                    resolve(helper);
-                                });
-                            });
-                        }
-                        else {
-                            iiifResource.getManifestByIndex(that._options.manifestIndex).then(function (manifest) {
-                                that._options.manifest = manifest;
-                                var helper = new Manifold.Helper(that._options);
-                                resolve(helper);
-                            });
-                        }
-                    }
-                    else {
-                        that._options.manifest = iiifResource;
-                        var helper = new Manifold.Helper(that._options);
-                        resolve(helper);
-                    }
-                });
+                // if < IE11, use jquery
+                var msie = that._msieversion();
+                if (msie > 0 && msie < 11) {
+                    $.getJSON(that._options.iiifResourceUri, function (json) {
+                        that._loaded(that, JSON.stringify(json), resolve, reject);
+                    });
+                }
+                else {
+                    manifesto.loadManifest(that._options.iiifResourceUri).then(function (json) {
+                        that._loaded(that, json, resolve, reject);
+                    });
+                }
             });
+        };
+        Bootstrapper.prototype._loaded = function (bootstrapper, json, resolve, reject) {
+            var iiifResource = manifesto.create(json, {
+                locale: bootstrapper._options.locale
+            });
+            // only set the root IIIFResource on the first load
+            if (!bootstrapper._options.iiifResource) {
+                bootstrapper._options.iiifResource = iiifResource;
+            }
+            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
+                // if it's a collection and has child collections, get the collection by index
+                if (iiifResource.collections && iiifResource.collections.length) {
+                    iiifResource.getCollectionByIndex(bootstrapper._options.collectionIndex).then(function (collection) {
+                        if (!collection) {
+                            reject('Collection index not found');
+                        }
+                        // Special case: we're trying to load the first manifest of the
+                        // collection, but the collection has no manifests but does have
+                        // subcollections. Thus, we should dive in until we find something
+                        // we can display!
+                        if (collection.getTotalManifests() === 0 && bootstrapper._options.manifestIndex === 0 && collection.getTotalCollections() > 0) {
+                            bootstrapper._options.collectionIndex = 0;
+                            bootstrapper._options.iiifResourceUri = collection.id;
+                            bootstrapper.bootstrap();
+                        }
+                        collection.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
+                            bootstrapper._options.manifest = manifest;
+                            var helper = new Manifold.Helper(bootstrapper._options);
+                            resolve(helper);
+                        });
+                    });
+                }
+                else {
+                    iiifResource.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
+                        bootstrapper._options.manifest = manifest;
+                        var helper = new Manifold.Helper(bootstrapper._options);
+                        resolve(helper);
+                    });
+                }
+            }
+            else {
+                bootstrapper._options.manifest = iiifResource;
+                var helper = new Manifold.Helper(bootstrapper._options);
+                resolve(helper);
+            }
+        };
+        Bootstrapper.prototype._msieversion = function () {
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
+            if (msie > 0) {
+                return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
+            }
+            else {
+                return 0;
+            }
         };
         return Bootstrapper;
     }());
