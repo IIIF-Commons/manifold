@@ -7,7 +7,7 @@ var path = require('path');
 
 gulp.task('bundle', function(cb) {
     return merge([
-        gulp.src(config.deps.concat([path.join(config.dist, config.jsMinOut)]))
+        gulp.src(config.deps.concat([path.join(config.dist, config.jsOut)]))
             .pipe(concat(config.jsBundleOut))
             .pipe(gulp.dest(config.dist))
     ]);
