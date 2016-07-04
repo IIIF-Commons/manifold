@@ -8,7 +8,8 @@ gulp.task('prependHeaders', function(cb){
     Promise.all([
         utils.prependHeader(config.header, path.join(config.dist, config.dtsOut), config.dist),
         utils.prependHeader(config.header, path.join(config.dist, config.jsOut), config.dist),
-        utils.prependHeader(config.header, path.join(config.dist, config.jsMinOut), config.dist)
+        utils.prependHeader(config.header, path.join(config.dist, config.jsMinOut), config.dist),
+        utils.prependHeader(config.header, path.join(config.dist, config.jsBundleOut), config.dist)
     ]).then(function(){
         cb();
     });
