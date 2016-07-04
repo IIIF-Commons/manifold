@@ -20,7 +20,6 @@ module Manifold {
             this.canvasIndex = options.canvasIndex || 0;
         }
         
-        
         // getters //
         
         public getAutoCompleteService(): Manifesto.IService {
