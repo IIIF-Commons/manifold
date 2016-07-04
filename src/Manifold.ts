@@ -4,3 +4,9 @@ namespace Manifold {
         return bootstrapper.bootstrap();
     } 
 }
+
+(function(w) {
+    if (!w.Manifold){
+        w.Manifold = w.manifold = Manifold;
+    }
+})(window);

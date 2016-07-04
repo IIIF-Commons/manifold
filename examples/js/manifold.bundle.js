@@ -12816,6 +12816,11 @@ var Manifold;
     }
     Manifold.loadManifest = loadManifest;
 })(Manifold || (Manifold = {}));
+(function (w) {
+    if (!w.Manifold) {
+        w.Manifold = w.manifold = Manifold;
+    }
+})(window);
 
 var Manifold;
 (function (Manifold) {
