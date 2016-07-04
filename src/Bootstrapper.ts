@@ -1,4 +1,4 @@
-module Manifold {
+namespace Manifold {
     
     export class Bootstrapper {
         

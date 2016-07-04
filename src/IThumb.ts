@@ -1,4 +1,4 @@
-module Manifold {
+namespace Manifold {
 
     export interface IThumb extends IMultiSelectable, Manifesto.IThumb {
         initialWidth: number;

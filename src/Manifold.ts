@@ -1,7 +1,6 @@
-(<any>global).manifold = (<any>global).Manifold = module.exports = <IManifold>{
-    TreeSortType: new Manifold.TreeSortType(),
-    loadManifest: function(options) {
+namespace Manifold {
+    export function loadManifest(options) {
         var bootstrapper = new Manifold.Bootstrapper(options);
         return bootstrapper.bootstrap();
-    }
+    } 
 }

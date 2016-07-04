@@ -1,4 +1,4 @@
-module Manifold {
+namespace Manifold {
 
     export interface ITreeNode extends IMultiSelectable, Manifesto.ITreeNode {
 

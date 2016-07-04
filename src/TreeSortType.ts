@@ -1,4 +1,4 @@
-module Manifold {
+namespace Manifold {
     export class TreeSortType extends StringValue{
         public static DATE = new TreeSortType("date");
         public static NONE = new TreeSortType("none");
