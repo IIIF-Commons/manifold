@@ -1225,6 +1225,29 @@ declare module Manifold {
 }
 
 declare module Manifold {
+    class ExternalResource implements Manifesto.IExternalResource {
+        clickThroughService: Manifesto.IService;
+        data: any;
+        dataUri: string;
+        error: any;
+        height: number;
+        isResponseHandled: boolean;
+        loginService: Manifesto.IService;
+        logoutService: Manifesto.IService;
+        restrictedService: Manifesto.IService;
+        status: number;
+        tokenService: Manifesto.IService;
+        width: number;
+        x: number;
+        y: number;
+        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string);
+        private _parseAuthServices(resource);
+        isAccessControlled(): boolean;
+        getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource>;
+    }
+}
+
+declare module Manifold {
     class Helper implements IHelper {
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
