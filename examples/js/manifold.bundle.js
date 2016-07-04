@@ -12818,7 +12818,7 @@ var Manifold;
 })(Manifold || (Manifold = {}));
 (function (w) {
     if (!w.Manifold) {
-        w.Manifold = w.manifold = Manifold;
+        w.Manifold = Manifold;
     }
 })(window);
 
