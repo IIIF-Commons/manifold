@@ -3,7 +3,7 @@ var config = new c();
 var gulp = require('gulp');
 var connect = require('gulp-connect');
 
-gulp.task('test', ['sync'], function() {
+gulp.task('examples', ['sync'], function() {
     connect.server({
         root: config.examplesDir,
         middleware: function(connect, opt) {
