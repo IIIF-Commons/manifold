@@ -48,6 +48,7 @@ declare namespace Manifold {
         constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string);
         private _parseAuthServices(resource);
         isAccessControlled(): boolean;
+        hasServiceDescriptor(): boolean;
         getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource>;
     }
 }

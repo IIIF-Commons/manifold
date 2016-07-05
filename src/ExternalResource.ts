@@ -2,7 +2,6 @@ namespace Manifold {
 
     export class ExternalResource implements Manifesto.IExternalResource {
 
-        //public profile: Manifesto.ServiceProfile;
         public clickThroughService: Manifesto.IService;
         public data: any;
         public dataUri: string;
@@ -22,7 +21,6 @@ namespace Manifold {
             resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
             this._parseAuthServices(resource);
-            //this.profile = (<Manifesto.IService>resource).getProfile();
         }
 
         private _parseAuthServices(resource: any): void {
@@ -50,6 +48,10 @@ namespace Manifold {
             return false;
         }
 
+        public hasServiceDescriptor(): boolean {
+            return this.dataUri.endsWith('info.json');
+        }
+
         public getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource> {
             var that = this;
 
@@ -60,8 +62,7 @@ namespace Manifold {
 
                 var type: string = 'GET';
 
-                // todo: use manifesto.hasServiceDescriptor
-                if (!that.dataUri.endsWith('info.json')){
+                if (!that.hasServiceDescriptor()){
                     // If access control is unnecessary, short circuit the process.
                     // Note that isAccessControlled check for short-circuiting only
                     // works in the "binary resource" context, since in that case,
