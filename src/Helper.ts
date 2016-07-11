@@ -281,10 +281,10 @@ namespace Manifold {
             var ids: string[] = range.getCanvasIds();
             return this.getCanvasesById(ids);
         }
-        
+
         public getRelated(): any {
             return this.manifest.getRelated();
-        } 
+        }
 
         public getResources(): Manifesto.IAnnotation[] {
             var element: Manifesto.IElement = this.getCurrentElement();

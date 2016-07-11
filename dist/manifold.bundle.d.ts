@@ -1384,6 +1384,7 @@ declare namespace Manifold {
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+        getRelated(): any;
         getResources(): Manifesto.IAnnotation[];
         getSearchWithinService(): Manifesto.IService;
         getSeeAlso(): any;
