@@ -470,6 +470,9 @@ var Manifold;
             var ids = range.getCanvasIds();
             return this.getCanvasesById(ids);
         };
+        Helper.prototype.getRelated = function () {
+            return this.manifest.getRelated();
+        };
         Helper.prototype.getResources = function () {
             var element = this.getCurrentElement();
             return element.getResources();
@@ -551,6 +554,10 @@ var Manifold;
         // inquiries //
         Helper.prototype.hasParentCollection = function () {
             return !!this.manifest.parentCollection;
+        };
+        Helper.prototype.hasRelatedPage = function () {
+            var related = this.getRelated();
+            return related['format'] === 'text/html';
         };
         Helper.prototype.hasResources = function () {
             return this.getResources().length > 0;

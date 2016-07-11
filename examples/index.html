@@ -14,6 +14,7 @@
         
         $(function() {
             
+            // http://wellcomelibrary.org/iiif/b18035978/manifest (Biocrats)
             // http://wellcomelibrary.org/iiif/b18035723/manifest (Wunder der Vererbung)
             // http://wellcomelibrary.org/iiif/collection/b19974760 (Chemist and Druggist)
             // http://wellcomelibrary.org/iiif/collection/b18031511 (Biological Basis of Medicine)
@@ -21,14 +22,15 @@
             // http://dams.llgc.org.uk/iiif/newspapers/4651124.json (Abergele and Pensarn Visitor 1909-1910)
 
             Manifold.loadManifest({
-                iiifResourceUri: 'http://wellcomelibrary.org/iiif/b18035723/manifest',
+                iiifResourceUri: 'http://wellcomelibrary.org/iiif/b18035978/manifest',
                 collectionIndex: 0,
                 manifestIndex: 0,
                 sequenceIndex: 0,
                 canvasIndex: 0
             }).then(function(h){                
-                helper = h;                
-                multiSelectState = helper.getMultiSelectState();  
+                helper = h;
+                console.log(helper.hasRelatedPage());
+                //multiSelectState = helper.getMultiSelectState();  
             }).catch(function() {
                 console.error('failed to load manifest');
             });

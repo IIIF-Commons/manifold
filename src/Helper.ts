@@ -282,6 +282,10 @@ namespace Manifold {
             return this.getCanvasesById(ids);
         }
         
+        public getRelated(): any {
+            return this.manifest.getRelated();
+        } 
+
         public getResources(): Manifesto.IAnnotation[] {
             var element: Manifesto.IElement = this.getCurrentElement();
             return element.getResources();
@@ -390,6 +394,11 @@ namespace Manifold {
         
         public hasParentCollection(): boolean {
             return !!this.manifest.parentCollection;
+        }
+
+        public hasRelatedPage(): boolean {
+            var related: any = this.getRelated();
+            return related['format'] === 'text/html';
         }
 
         public hasResources(): boolean {
