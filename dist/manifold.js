@@ -331,7 +331,7 @@ var Manifold;
                 return canvas.ranges; // cache
             }
             else {
-                canvas.ranges = this.manifest.getRanges().en().where(function (range) { return (range.getCanvasIds().en().any(function (c) { return c === canvas.id; })); }).toArray();
+                canvas.ranges = this.manifest.getAllRanges().en().where(function (range) { return (range.getCanvasIds().en().any(function (c) { return c === canvas.id; })); }).toArray();
             }
             return canvas.ranges;
         };
@@ -461,7 +461,7 @@ var Manifold;
             return m;
         };
         Helper.prototype.getRanges = function () {
-            return this.manifest.getRanges();
+            return this.manifest.getAllRanges();
         };
         Helper.prototype.getRangeByPath = function (path) {
             return this.manifest.getRangeByPath(path);
@@ -516,7 +516,7 @@ var Manifold;
             return this.manifest.getTrackingLabel();
         };
         Helper.prototype.getTree = function (sortType) {
-            var tree = this.iiifResource.getTree();
+            var tree = this.iiifResource.getDefaultTree();
             var sortedTree = manifesto.getTreeNode();
             switch (sortType.toString()) {
                 case Manifold.TreeSortType.DATE.toString():

@@ -103,7 +103,7 @@ namespace Manifold {
             if (canvas.ranges){
                 return canvas.ranges; // cache
             } else {
-                canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
+                canvas.ranges = <IRange[]>this.manifest.getAllRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
             }
 
             return canvas.ranges;
@@ -270,7 +270,7 @@ namespace Manifold {
         }
         
         public getRanges(): IRange[] {
-            return <IRange[]>(<Manifesto.IManifest>this.manifest).getRanges();
+            return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();
         }
         
         public getRangeByPath(path: string): any{
@@ -344,7 +344,7 @@ namespace Manifold {
 
         public getTree(sortType?: TreeSortType): ITreeNode {
 
-            var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
+            var tree: ITreeNode = <ITreeNode>this.iiifResource.getDefaultTree();
             var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
             
             switch (sortType.toString()){
