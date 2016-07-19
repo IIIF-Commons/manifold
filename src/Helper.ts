@@ -334,10 +334,14 @@ namespace Manifold {
             return this.getCurrentSequence().getThumbs(width, height);
         }
         
-        public getTotalCanvases(): number{
+        public getTopRanges(): Manifesto.IRange[] {
+            return this.manifest.getTopRanges();
+        }
+
+        public getTotalCanvases(): number {
             return this.getCurrentSequence().getTotalCanvases();
         }
-        
+
         public getTrackingLabel(): string {
             return this.manifest.getTrackingLabel();
         }

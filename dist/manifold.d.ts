@@ -100,6 +100,7 @@ declare namespace Manifold {
         getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void;
         getStartCanvasIndex(): number;
         getThumbs(width: number, height: number): Manifesto.IThumb[];
+        getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
         getTree(sortType?: TreeSortType): ITreeNode;
@@ -195,6 +196,7 @@ declare namespace Manifold {
         getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void;
         getStartCanvasIndex(): number;
         getThumbs(width: number, height: number): Manifesto.IThumb[];
+        getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
         getTree(sortType?: TreeSortType): ITreeNode;

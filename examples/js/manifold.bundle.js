@@ -12770,6 +12770,9 @@ var Manifold;
         Helper.prototype.getThumbs = function (width, height) {
             return this.getCurrentSequence().getThumbs(width, height);
         };
+        Helper.prototype.getTopRanges = function () {
+            return this.manifest.getTopRanges();
+        };
         Helper.prototype.getTotalCanvases = function () {
             return this.getCurrentSequence().getTotalCanvases();
         };
