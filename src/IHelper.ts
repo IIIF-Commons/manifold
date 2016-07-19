@@ -52,7 +52,7 @@ namespace Manifold {
         getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
-        getTree(sortType?: TreeSortType): ITreeNode;   
+        getTree(topRangeIndex?: number, sortType?: TreeSortType): ITreeNode;   
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         

@@ -518,8 +518,23 @@ var Manifold;
         Helper.prototype.getTrackingLabel = function () {
             return this.manifest.getTrackingLabel();
         };
-        Helper.prototype.getTree = function (sortType) {
-            var tree = this.iiifResource.getDefaultTree();
+        Helper.prototype.getTree = function (topRangeIndex, sortType) {
+            // if it's a collection, use IIIFResource.getDefaultTree()
+            // otherwise, get the top range by index and use Range.getTree()
+            if (topRangeIndex === void 0) { topRangeIndex = 0; }
+            if (sortType === void 0) { sortType = Manifold.TreeSortType.NONE; }
+            var tree;
+            if (this.iiifResource.isCollection()) {
+                tree = this.iiifResource.getDefaultTree();
+            }
+            else {
+                var topRanges = this.iiifResource.getTopRanges();
+                var range = topRanges[topRangeIndex];
+                var root = manifesto.getTreeNode();
+                root.label = 'root';
+                root.data = this.iiifResource;
+                tree = range.getTree(root);
+            }
             var sortedTree = manifesto.getTreeNode();
             switch (sortType.toString()) {
                 case Manifold.TreeSortType.DATE.toString():

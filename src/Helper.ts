@@ -346,9 +346,24 @@ namespace Manifold {
             return this.manifest.getTrackingLabel();
         }
 
-        public getTree(sortType?: TreeSortType): ITreeNode {
+        public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): ITreeNode {
 
-            var tree: ITreeNode = <ITreeNode>this.iiifResource.getDefaultTree();
+            // if it's a collection, use IIIFResource.getDefaultTree()
+            // otherwise, get the top range by index and use Range.getTree()
+
+            var tree: ITreeNode;
+
+            if (this.iiifResource.isCollection()){
+                tree = <ITreeNode>this.iiifResource.getDefaultTree();
+            } else {
+                var topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
+                var range: Manifesto.IRange = topRanges[topRangeIndex];
+                var root: ITreeNode = <ITreeNode>manifesto.getTreeNode();
+                root.label = 'root';
+                root.data = this.iiifResource;
+                tree = <ITreeNode>range.getTree(root);
+            }
+
             var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
             
             switch (sortType.toString()){

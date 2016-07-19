@@ -103,7 +103,7 @@ declare namespace Manifold {
         getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
-        getTree(sortType?: TreeSortType): ITreeNode;
+        getTree(topRangeIndex?: number, sortType?: TreeSortType): ITreeNode;
         treeHasNavDates(tree: ITreeNode): boolean;
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
@@ -199,7 +199,7 @@ declare namespace Manifold {
         getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
-        getTree(sortType?: TreeSortType): ITreeNode;
+        getTree(topRangeIndex?: number, sortType?: TreeSortType): ITreeNode;
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         hasParentCollection(): boolean;
