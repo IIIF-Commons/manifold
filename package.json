@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/UniversalViewer/manifold.git"
+    "url": "git+https://github.com/viewdir/manifold.git"
   },
-  "author": "Edward Silverton <e.silverton@gmail.com> (http://edsilv.com)",
+  "author": "Edward Silverton <ed@edsilv.com> (http://edsilv.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/UniversalViewer/manifold/issues"
+    "url": "https://github.com/viewdir/manifold/issues"
   },
-  "homepage": "https://github.com/UniversalViewer/manifold#readme",
+  "homepage": "https://github.com/viewdir/manifold#readme",
   "devDependencies": {
     "del": "^2.2.0",
     "gulp": "^3.9.1",
@@ -24,8 +24,8 @@
     "gulp-connect": "^4.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-typescript": "^2.13.4",
-    "gulp-utils": "git://github.com/edsilv/gulp-utils.git",
-    "manifesto": "git://github.com/universalviewer/manifesto.git#dev",
+    "gulp-utils": "git://github.com/viewdir/gulp-utils.git",
+    "manifesto": "git://github.com/viewdir/manifesto.git#dev",
     "merge2": "^1.0.2",
     "path": "^0.12.7",
     "require-dir": "^0.3.0",
