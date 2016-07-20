@@ -529,11 +529,16 @@ var Manifold;
             }
             else {
                 var topRanges = this.iiifResource.getTopRanges();
-                var range = topRanges[topRangeIndex];
                 var root = manifesto.getTreeNode();
                 root.label = 'root';
                 root.data = this.iiifResource;
-                tree = range.getTree(root);
+                if (topRanges.length) {
+                    var range = topRanges[topRangeIndex];
+                    tree = range.getTree(root);
+                }
+                else {
+                    return root;
+                }
             }
             var sortedTree = manifesto.getTreeNode();
             switch (sortType.toString()) {

@@ -357,11 +357,17 @@ namespace Manifold {
                 tree = <ITreeNode>this.iiifResource.getDefaultTree();
             } else {
                 var topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
-                var range: Manifesto.IRange = topRanges[topRangeIndex];
+                
                 var root: ITreeNode = <ITreeNode>manifesto.getTreeNode();
                 root.label = 'root';
                 root.data = this.iiifResource;
-                tree = <ITreeNode>range.getTree(root);
+                
+                if (topRanges.length){
+                    var range: Manifesto.IRange = topRanges[topRangeIndex];                    
+                    tree = <ITreeNode>range.getTree(root);
+                } else {
+                    return root;
+                }
             }
 
             var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
