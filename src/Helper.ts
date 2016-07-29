@@ -283,7 +283,7 @@ namespace Manifold {
         }
 
         public getRelated(): any {
-            return this.manifest.getRelated();
+            var related = this.manifest.getRelated();
         }
 
         public getResources(): Manifesto.IAnnotation[] {
@@ -417,6 +417,9 @@ namespace Manifold {
 
         public hasRelatedPage(): boolean {
             var related: any = this.getRelated();
+            if (related.length){
+                related = related[0];
+            }
             return related['format'] === 'text/html';
         }
 

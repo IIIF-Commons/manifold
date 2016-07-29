@@ -12738,7 +12738,7 @@ var Manifold;
             return this.getCanvasesById(ids);
         };
         Helper.prototype.getRelated = function () {
-            return this.manifest.getRelated();
+            var related = this.manifest.getRelated();
         };
         Helper.prototype.getResources = function () {
             var element = this.getCurrentElement();
@@ -12842,6 +12842,9 @@ var Manifold;
         };
         Helper.prototype.hasRelatedPage = function () {
             var related = this.getRelated();
+            if (related.length) {
+                related = related[0];
+            }
             return related['format'] === 'text/html';
         };
         Helper.prototype.hasResources = function () {
