@@ -283,7 +283,7 @@ namespace Manifold {
         }
 
         public getRelated(): any {
-            var related = this.manifest.getRelated();
+            return this.manifest.getRelated();
         }
 
         public getResources(): Manifesto.IAnnotation[] {

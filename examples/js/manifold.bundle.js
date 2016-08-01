@@ -12744,7 +12744,7 @@ var Manifold;
             return this.getCanvasesById(ids);
         };
         Helper.prototype.getRelated = function () {
-            var related = this.manifest.getRelated();
+            return this.manifest.getRelated();
         };
         Helper.prototype.getResources = function () {
             var element = this.getCurrentElement();
