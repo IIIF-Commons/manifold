@@ -64,7 +64,9 @@ namespace Manifold {
 
             if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
                 // if it's a collection and has child collections, get the collection by index
-                if ((<Manifesto.ICollection>iiifResource).collections && (<Manifesto.ICollection>iiifResource).collections.length){
+                var collections: Manifesto.ICollection[] = (<Manifesto.ICollection>iiifResource).getCollections();
+
+                if (collections && collections.length){
 
                     (<Manifesto.ICollection>iiifResource).getCollectionByIndex(bootstrapper._options.collectionIndex).then((collection: Manifesto.ICollection) => {
 

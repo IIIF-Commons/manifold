@@ -95,7 +95,8 @@ var Manifold;
             }
             if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
                 // if it's a collection and has child collections, get the collection by index
-                if (iiifResource.collections && iiifResource.collections.length) {
+                var collections = iiifResource.getCollections();
+                if (collections && collections.length) {
                     iiifResource.getCollectionByIndex(bootstrapper._options.collectionIndex).then(function (collection) {
                         if (!collection) {
                             reject('Collection index not found');
