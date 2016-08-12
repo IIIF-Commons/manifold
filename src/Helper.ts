@@ -446,7 +446,11 @@ namespace Manifold {
         }
         
         public isFirstCanvas(index?: number): boolean {
-            return this.getCurrentSequence().isFirstCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isFirstCanvas(index);
+            }
+            
+            return this.getCurrentSequence().isFirstCanvas(this.canvasIndex);
         }
         
         public isHorizontallyAligned(): boolean {
@@ -454,7 +458,11 @@ namespace Manifold {
         }
         
         public isLastCanvas(index?: number): boolean {
-            return this.getCurrentSequence().isLastCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isLastCanvas(index);
+            }
+            
+            return this.getCurrentSequence().isLastCanvas(this.canvasIndex);
         }
         
         public isLeftToRight(): boolean {
