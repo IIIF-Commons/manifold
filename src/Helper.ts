@@ -311,7 +311,7 @@ namespace Manifold {
                 if ((<any>shareService).length){
                     shareService = shareService[0];
                 }
-                url = (<any>shareService).shareUrl;
+                url = shareService.__jsonld.shareUrl;
             }
 
             return url;

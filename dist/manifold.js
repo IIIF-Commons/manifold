@@ -494,7 +494,7 @@ var Manifold;
                 if (shareService.length) {
                     shareService = shareService[0];
                 }
-                url = shareService.shareUrl;
+                url = shareService.__jsonld.shareUrl;
             }
             return url;
         };
