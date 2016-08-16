@@ -308,10 +308,10 @@ namespace Manifold {
             var shareService: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
 
             if (shareService){
-                if (shareService.length){
+                if ((<any>shareService).length){
                     shareService = shareService[0];
                 }
-                url = shareService.shareUrl;
+                url = (<any>shareService).shareUrl;
             }
 
             return url;
