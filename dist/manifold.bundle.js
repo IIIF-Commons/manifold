@@ -12866,6 +12866,17 @@ var Manifold;
         Helper.prototype.getSequenceByIndex = function (index) {
             return this.manifest.getSequenceByIndex(index);
         };
+        Helper.prototype.getShareServiceUrl = function () {
+            var url;
+            var shareService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
+            if (shareService) {
+                if (shareService.length) {
+                    shareService = shareService[0];
+                }
+                url = shareService.shareUrl;
+            }
+            return url;
+        };
         Helper.prototype.getSortedTreeNodesByDate = function (sortedTree, tree) {
             var all = tree.nodes.en().traverseUnique(function (node) { return node.nodes; })
                 .where(function (n) { return n.data.type === manifesto.TreeNodeType.collection().toString() ||

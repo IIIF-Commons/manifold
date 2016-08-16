@@ -303,6 +303,20 @@ namespace Manifold {
             return this.manifest.getSequenceByIndex(index);
         }
 
+        public getShareServiceUrl(): string {
+            var url: string;
+            var shareService: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
+
+            if (shareService){
+                if (shareService.length){
+                    shareService = shareService[0];
+                }
+                url = shareService.shareUrl;
+            }
+
+            return url;
+        }
+
         public getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
 
             var all: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
