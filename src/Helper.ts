@@ -103,7 +103,7 @@ namespace Manifold {
             if (canvas.ranges){
                 return canvas.ranges; // cache
             } else {
-                canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
+                canvas.ranges = <IRange[]>this.manifest.getAllRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
             }
 
             return canvas.ranges;
@@ -270,7 +270,7 @@ namespace Manifold {
         }
         
         public getRanges(): IRange[] {
-            return <IRange[]>(<Manifesto.IManifest>this.manifest).getRanges();
+            return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();
         }
         
         public getRangeByPath(path: string): any{
@@ -301,6 +301,20 @@ namespace Manifold {
 
         public getSequenceByIndex(index: number): Manifesto.ISequence {
             return this.manifest.getSequenceByIndex(index);
+        }
+
+        public getShareServiceUrl(): string {
+            var url: string;
+            var shareService: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
+
+            if (shareService){
+                if ((<any>shareService).length){
+                    shareService = shareService[0];
+                }
+                url = shareService.__jsonld.shareUrl;
+            }
+
+            return url;
         }
 
         public getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
@@ -334,17 +348,42 @@ namespace Manifold {
             return this.getCurrentSequence().getThumbs(width, height);
         }
         
-        public getTotalCanvases(): number{
+        public getTopRanges(): Manifesto.IRange[] {
+            return this.manifest.getTopRanges();
+        }
+
+        public getTotalCanvases(): number {
             return this.getCurrentSequence().getTotalCanvases();
         }
-        
+
         public getTrackingLabel(): string {
             return this.manifest.getTrackingLabel();
         }
 
-        public getTree(sortType?: TreeSortType): ITreeNode {
+        public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): ITreeNode {
 
-            var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
+            // if it's a collection, use IIIFResource.getDefaultTree()
+            // otherwise, get the top range by index and use Range.getTree()
+
+            var tree: ITreeNode;
+
+            if (this.iiifResource.isCollection()){
+                tree = <ITreeNode>this.iiifResource.getDefaultTree();
+            } else {
+                var topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
+                
+                var root: ITreeNode = <ITreeNode>manifesto.getTreeNode();
+                root.label = 'root';
+                root.data = this.iiifResource;
+                
+                if (topRanges.length){
+                    var range: Manifesto.IRange = topRanges[topRangeIndex];                    
+                    tree = <ITreeNode>range.getTree(root);
+                } else {
+                    return root;
+                }
+            }
+
             var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
             
             switch (sortType.toString()){
@@ -398,6 +437,9 @@ namespace Manifold {
 
         public hasRelatedPage(): boolean {
             var related: any = this.getRelated();
+            if (related.length){
+                related = related[0];
+            }
             return related['format'] === 'text/html';
         }
 
@@ -418,7 +460,11 @@ namespace Manifold {
         }
         
         public isFirstCanvas(index?: number): boolean {
-            return this.getCurrentSequence().isFirstCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isFirstCanvas(index);
+            }
+            
+            return this.getCurrentSequence().isFirstCanvas(this.canvasIndex);
         }
         
         public isHorizontallyAligned(): boolean {
@@ -426,7 +472,11 @@ namespace Manifold {
         }
         
         public isLastCanvas(index?: number): boolean {
-            return this.getCurrentSequence().isLastCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isLastCanvas(index);
+            }
+            
+            return this.getCurrentSequence().isLastCanvas(this.canvasIndex);
         }
         
         public isLeftToRight(): boolean {

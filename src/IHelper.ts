@@ -46,12 +46,14 @@ namespace Manifold {
         getSearchWithinService(): Manifesto.IService;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
+        getShareServiceUrl(): string;
         getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void;
         getStartCanvasIndex(): number;
         getThumbs(width: number, height: number): Manifesto.IThumb[];
+        getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
-        getTree(sortType?: TreeSortType): ITreeNode;   
+        getTree(topRangeIndex?: number, sortType?: TreeSortType): ITreeNode;   
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         

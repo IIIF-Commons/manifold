@@ -1,4 +1,4 @@
-// manifold v1.0.1 https://github.com/viewdir/manifold#readme
+// manifold v1.0.3 https://github.com/viewdir/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Manifold;
 (function (Manifold) {
@@ -95,7 +95,8 @@ var Manifold;
             }
             if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
                 // if it's a collection and has child collections, get the collection by index
-                if (iiifResource.collections && iiifResource.collections.length) {
+                var collections = iiifResource.getCollections();
+                if (collections && collections.length) {
                     iiifResource.getCollectionByIndex(bootstrapper._options.collectionIndex).then(function (collection) {
                         if (!collection) {
                             reject('Collection index not found');
@@ -331,7 +332,7 @@ var Manifold;
                 return canvas.ranges; // cache
             }
             else {
-                canvas.ranges = this.manifest.getRanges().en().where(function (range) { return (range.getCanvasIds().en().any(function (c) { return c === canvas.id; })); }).toArray();
+                canvas.ranges = this.manifest.getAllRanges().en().where(function (range) { return (range.getCanvasIds().en().any(function (c) { return c === canvas.id; })); }).toArray();
             }
             return canvas.ranges;
         };
@@ -461,7 +462,7 @@ var Manifold;
             return m;
         };
         Helper.prototype.getRanges = function () {
-            return this.manifest.getRanges();
+            return this.manifest.getAllRanges();
         };
         Helper.prototype.getRangeByPath = function (path) {
             return this.manifest.getRangeByPath(path);
@@ -486,6 +487,17 @@ var Manifold;
         Helper.prototype.getSequenceByIndex = function (index) {
             return this.manifest.getSequenceByIndex(index);
         };
+        Helper.prototype.getShareServiceUrl = function () {
+            var url;
+            var shareService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
+            if (shareService) {
+                if (shareService.length) {
+                    shareService = shareService[0];
+                }
+                url = shareService.__jsonld.shareUrl;
+            }
+            return url;
+        };
         Helper.prototype.getSortedTreeNodesByDate = function (sortedTree, tree) {
             var all = tree.nodes.en().traverseUnique(function (node) { return node.nodes; })
                 .where(function (n) { return n.data.type === manifesto.TreeNodeType.collection().toString() ||
@@ -509,14 +521,37 @@ var Manifold;
         Helper.prototype.getThumbs = function (width, height) {
             return this.getCurrentSequence().getThumbs(width, height);
         };
+        Helper.prototype.getTopRanges = function () {
+            return this.manifest.getTopRanges();
+        };
         Helper.prototype.getTotalCanvases = function () {
             return this.getCurrentSequence().getTotalCanvases();
         };
         Helper.prototype.getTrackingLabel = function () {
             return this.manifest.getTrackingLabel();
         };
-        Helper.prototype.getTree = function (sortType) {
-            var tree = this.iiifResource.getTree();
+        Helper.prototype.getTree = function (topRangeIndex, sortType) {
+            // if it's a collection, use IIIFResource.getDefaultTree()
+            // otherwise, get the top range by index and use Range.getTree()
+            if (topRangeIndex === void 0) { topRangeIndex = 0; }
+            if (sortType === void 0) { sortType = Manifold.TreeSortType.NONE; }
+            var tree;
+            if (this.iiifResource.isCollection()) {
+                tree = this.iiifResource.getDefaultTree();
+            }
+            else {
+                var topRanges = this.iiifResource.getTopRanges();
+                var root = manifesto.getTreeNode();
+                root.label = 'root';
+                root.data = this.iiifResource;
+                if (topRanges.length) {
+                    var range = topRanges[topRangeIndex];
+                    tree = range.getTree(root);
+                }
+                else {
+                    return root;
+                }
+            }
             var sortedTree = manifesto.getTreeNode();
             switch (sortType.toString()) {
                 case Manifold.TreeSortType.DATE.toString():
@@ -557,6 +592,9 @@ var Manifold;
         };
         Helper.prototype.hasRelatedPage = function () {
             var related = this.getRelated();
+            if (related.length) {
+                related = related[0];
+            }
             return related['format'] === 'text/html';
         };
         Helper.prototype.hasResources = function () {
@@ -572,13 +610,19 @@ var Manifold;
             return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
         };
         Helper.prototype.isFirstCanvas = function (index) {
-            return this.getCurrentSequence().isFirstCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isFirstCanvas(index);
+            }
+            return this.getCurrentSequence().isFirstCanvas(this.canvasIndex);
         };
         Helper.prototype.isHorizontallyAligned = function () {
             return this.isLeftToRight() || this.isRightToLeft();
         };
         Helper.prototype.isLastCanvas = function (index) {
-            return this.getCurrentSequence().isLastCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isLastCanvas(index);
+            }
+            return this.getCurrentSequence().isLastCanvas(this.canvasIndex);
         };
         Helper.prototype.isLeftToRight = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
