@@ -55,6 +55,7 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     class Helper implements IHelper {
+        private _multiSelectState;
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
