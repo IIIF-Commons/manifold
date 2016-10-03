@@ -2,6 +2,8 @@ namespace Manifold {
     
     export class Helper implements IHelper {
         
+        private _multiSelectState: Manifold.MultiSelectState;
+
         public iiifResource: Manifesto.IIIIFResource;
         public iiifResourceUri: string;
         public manifest: Manifesto.IManifest;
@@ -263,10 +265,13 @@ namespace Manifold {
         }
         
         public getMultiSelectState(): Manifold.MultiSelectState {
-            var m: Manifold.MultiSelectState = new Manifold.MultiSelectState();
-            m.ranges = this.getRanges().clone();
-            m.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases().clone();
-            return m;
+            if (!this._multiSelectState) {
+                this._multiSelectState = new Manifold.MultiSelectState();
+                this._multiSelectState.ranges = this.getRanges().clone();
+                this._multiSelectState.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases().clone();
+            }
+
+            return this._multiSelectState;
         }
         
         public getRanges(): IRange[] {
