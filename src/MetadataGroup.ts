@@ -2,7 +2,7 @@ namespace Manifold {
     export class MetadataGroup {
         public type: MetadataGroupType;
         public name: string;
-        public metadata: IMetadataItem[] = [];
+        public items: IMetadataItem[] = [];
 
         constructor(type: MetadataGroupType, name?: string) {
             this.type = type;
@@ -10,7 +10,7 @@ namespace Manifold {
         }
 
         public addItem(item: IMetadataItem): void {
-            this.metadata.push(item);
+            this.items.push(item);
         }
 
         public addMetadata(metadata: any[], isTranslatable: boolean = false): void {

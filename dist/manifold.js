@@ -879,12 +879,12 @@ var Manifold;
 (function (Manifold) {
     var MetadataGroup = (function () {
         function MetadataGroup(type, name) {
-            this.metadata = [];
+            this.items = [];
             this.type = type;
             this.name = name;
         }
         MetadataGroup.prototype.addItem = function (item) {
-            this.metadata.push(item);
+            this.items.push(item);
         };
         MetadataGroup.prototype.addMetadata = function (metadata, isTranslatable) {
             if (isTranslatable === void 0) { isTranslatable = false; }

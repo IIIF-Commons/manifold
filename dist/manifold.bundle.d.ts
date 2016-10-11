@@ -1518,7 +1518,7 @@ declare namespace Manifold {
     class MetadataGroup {
         type: MetadataGroupType;
         name: string;
-        metadata: IMetadataItem[];
+        items: IMetadataItem[];
         constructor(type: MetadataGroupType, name?: string);
         addItem(item: IMetadataItem): void;
         addMetadata(metadata: any[], isTranslatable?: boolean): void;
