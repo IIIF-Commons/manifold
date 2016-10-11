@@ -20,16 +20,21 @@
             // http://wellcomelibrary.org/iiif/collection/b18031511 (Biological Basis of Medicine)
             // http://digital.library.villanova.edu/Collection/vudl:3/IIIF (Villanova Collection)
             // http://dams.llgc.org.uk/iiif/newspapers/4651124.json (Abergele and Pensarn Visitor 1909-1910)
+            // https://edsilv.github.io/test-manifests/all-metadata.json (all metadata)
 
             Manifold.loadManifest({
-                iiifResourceUri: 'http://wellcomelibrary.org/iiif/b18035978/manifest',
+                iiifResourceUri: 'https://edsilv.github.io/test-manifests/all-metadata.json',
                 collectionIndex: 0,
                 manifestIndex: 0,
                 sequenceIndex: 0,
                 canvasIndex: 0
             }).then(function(h){                
                 helper = h;
-                console.log(helper.hasRelatedPage());
+
+                var metadata = helper.getMetadata({
+                    canvases: [helper.getCanvasByIndex(1), helper.getCanvasByIndex(2)]
+                });
+                //console.log(helper.hasRelatedPage());
                 //multiSelectState = helper.getMultiSelectState();  
             }).catch(function() {
                 console.error('failed to load manifest');

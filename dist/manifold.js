@@ -1,4 +1,4 @@
-// manifold v1.0.4 https://github.com/viewdir/manifold#readme
+// manifold v1.0.5 https://github.com/viewdir/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Manifold;
 (function (Manifold) {
@@ -300,18 +300,6 @@ var Manifold;
             var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
             return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
         };
-        Helper.prototype.getCanvasMetadata = function (canvas) {
-            var result = [];
-            var metadata = canvas.getMetadata();
-            if (metadata) {
-                result.push({
-                    label: "metadata",
-                    value: metadata,
-                    isRootLevel: true
-                });
-            }
-            return result;
-        };
         Helper.prototype.getCanvasRange = function (canvas, path) {
             var ranges = this.getCanvasRanges(canvas);
             if (path) {
@@ -415,45 +403,74 @@ var Manifold;
             }
             return manifestType;
         };
-        Helper.prototype.getMetadata = function (licenseFormatter) {
-            var result = [];
-            var metadata = this.manifest.getMetadata();
-            if (metadata) {
-                result.push({
-                    label: "metadata",
-                    value: metadata,
-                    isRootLevel: true
-                });
+        Helper.prototype.getMetadata = function (options) {
+            var metadataGroups = [];
+            var manifestMetadata = this.manifest.getMetadata();
+            var manifestGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.MANIFEST);
+            if (manifestMetadata && manifestMetadata.length) {
+                manifestGroup.addMetadata(manifestMetadata, true);
             }
             if (this.manifest.getDescription()) {
-                result.push({
-                    label: "description",
-                    value: this.manifest.getDescription(),
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new Manifold.MetadataItem("description", this.manifest.getDescription(), true));
             }
             if (this.manifest.getAttribution()) {
-                result.push({
-                    label: "attribution",
-                    value: this.manifest.getAttribution(),
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new Manifold.MetadataItem("attribution", this.manifest.getAttribution(), true));
             }
             if (this.manifest.getLicense()) {
-                result.push({
-                    label: "license",
-                    value: licenseFormatter ? licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense(),
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new Manifold.MetadataItem("license", options && options.licenseFormatter ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense(), true));
             }
             if (this.manifest.getLogo()) {
-                result.push({
-                    label: "logo",
-                    value: '<img src="' + this.manifest.getLogo() + '"/>',
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new Manifold.MetadataItem("logo", '<img src="' + this.manifest.getLogo() + '"/>', true));
             }
-            return result;
+            metadataGroups.push(manifestGroup);
+            if (options) {
+                this._parseMetadataOptions(options, metadataGroups);
+            }
+            return metadataGroups;
+        };
+        Helper.prototype._parseMetadataOptions = function (options, metadataGroups) {
+            // get sequence metadata
+            var sequence = this.getCurrentSequence();
+            var sequenceMetadata = sequence.getMetadata();
+            if (sequenceMetadata && sequenceMetadata.length) {
+                var sequenceGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.SEQUENCE);
+                sequenceGroup.addMetadata(sequenceMetadata);
+                metadataGroups.push(sequenceGroup);
+            }
+            // get range metadata
+            // todo: walk up parents
+            if (options.range) {
+                var rangeMetadata = options.range.getMetadata();
+                if (rangeMetadata && rangeMetadata.length) {
+                    var rangeGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.RANGE);
+                    rangeGroup.addMetadata(rangeMetadata);
+                    metadataGroups.push(rangeGroup);
+                }
+            }
+            // get canvas metadata
+            if (options.canvases && options.canvases.length) {
+                for (var i = 0; i < options.canvases.length; i++) {
+                    var canvas = options.canvases[i];
+                    var canvasMetadata = canvas.getMetadata();
+                    if (canvasMetadata && canvasMetadata.length) {
+                        var canvasGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.CANVAS);
+                        canvasGroup.addMetadata(canvas.getMetadata());
+                        metadataGroups.push(canvasGroup);
+                    }
+                    // add image metadata
+                    var images = canvas.getImages();
+                    for (var j = 0; j < images.length; j++) {
+                        var image = images[j];
+                        var imageMetadata = image.getMetadata();
+                        if (imageMetadata && imageMetadata.length) {
+                            var imageGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.IMAGE);
+                            imageGroup.addMetadata(imageMetadata);
+                            metadataGroups.push(imageGroup);
+                        }
+                    }
+                }
+            }
+            return metadataGroups;
         };
         Helper.prototype.getMultiSelectState = function () {
             if (!this._multiSelectState) {
@@ -857,6 +874,75 @@ var Manifold;
         w.Manifold = Manifold;
     }
 })(window);
+
+var Manifold;
+(function (Manifold) {
+    var MetadataGroup = (function () {
+        function MetadataGroup(type, name) {
+            this.metadata = [];
+            this.type = type;
+            this.name = name;
+        }
+        MetadataGroup.prototype.addItem = function (item) {
+            this.metadata.push(item);
+        };
+        MetadataGroup.prototype.addMetadata = function (metadata, isTranslatable) {
+            if (isTranslatable === void 0) { isTranslatable = false; }
+            for (var i = 0; i < metadata.length; i++) {
+                var item = metadata[i];
+                this.addItem(new Manifold.MetadataItem(item.label, item.value, isTranslatable));
+            }
+        };
+        return MetadataGroup;
+    }());
+    Manifold.MetadataGroup = MetadataGroup;
+})(Manifold || (Manifold = {}));
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Manifold;
+(function (Manifold) {
+    var MetadataGroupType = (function (_super) {
+        __extends(MetadataGroupType, _super);
+        function MetadataGroupType() {
+            _super.apply(this, arguments);
+        }
+        MetadataGroupType.MANIFEST = new MetadataGroupType("manifest");
+        MetadataGroupType.SEQUENCE = new MetadataGroupType("sequence");
+        MetadataGroupType.RANGE = new MetadataGroupType("range");
+        MetadataGroupType.CANVAS = new MetadataGroupType("canvas");
+        MetadataGroupType.IMAGE = new MetadataGroupType("image");
+        return MetadataGroupType;
+    }(Manifold.StringValue));
+    Manifold.MetadataGroupType = MetadataGroupType;
+})(Manifold || (Manifold = {}));
+
+var Manifold;
+(function (Manifold) {
+    var MetadataItem = (function () {
+        function MetadataItem(label, value, isTranslatable) {
+            if (isTranslatable === void 0) { isTranslatable = false; }
+            this.label = label;
+            this.value = value;
+            this.isTranslatable = isTranslatable;
+        }
+        return MetadataItem;
+    }());
+    Manifold.MetadataItem = MetadataItem;
+})(Manifold || (Manifold = {}));
+
+var Manifold;
+(function (Manifold) {
+    var MetadataOptions = (function () {
+        function MetadataOptions() {
+        }
+        return MetadataOptions;
+    }());
+    Manifold.MetadataOptions = MetadataOptions;
+})(Manifold || (Manifold = {}));
 
 var Manifold;
 (function (Manifold) {

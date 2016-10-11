@@ -20,7 +20,6 @@ namespace Manifold {
         getCanvasByIndex(index: number): Manifesto.ICanvas;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string): number;
-        getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[];
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
@@ -36,7 +35,7 @@ namespace Manifold {
         getLicense(): string;
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;
-        getMetadata(): Manifold.IMetadataItem[];
+        getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;      
         getRanges(): IRange[];
         getRangeByPath(path: string): any;

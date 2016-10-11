@@ -1,4 +1,4 @@
-// manifesto.js v0.2.1 https://github.com/viewdir/manifesto
+// manifesto.js v0.2.3 https://github.com/viewdir/manifesto
 declare module exjs {
     var version: string;
 }
@@ -985,7 +985,7 @@ declare module Manifesto {
 }
 
 declare module Manifesto {
-    interface IAnnotation extends IJSONLDResource {
+    interface IAnnotation extends IManifestResource {
         getMotivation(): AnnotationMotivation;
         getOn(): string;
         getResource(): Resource;
@@ -1305,7 +1305,6 @@ declare namespace Manifold {
         getCanvasByIndex(index: number): Manifesto.ICanvas;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string): number;
-        getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[];
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
@@ -1321,7 +1320,8 @@ declare namespace Manifold {
         getLicense(): string;
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;
-        getMetadata(licenseFormatter?: Manifold.UriLabeller): Manifold.IMetadataItem[];
+        getMetadata(options?: MetadataOptions): MetadataGroup[];
+        private _parseMetadataOptions(options, metadataGroups);
         getMultiSelectState(): Manifold.MultiSelectState;
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
@@ -1402,7 +1402,6 @@ declare namespace Manifold {
         getCanvasByIndex(index: number): Manifesto.ICanvas;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string): number;
-        getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[];
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
@@ -1418,7 +1417,7 @@ declare namespace Manifold {
         getLicense(): string;
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;
-        getMetadata(): Manifold.IMetadataItem[];
+        getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
@@ -1482,8 +1481,8 @@ declare namespace Manifold {
 declare namespace Manifold {
     interface IMetadataItem {
         label: string;
-        value: string | IMetadataItem[];
-        isRootLevel: boolean;
+        value: string;
+        isTranslatable: boolean;
     }
 }
 
@@ -1513,6 +1512,44 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     function loadManifest(options: any): Promise<IHelper>;
+}
+
+declare namespace Manifold {
+    class MetadataGroup {
+        type: MetadataGroupType;
+        name: string;
+        metadata: IMetadataItem[];
+        constructor(type: MetadataGroupType, name?: string);
+        addItem(item: IMetadataItem): void;
+        addMetadata(metadata: any[], isTranslatable?: boolean): void;
+    }
+}
+
+declare namespace Manifold {
+    class MetadataGroupType extends StringValue {
+        static MANIFEST: MetadataGroupType;
+        static SEQUENCE: MetadataGroupType;
+        static RANGE: MetadataGroupType;
+        static CANVAS: MetadataGroupType;
+        static IMAGE: MetadataGroupType;
+    }
+}
+
+declare namespace Manifold {
+    class MetadataItem implements IMetadataItem {
+        label: string;
+        value: string;
+        isTranslatable: boolean;
+        constructor(label: string, value: string, isTranslatable?: boolean);
+    }
+}
+
+declare namespace Manifold {
+    class MetadataOptions {
+        canvases: Manifesto.ICanvas[];
+        licenseFormatter: Manifold.UriLabeller;
+        range: Manifesto.IRange;
+    }
 }
 
 declare namespace Manifold {

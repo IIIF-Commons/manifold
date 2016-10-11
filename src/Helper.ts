@@ -66,22 +66,6 @@ namespace Manifold {
             return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
         }
         
-        public getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[] {
-            var result: Manifold.IMetadataItem[] = [];
-
-            var metadata = canvas.getMetadata();
-
-            if (metadata){
-                result.push(<Manifold.IMetadataItem>{
-                    label: "metadata",
-                    value: metadata,
-                    isRootLevel: true
-                });
-            }
-
-            return result;
-        }
-        
         public getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange {
             var ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
             
@@ -216,54 +200,96 @@ namespace Manifold {
             return manifestType;
         }
         
-        public getMetadata(licenseFormatter?: Manifold.UriLabeller): Manifold.IMetadataItem[] {
-            var result: Manifold.IMetadataItem[] = [];
+        public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
-            var metadata = this.manifest.getMetadata();
+            var metadataGroups: MetadataGroup[] = [];
+            var manifestMetadata: any[] = this.manifest.getMetadata();
+            var manifestGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.MANIFEST);
 
-            if (metadata){
-                result.push(<Manifold.IMetadataItem>{
-                    label: "metadata",
-                    value: metadata,
-                    isRootLevel: true
-                });
+            if (manifestMetadata && manifestMetadata.length){
+                manifestGroup.addMetadata(manifestMetadata, true);
             }
 
             if (this.manifest.getDescription()){
-                result.push(<Manifold.IMetadataItem>{
-                    label: "description",
-                    value: this.manifest.getDescription(),
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new MetadataItem("description", this.manifest.getDescription(), true));
             }
 
             if (this.manifest.getAttribution()){
-                result.push(<Manifold.IMetadataItem>{
-                    label: "attribution",
-                    value: this.manifest.getAttribution(),
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new MetadataItem("attribution", this.manifest.getAttribution(), true));
             }
 
             if (this.manifest.getLicense()){
-                result.push(<Manifold.IMetadataItem>{
-                    label: "license",
-                    value: licenseFormatter ? licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense(),
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new MetadataItem("license", options && options.licenseFormatter ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense(), true));
             }
 
             if (this.manifest.getLogo()){
-                result.push(<Manifold.IMetadataItem>{
-                    label: "logo",
-                    value: '<img src="' + this.manifest.getLogo() + '"/>',
-                    isRootLevel: true
-                });
+                manifestGroup.addItem(new MetadataItem("logo", '<img src="' + this.manifest.getLogo() + '"/>', true));
             }
 
-            return result;
+            metadataGroups.push(manifestGroup);
+
+            if (options) {
+                this._parseMetadataOptions(options, metadataGroups);
+            }
+
+            return metadataGroups;
         }
-        
+    
+        private _parseMetadataOptions(options: MetadataOptions, metadataGroups: MetadataGroup[]): MetadataGroup[] {
+
+            // get sequence metadata
+            var sequence: Manifesto.ISequence = this.getCurrentSequence();
+            var sequenceMetadata: any[] = sequence.getMetadata();
+
+            if (sequenceMetadata && sequenceMetadata.length) {
+                var sequenceGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.SEQUENCE);
+                sequenceGroup.addMetadata(sequenceMetadata);
+                metadataGroups.push(sequenceGroup);
+            }
+
+            // get range metadata
+            // todo: walk up parents
+            if (options.range) {
+                var rangeMetadata: any[] = options.range.getMetadata();
+
+                if (rangeMetadata && rangeMetadata.length) {
+                    var rangeGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.RANGE);
+                    rangeGroup.addMetadata(rangeMetadata);
+                    metadataGroups.push(rangeGroup);
+                }
+            }
+
+            // get canvas metadata
+            if (options.canvases && options.canvases.length) {
+                for (var i = 0; i < options.canvases.length; i++) {
+                    var canvas: Manifesto.ICanvas = options.canvases[i];
+                    var canvasMetadata: any[] = canvas.getMetadata();
+
+                    if (canvasMetadata && canvasMetadata.length) {
+                        var canvasGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.CANVAS);
+                        canvasGroup.addMetadata(canvas.getMetadata());
+                        metadataGroups.push(canvasGroup);
+                    }
+
+                    // add image metadata
+                    var images: Manifesto.IAnnotation[] = canvas.getImages();
+
+                    for (var j = 0; j < images.length; j++) {
+                        var image: Manifesto.IAnnotation = images[j];
+                        var imageMetadata: any[] = image.getMetadata();
+
+                        if (imageMetadata && imageMetadata.length) {
+                            var imageGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.IMAGE);
+                            imageGroup.addMetadata(imageMetadata);
+                            metadataGroups.push(imageGroup);
+                        }
+                    }
+                }
+            }
+
+            return metadataGroups;
+        }
+
         public getMultiSelectState(): Manifold.MultiSelectState {
             if (!this._multiSelectState) {
                 this._multiSelectState = new Manifold.MultiSelectState();
