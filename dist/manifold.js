@@ -438,11 +438,10 @@ var Manifold;
                 metadataGroups.push(sequenceGroup);
             }
             // get range metadata
-            // todo: walk up parents
             if (options.range) {
                 var rangeGroups = this._getRangeMetadata([], options.range);
                 rangeGroups = rangeGroups.reverse();
-                metadataGroups.push(rangeGroups);
+                metadataGroups.concat(rangeGroups);
             }
             // get canvas metadata
             if (options.canvases && options.canvases.length) {
