@@ -250,8 +250,9 @@ namespace Manifold {
             // get range metadata
             // todo: walk up parents
             if (options.range) {
-                var rangeMetadata: MetadataGroup[] = this._getRangeMetadata([], options.range);
-                rangeMetadata = rangeMetadata.reverse();
+                var rangeGroups: MetadataGroup[] = this._getRangeMetadata([], options.range);
+                rangeGroups = rangeGroups.reverse();
+                metadataGroups.push(rangeGroups);
             }
 
             // get canvas metadata
@@ -295,7 +296,7 @@ namespace Manifold {
             }
 
             if (range.parentRange) {
-                this._getRangeMetadata(metadataGroups, range.parentRange);
+                return this._getRangeMetadata(metadataGroups, range.parentRange);
             } else {
                 return metadataGroups;
             }

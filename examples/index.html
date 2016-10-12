@@ -32,7 +32,8 @@
                 helper = h;
 
                 var metadata = helper.getMetadata({
-                    canvases: [helper.getCanvasByIndex(1), helper.getCanvasByIndex(2)]
+                    canvases: [helper.getCanvasByIndex(0), helper.getCanvasByIndex(1)],
+                    range: helper.getRanges()[0]
                 });
                 //console.log(helper.hasRelatedPage());
                 //multiSelectState = helper.getMultiSelectState();  

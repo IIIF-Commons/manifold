@@ -12819,8 +12819,9 @@ var Manifold;
             // get range metadata
             // todo: walk up parents
             if (options.range) {
-                var rangeMetadata = this._getRangeMetadata([], options.range);
-                rangeMetadata = rangeMetadata.reverse();
+                var rangeGroups = this._getRangeMetadata([], options.range);
+                rangeGroups = rangeGroups.reverse();
+                metadataGroups.push(rangeGroups);
             }
             // get canvas metadata
             if (options.canvases && options.canvases.length) {
@@ -12855,7 +12856,7 @@ var Manifold;
                 metadataGroups.push(rangeGroup);
             }
             if (range.parentRange) {
-                this._getRangeMetadata(metadataGroups, range.parentRange);
+                return this._getRangeMetadata(metadataGroups, range.parentRange);
             }
             else {
                 return metadataGroups;
@@ -13267,10 +13268,10 @@ var Manifold;
 var Manifold;
 (function (Manifold) {
     var MetadataGroup = (function () {
-        function MetadataGroup(type, name) {
+        function MetadataGroup(type, label) {
             this.items = [];
             this.type = type;
-            this.name = name;
+            this.label = label;
         }
         MetadataGroup.prototype.addItem = function (item) {
             this.items.push(item);
