@@ -12819,12 +12819,8 @@ var Manifold;
             // get range metadata
             // todo: walk up parents
             if (options.range) {
-                var rangeMetadata = options.range.getMetadata();
-                if (rangeMetadata && rangeMetadata.length) {
-                    var rangeGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.RANGE);
-                    rangeGroup.addMetadata(rangeMetadata);
-                    metadataGroups.push(rangeGroup);
-                }
+                var rangeMetadata = this._getRangeMetadata([], options.range);
+                rangeMetadata = rangeMetadata.reverse();
             }
             // get canvas metadata
             if (options.canvases && options.canvases.length) {
@@ -12850,6 +12846,20 @@ var Manifold;
                 }
             }
             return metadataGroups;
+        };
+        Helper.prototype._getRangeMetadata = function (metadataGroups, range) {
+            var rangeMetadata = range.getMetadata();
+            if (rangeMetadata && rangeMetadata.length) {
+                var rangeGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.RANGE);
+                rangeGroup.addMetadata(rangeMetadata);
+                metadataGroups.push(rangeGroup);
+            }
+            if (range.parentRange) {
+                this._getRangeMetadata(metadataGroups, range.parentRange);
+            }
+            else {
+                return metadataGroups;
+            }
         };
         Helper.prototype.getMultiSelectState = function () {
             if (!this._multiSelectState) {

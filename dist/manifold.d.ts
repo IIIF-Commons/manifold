@@ -89,6 +89,7 @@ declare namespace Manifold {
         getManifestType(): Manifesto.ManifestType;
         getMetadata(options?: MetadataOptions): MetadataGroup[];
         private _parseMetadataOptions(options, metadataGroups);
+        private _getRangeMetadata(metadataGroups, range);
         getMultiSelectState(): Manifold.MultiSelectState;
         getRanges(): IRange[];
         getRangeByPath(path: string): any;

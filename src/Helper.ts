@@ -250,13 +250,8 @@ namespace Manifold {
             // get range metadata
             // todo: walk up parents
             if (options.range) {
-                var rangeMetadata: any[] = options.range.getMetadata();
-
-                if (rangeMetadata && rangeMetadata.length) {
-                    var rangeGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.RANGE);
-                    rangeGroup.addMetadata(rangeMetadata);
-                    metadataGroups.push(rangeGroup);
-                }
+                var rangeMetadata: MetadataGroup[] = this._getRangeMetadata([], options.range);
+                rangeMetadata = rangeMetadata.reverse();
             }
 
             // get canvas metadata
@@ -288,6 +283,22 @@ namespace Manifold {
             }
 
             return metadataGroups;
+        }
+
+        private _getRangeMetadata(metadataGroups: MetadataGroup[], range: Manifesto.IRange): MetadataGroup[] {
+            var rangeMetadata: any[] = range.getMetadata();
+
+            if (rangeMetadata && rangeMetadata.length) {
+                var rangeGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.RANGE);
+                rangeGroup.addMetadata(rangeMetadata);
+                metadataGroups.push(rangeGroup);
+            }
+
+            if (range.parentRange) {
+                this._getRangeMetadata(metadataGroups, range.parentRange);
+            } else {
+                return metadataGroups;
+            }
         }
 
         public getMultiSelectState(): Manifold.MultiSelectState {
