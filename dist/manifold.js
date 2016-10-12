@@ -406,7 +406,7 @@ var Manifold;
         Helper.prototype.getMetadata = function (options) {
             var metadataGroups = [];
             var manifestMetadata = this.manifest.getMetadata();
-            var manifestGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.MANIFEST);
+            var manifestGroup = new Manifold.MetadataGroup(this.manifest);
             if (manifestMetadata && manifestMetadata.length) {
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
@@ -433,7 +433,7 @@ var Manifold;
             var sequence = this.getCurrentSequence();
             var sequenceMetadata = sequence.getMetadata();
             if (sequenceMetadata && sequenceMetadata.length) {
-                var sequenceGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.SEQUENCE);
+                var sequenceGroup = new Manifold.MetadataGroup(sequence);
                 sequenceGroup.addMetadata(sequenceMetadata);
                 metadataGroups.push(sequenceGroup);
             }
@@ -441,7 +441,7 @@ var Manifold;
             if (options.range) {
                 var rangeGroups = this._getRangeMetadata([], options.range);
                 rangeGroups = rangeGroups.reverse();
-                metadataGroups.concat(rangeGroups);
+                metadataGroups = metadataGroups.concat(rangeGroups);
             }
             // get canvas metadata
             if (options.canvases && options.canvases.length) {
@@ -449,7 +449,7 @@ var Manifold;
                     var canvas = options.canvases[i];
                     var canvasMetadata = canvas.getMetadata();
                     if (canvasMetadata && canvasMetadata.length) {
-                        var canvasGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.CANVAS);
+                        var canvasGroup = new Manifold.MetadataGroup(canvas);
                         canvasGroup.addMetadata(canvas.getMetadata());
                         metadataGroups.push(canvasGroup);
                     }
@@ -459,7 +459,7 @@ var Manifold;
                         var image = images[j];
                         var imageMetadata = image.getMetadata();
                         if (imageMetadata && imageMetadata.length) {
-                            var imageGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.IMAGE);
+                            var imageGroup = new Manifold.MetadataGroup(image);
                             imageGroup.addMetadata(imageMetadata);
                             metadataGroups.push(imageGroup);
                         }
@@ -471,7 +471,7 @@ var Manifold;
         Helper.prototype._getRangeMetadata = function (metadataGroups, range) {
             var rangeMetadata = range.getMetadata();
             if (rangeMetadata && rangeMetadata.length) {
-                var rangeGroup = new Manifold.MetadataGroup(Manifold.MetadataGroupType.RANGE);
+                var rangeGroup = new Manifold.MetadataGroup(range);
                 rangeGroup.addMetadata(rangeMetadata);
                 metadataGroups.push(rangeGroup);
             }
@@ -888,9 +888,9 @@ var Manifold;
 var Manifold;
 (function (Manifold) {
     var MetadataGroup = (function () {
-        function MetadataGroup(type, label) {
+        function MetadataGroup(resource, label) {
             this.items = [];
-            this.type = type;
+            this.resource = resource;
             this.label = label;
         }
         MetadataGroup.prototype.addItem = function (item) {
@@ -906,28 +906,6 @@ var Manifold;
         return MetadataGroup;
     }());
     Manifold.MetadataGroup = MetadataGroup;
-})(Manifold || (Manifold = {}));
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Manifold;
-(function (Manifold) {
-    var MetadataGroupType = (function (_super) {
-        __extends(MetadataGroupType, _super);
-        function MetadataGroupType() {
-            _super.apply(this, arguments);
-        }
-        MetadataGroupType.MANIFEST = new MetadataGroupType("manifest");
-        MetadataGroupType.SEQUENCE = new MetadataGroupType("sequence");
-        MetadataGroupType.RANGE = new MetadataGroupType("range");
-        MetadataGroupType.CANVAS = new MetadataGroupType("canvas");
-        MetadataGroupType.IMAGE = new MetadataGroupType("image");
-        return MetadataGroupType;
-    }(Manifold.StringValue));
-    Manifold.MetadataGroupType = MetadataGroupType;
 })(Manifold || (Manifold = {}));
 
 var Manifold;

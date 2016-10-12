@@ -204,7 +204,7 @@ namespace Manifold {
 
             var metadataGroups: MetadataGroup[] = [];
             var manifestMetadata: any[] = this.manifest.getMetadata();
-            var manifestGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.MANIFEST);
+            var manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
 
             if (manifestMetadata && manifestMetadata.length){
                 manifestGroup.addMetadata(manifestMetadata, true);
@@ -242,7 +242,7 @@ namespace Manifold {
             var sequenceMetadata: any[] = sequence.getMetadata();
 
             if (sequenceMetadata && sequenceMetadata.length) {
-                var sequenceGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.SEQUENCE);
+                var sequenceGroup: MetadataGroup = new MetadataGroup(sequence);
                 sequenceGroup.addMetadata(sequenceMetadata);
                 metadataGroups.push(sequenceGroup);
             }
@@ -251,7 +251,7 @@ namespace Manifold {
             if (options.range) {
                 var rangeGroups: MetadataGroup[] = this._getRangeMetadata([], options.range);
                 rangeGroups = rangeGroups.reverse();
-                metadataGroups.concat(rangeGroups);
+                metadataGroups = metadataGroups.concat(rangeGroups);
             }
 
             // get canvas metadata
@@ -261,7 +261,7 @@ namespace Manifold {
                     var canvasMetadata: any[] = canvas.getMetadata();
 
                     if (canvasMetadata && canvasMetadata.length) {
-                        var canvasGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.CANVAS);
+                        var canvasGroup: MetadataGroup = new MetadataGroup(canvas);
                         canvasGroup.addMetadata(canvas.getMetadata());
                         metadataGroups.push(canvasGroup);
                     }
@@ -274,7 +274,7 @@ namespace Manifold {
                         var imageMetadata: any[] = image.getMetadata();
 
                         if (imageMetadata && imageMetadata.length) {
-                            var imageGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.IMAGE);
+                            var imageGroup: MetadataGroup = new MetadataGroup(image);
                             imageGroup.addMetadata(imageMetadata);
                             metadataGroups.push(imageGroup);
                         }
@@ -289,7 +289,7 @@ namespace Manifold {
             var rangeMetadata: any[] = range.getMetadata();
 
             if (rangeMetadata && rangeMetadata.length) {
-                var rangeGroup: MetadataGroup = new MetadataGroup(MetadataGroupType.RANGE);
+                var rangeGroup: MetadataGroup = new MetadataGroup(range);
                 rangeGroup.addMetadata(rangeMetadata);
                 metadataGroups.push(rangeGroup);
             }

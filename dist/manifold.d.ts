@@ -284,22 +284,12 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     class MetadataGroup {
-        type: MetadataGroupType;
+        resource: Manifesto.IManifestResource;
         label: string;
         items: IMetadataItem[];
-        constructor(type: MetadataGroupType, label?: string);
+        constructor(resource: Manifesto.IManifestResource, label?: string);
         addItem(item: IMetadataItem): void;
         addMetadata(metadata: any[], isTranslatable?: boolean): void;
-    }
-}
-
-declare namespace Manifold {
-    class MetadataGroupType extends StringValue {
-        static MANIFEST: MetadataGroupType;
-        static SEQUENCE: MetadataGroupType;
-        static RANGE: MetadataGroupType;
-        static CANVAS: MetadataGroupType;
-        static IMAGE: MetadataGroupType;
     }
 }
 

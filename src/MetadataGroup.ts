@@ -1,11 +1,11 @@
 namespace Manifold {
     export class MetadataGroup {
-        public type: MetadataGroupType;
+        public resource: Manifesto.IManifestResource;
         public label: string;
         public items: IMetadataItem[] = [];
 
-        constructor(type: MetadataGroupType, label?: string) {
-            this.type = type;
+        constructor(resource: Manifesto.IManifestResource, label?: string) {
+            this.resource = resource;
             this.label = label;
         }
 
