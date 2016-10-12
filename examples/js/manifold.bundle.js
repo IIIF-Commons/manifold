@@ -12823,9 +12823,11 @@ var Manifold;
             }
             metadataGroups.push(manifestGroup);
             if (options) {
-                this._parseMetadataOptions(options, metadataGroups);
+                return this._parseMetadataOptions(options, metadataGroups);
             }
-            return metadataGroups;
+            else {
+                return metadataGroups;
+            }
         };
         Helper.prototype._parseMetadataOptions = function (options, metadataGroups) {
             // get sequence metadata

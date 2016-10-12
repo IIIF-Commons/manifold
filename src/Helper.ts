@@ -229,10 +229,10 @@ namespace Manifold {
             metadataGroups.push(manifestGroup);
 
             if (options) {
-                this._parseMetadataOptions(options, metadataGroups);
+                return this._parseMetadataOptions(options, metadataGroups);
+            } else {
+                return metadataGroups;
             }
-
-            return metadataGroups;
         }
     
         private _parseMetadataOptions(options: MetadataOptions, metadataGroups: MetadataGroup[]): MetadataGroup[] {
