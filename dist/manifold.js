@@ -954,6 +954,13 @@ var Manifold;
                 t.value = value;
             }
         };
+        MetadataItem.prototype.setValue = function (value) {
+            var _this = this;
+            if (this.value.length) {
+                var t = this.value.en().where(function (x) { return x.locale === _this.defaultLocale; }).first();
+                t.value = value;
+            }
+        };
         return MetadataItem;
     }(Manifesto.MetadataItem));
     Manifold.MetadataItem = MetadataItem;

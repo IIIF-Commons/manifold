@@ -8,5 +8,12 @@ namespace Manifold {
                 t.value = value;
             }
         }
+
+        setValue(value: string): void {
+            if (this.value.length) {
+                var t: Manifesto.Translation = this.value.en().where(x => x.locale === this.defaultLocale).first();
+                t.value = value;
+            }
+        }
     }
 }
