@@ -4,22 +4,24 @@ namespace Manifold {
         
         private _multiSelectState: Manifold.MultiSelectState;
 
+        public canvasIndex: number;
+        public collectionIndex: number;
         public iiifResource: Manifesto.IIIIFResource;
         public iiifResourceUri: string;
         public manifest: Manifesto.IManifest;
-        public collectionIndex: number;
         public manifestIndex: number;
-        public canvasIndex: number;
+        public options: IManifoldOptions;
         public sequenceIndex: number;        
         
         constructor(options: IManifoldOptions){
-            this.iiifResource = options.iiifResource;
-            this.iiifResourceUri = options.iiifResourceUri;
-            this.manifest = options.manifest;
-            this.collectionIndex = options.collectionIndex || 0;
-            this.manifestIndex = options.manifestIndex || 0;
-            this.sequenceIndex = options.sequenceIndex || 0;
-            this.canvasIndex = options.canvasIndex || 0;
+            this.options = options;
+            this.iiifResource = this.options.iiifResource;
+            this.iiifResourceUri = this.options.iiifResourceUri;
+            this.manifest = this.options.manifest;
+            this.collectionIndex = this.options.collectionIndex || 0;
+            this.manifestIndex = this.options.manifestIndex || 0;
+            this.sequenceIndex = this.options.sequenceIndex || 0;
+            this.canvasIndex = this.options.canvasIndex || 0;
         }
         
         // getters //
@@ -203,7 +205,7 @@ namespace Manifold {
         public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
             var metadataGroups: MetadataGroup[] = [];
-            var manifestMetadata: any[] = this.manifest.getMetadata();
+            var manifestMetadata: Manifesto.MetadataItem[] = this.manifest.getMetadata();
             var manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
 
             if (manifestMetadata && manifestMetadata.length){
@@ -211,19 +213,43 @@ namespace Manifold {
             }
 
             if (this.manifest.getDescription()){
-                manifestGroup.addItem(new MetadataItem("description", this.manifest.getDescription(), true));
+                var item: any = {
+                    label: "description",
+                    value: this.manifest.getDescription()
+                };
+                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
 
             if (this.manifest.getAttribution()){
-                manifestGroup.addItem(new MetadataItem("attribution", this.manifest.getAttribution(), true));
+                var item: any = {
+                    label: "attribution",
+                    value: this.manifest.getAttribution()
+                };
+                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
 
             if (this.manifest.getLicense()){
-                manifestGroup.addItem(new MetadataItem("license", options && options.licenseFormatter ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense(), true));
+                var item: any = {
+                    label: "license",
+                    value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
+                };
+                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
 
             if (this.manifest.getLogo()){
-                manifestGroup.addItem(new MetadataItem("logo", '<img src="' + this.manifest.getLogo() + '"/>', true));
+                var item: any = {
+                    label: "logo",
+                    value: '<img src="' + this.manifest.getLogo() + '"/>'
+                };
+                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
 
             metadataGroups.push(manifestGroup);

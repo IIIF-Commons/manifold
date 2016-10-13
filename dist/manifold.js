@@ -258,13 +258,14 @@ var Manifold;
 (function (Manifold) {
     var Helper = (function () {
         function Helper(options) {
-            this.iiifResource = options.iiifResource;
-            this.iiifResourceUri = options.iiifResourceUri;
-            this.manifest = options.manifest;
-            this.collectionIndex = options.collectionIndex || 0;
-            this.manifestIndex = options.manifestIndex || 0;
-            this.sequenceIndex = options.sequenceIndex || 0;
-            this.canvasIndex = options.canvasIndex || 0;
+            this.options = options;
+            this.iiifResource = this.options.iiifResource;
+            this.iiifResourceUri = this.options.iiifResourceUri;
+            this.manifest = this.options.manifest;
+            this.collectionIndex = this.options.collectionIndex || 0;
+            this.manifestIndex = this.options.manifestIndex || 0;
+            this.sequenceIndex = this.options.sequenceIndex || 0;
+            this.canvasIndex = this.options.canvasIndex || 0;
         }
         // getters //
         Helper.prototype.getAutoCompleteService = function () {
@@ -411,16 +412,40 @@ var Manifold;
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
             if (this.manifest.getDescription()) {
-                manifestGroup.addItem(new Manifold.MetadataItem("description", this.manifest.getDescription(), true));
+                var item = {
+                    label: "description",
+                    value: this.manifest.getDescription()
+                };
+                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
             if (this.manifest.getAttribution()) {
-                manifestGroup.addItem(new Manifold.MetadataItem("attribution", this.manifest.getAttribution(), true));
+                var item = {
+                    label: "attribution",
+                    value: this.manifest.getAttribution()
+                };
+                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
             if (this.manifest.getLicense()) {
-                manifestGroup.addItem(new Manifold.MetadataItem("license", options && options.licenseFormatter ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense(), true));
+                var item = {
+                    label: "license",
+                    value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
+                };
+                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
             if (this.manifest.getLogo()) {
-                manifestGroup.addItem(new Manifold.MetadataItem("logo", '<img src="' + this.manifest.getLogo() + '"/>', true));
+                var item = {
+                    label: "logo",
+                    value: '<img src="' + this.manifest.getLogo() + '"/>'
+                };
+                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                metadataItem.isRootLevel = true;
+                manifestGroup.addItem(metadataItem);
             }
             metadataGroups.push(manifestGroup);
             if (options) {
@@ -871,8 +896,6 @@ var Manifold;
 
 
 
-
-
 var Manifold;
 (function (Manifold) {
     function loadManifest(options) {
@@ -898,11 +921,13 @@ var Manifold;
         MetadataGroup.prototype.addItem = function (item) {
             this.items.push(item);
         };
-        MetadataGroup.prototype.addMetadata = function (metadata, isTranslatable) {
-            if (isTranslatable === void 0) { isTranslatable = false; }
+        MetadataGroup.prototype.addMetadata = function (metadata, isRootLevel) {
+            if (isRootLevel === void 0) { isRootLevel = false; }
             for (var i = 0; i < metadata.length; i++) {
                 var item = metadata[i];
-                this.addItem(new Manifold.MetadataItem(item.label, item.value, isTranslatable));
+                var metadataItem = new Manifold.MetadataItem(item.label, item.value);
+                metadataItem.isRootLevel = isRootLevel;
+                this.addItem(metadataItem);
             }
         };
         return MetadataGroup;
@@ -910,17 +935,20 @@ var Manifold;
     Manifold.MetadataGroup = MetadataGroup;
 })(Manifold || (Manifold = {}));
 
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Manifold;
 (function (Manifold) {
-    var MetadataItem = (function () {
-        function MetadataItem(label, value, isTranslatable) {
-            if (isTranslatable === void 0) { isTranslatable = false; }
-            this.label = label;
-            this.value = value;
-            this.isTranslatable = isTranslatable;
+    var MetadataItem = (function (_super) {
+        __extends(MetadataItem, _super);
+        function MetadataItem() {
+            _super.apply(this, arguments);
         }
         return MetadataItem;
-    }());
+    }(Manifesto.MetadataItem));
     Manifold.MetadataItem = MetadataItem;
 })(Manifold || (Manifold = {}));
 
@@ -1023,6 +1051,18 @@ var Manifold;
         return MultiSelectState;
     }());
     Manifold.MultiSelectState = MultiSelectState;
+})(Manifold || (Manifold = {}));
+
+var Manifold;
+(function (Manifold) {
+    var Translation = (function () {
+        function Translation(value, locale) {
+            this.value = value;
+            this.locale = locale;
+        }
+        return Translation;
+    }());
+    Manifold.Translation = Translation;
 })(Manifold || (Manifold = {}));
 
 var Manifold;

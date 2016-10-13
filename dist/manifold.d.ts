@@ -56,12 +56,13 @@ declare namespace Manifold {
 declare namespace Manifold {
     class Helper implements IHelper {
         private _multiSelectState;
+        canvasIndex: number;
+        collectionIndex: number;
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
-        collectionIndex: number;
         manifestIndex: number;
-        canvasIndex: number;
+        options: IManifoldOptions;
         sequenceIndex: number;
         constructor(options: IManifoldOptions);
         getAutoCompleteService(): Manifesto.IService;
@@ -247,14 +248,6 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    interface IMetadataItem {
-        label: string;
-        value: string;
-        isTranslatable: boolean;
-    }
-}
-
-declare namespace Manifold {
     interface IMultiSelectable {
         multiSelected: boolean;
         multiSelectEnabled: boolean;
@@ -286,19 +279,16 @@ declare namespace Manifold {
     class MetadataGroup {
         resource: Manifesto.IManifestResource;
         label: string;
-        items: IMetadataItem[];
+        items: MetadataItem[];
         constructor(resource: Manifesto.IManifestResource, label?: string);
-        addItem(item: IMetadataItem): void;
-        addMetadata(metadata: any[], isTranslatable?: boolean): void;
+        addItem(item: MetadataItem): void;
+        addMetadata(metadata: any[], isRootLevel?: boolean): void;
     }
 }
 
 declare namespace Manifold {
-    class MetadataItem implements IMetadataItem {
-        label: string;
-        value: string;
-        isTranslatable: boolean;
-        constructor(label: string, value: string, isTranslatable?: boolean);
+    class MetadataItem extends Manifesto.MetadataItem {
+        isRootLevel: boolean;
     }
 }
 
@@ -332,6 +322,14 @@ declare namespace Manifold {
         selectAllRanges(selected: boolean): void;
         selectRanges(ranges: IRange[], selected: boolean): void;
         setEnabled(enabled: boolean): void;
+    }
+}
+
+declare namespace Manifold {
+    class Translation {
+        value: string;
+        locale: string;
+        constructor(value: string, locale: string);
     }
 }
 
