@@ -947,6 +947,13 @@ var Manifold;
         function MetadataItem() {
             _super.apply(this, arguments);
         }
+        MetadataItem.prototype.setLabel = function (value) {
+            var _this = this;
+            if (this.label.length) {
+                var t = this.label.en().where(function (x) { return x.locale === _this.defaultLocale; }).first();
+                t.value = value;
+            }
+        };
         return MetadataItem;
     }(Manifesto.MetadataItem));
     Manifold.MetadataItem = MetadataItem;
