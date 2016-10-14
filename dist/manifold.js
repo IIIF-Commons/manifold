@@ -956,14 +956,14 @@ var Manifold;
         MetadataItem.prototype.setLabel = function (value) {
             var _this = this;
             if (this.label.length) {
-                var t = this.label.en().where(function (x) { return x.locale === _this.defaultLocale; }).first();
+                var t = this.label.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
                 t.value = value;
             }
         };
         MetadataItem.prototype.setValue = function (value) {
             var _this = this;
             if (this.value.length) {
-                var t = this.value.en().where(function (x) { return x.locale === _this.defaultLocale; }).first();
+                var t = this.value.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
                 t.value = value;
             }
         };
