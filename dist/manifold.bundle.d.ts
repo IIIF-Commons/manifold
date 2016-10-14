@@ -1560,8 +1560,8 @@ declare namespace Manifold {
         label: string;
         items: MetadataItem[];
         constructor(resource: Manifesto.IManifestResource, label?: string);
-        addItem(item: MetadataItem): void;
-        addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel?: boolean): void;
+        addItem(item: Manifold.MetadataItem): void;
+        addMetadata(metadata: Manifold.MetadataItem[], isRootLevel?: boolean): void;
     }
 }
 

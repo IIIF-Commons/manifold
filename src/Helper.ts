@@ -205,7 +205,7 @@ namespace Manifold {
         public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
             var metadataGroups: MetadataGroup[] = [];
-            var manifestMetadata: Manifesto.MetadataItem[] = this.manifest.getMetadata();
+            var manifestMetadata: Manifold.MetadataItem[] = this.manifest.getMetadata();
             var manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
 
             if (manifestMetadata && manifestMetadata.length){

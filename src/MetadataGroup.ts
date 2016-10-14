@@ -9,13 +9,13 @@ namespace Manifold {
             this.label = label;
         }
 
-        public addItem(item: MetadataItem): void {
+        public addItem(item: Manifold.MetadataItem): void {
             this.items.push(item);
         }
 
-        public addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel: boolean = false): void {
+        public addMetadata(metadata: Manifold.MetadataItem[], isRootLevel: boolean = false): void {
             for (var i = 0; i < metadata.length; i++) {
-                var metadataItem: MetadataItem = <MetadataItem>metadata[i];
+                var metadataItem: Manifold.MetadataItem = <Manifold.MetadataItem>metadata[i];
                 metadataItem.isRootLevel = isRootLevel;
                 this.addItem(metadataItem);
             }
