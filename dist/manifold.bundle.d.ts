@@ -941,6 +941,17 @@ declare module Manifesto {
     }
 }
 
+declare module Manifesto {
+    class MetadataItem {
+        label: TranslationCollection;
+        value: TranslationCollection;
+        defaultLocale: string;
+        constructor(item: any, defaultLocale: string);
+        getLabel(): string;
+        getValue(): string;
+    }
+}
+
 
 /// <reference path="StringValue.d.ts" />
 /// <reference path="AnnotationMotivation.d.ts" />
@@ -971,6 +982,7 @@ declare module Manifesto {
 /// <reference path="TreeNode.d.ts" />
 /// <reference path="TreeNodeType.d.ts" />
 /// <reference path="Utils.d.ts" />
+/// <reference path="MetadataItem.d.ts" />
 /// <reference path="Manifesto.d.ts" />
 
 declare module Manifesto {
@@ -1116,7 +1128,7 @@ interface IManifesto {
     loadExternalResources: (resources: Manifesto.IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, restricted: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource, rejectOnError: boolean) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource, tokenStorageStrategy: string) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
     loadManifest: (uri: string) => Promise<string>;
     ManifestType: Manifesto.ManifestType;
-    MetadataItem: Manifesto.MetadataItem;
+    MetadataItem: any;
     RenderingFormat: Manifesto.RenderingFormat;
     ResourceFormat: Manifesto.ResourceFormat;
     ResourceType: Manifesto.ResourceType;
@@ -1226,17 +1238,6 @@ declare module Manifesto {
         FORBIDDEN: number;
         INTERNAL_SERVER_ERROR: number;
         RESTRICTED: number;
-    }
-}
-
-declare module Manifesto {
-    class MetadataItem {
-        label: TranslationCollection;
-        value: TranslationCollection;
-        defaultLocale: string;
-        constructor(item: any, defaultLocale: string);
-        getLabel(): string;
-        getValue(): string;
     }
 }
 
@@ -1560,13 +1561,14 @@ declare namespace Manifold {
         items: MetadataItem[];
         constructor(resource: Manifesto.IManifestResource, label?: string);
         addItem(item: MetadataItem): void;
-        addMetadata(metadata: any[], isRootLevel?: boolean): void;
+        addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel?: boolean): void;
     }
 }
 
 declare namespace Manifold {
     class MetadataItem extends Manifesto.MetadataItem {
         isRootLevel: boolean;
+        constructor(item: any, defaultLocale: string);
         setLabel(value: string): void;
         setValue(value: string): void;
     }

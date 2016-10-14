@@ -290,13 +290,14 @@ declare namespace Manifold {
         items: MetadataItem[];
         constructor(resource: Manifesto.IManifestResource, label?: string);
         addItem(item: MetadataItem): void;
-        addMetadata(metadata: any[], isRootLevel?: boolean): void;
+        addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel?: boolean): void;
     }
 }
 
 declare namespace Manifold {
     class MetadataItem extends Manifesto.MetadataItem {
         isRootLevel: boolean;
+        constructor(item: any, defaultLocale: string);
         setLabel(value: string): void;
         setValue(value: string): void;
     }

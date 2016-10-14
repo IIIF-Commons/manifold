@@ -926,8 +926,7 @@ var Manifold;
         MetadataGroup.prototype.addMetadata = function (metadata, isRootLevel) {
             if (isRootLevel === void 0) { isRootLevel = false; }
             for (var i = 0; i < metadata.length; i++) {
-                var item = metadata[i];
-                var metadataItem = new Manifold.MetadataItem(item.label, item.value);
+                var metadataItem = metadata[i];
                 metadataItem.isRootLevel = isRootLevel;
                 this.addItem(metadataItem);
             }
@@ -946,8 +945,8 @@ var Manifold;
 (function (Manifold) {
     var MetadataItem = (function (_super) {
         __extends(MetadataItem, _super);
-        function MetadataItem() {
-            _super.apply(this, arguments);
+        function MetadataItem(item, defaultLocale) {
+            _super.call(this, item, defaultLocale);
         }
         MetadataItem.prototype.setLabel = function (value) {
             var _this = this;

@@ -2155,12 +2155,39 @@ var Manifesto;
     Manifesto.Utils = Utils;
 })(Manifesto || (Manifesto = {}));
 
+var Manifesto;
+(function (Manifesto) {
+    var MetadataItem = (function () {
+        function MetadataItem(item, defaultLocale) {
+            this.defaultLocale = defaultLocale;
+            this.label = Manifesto.TranslationCollection.parse(item.label, this.defaultLocale);
+            this.value = Manifesto.TranslationCollection.parse(item.value, this.defaultLocale);
+        }
+        MetadataItem.prototype.getLabel = function () {
+            var _this = this;
+            if (this.label.length) {
+                return this.label.en().where(function (x) { return x.locale === _this.defaultLocale; }).first().value;
+            }
+            return null;
+        };
+        MetadataItem.prototype.getValue = function () {
+            var _this = this;
+            if (this.value.length) {
+                return this.value.en().where(function (x) { return x.locale === _this.defaultLocale; }).first().value;
+            }
+            return null;
+        };
+        return MetadataItem;
+    }());
+    Manifesto.MetadataItem = MetadataItem;
+})(Manifesto || (Manifesto = {}));
+
 global.manifesto = global.Manifesto = module.exports = {
     AnnotationMotivation: new Manifesto.AnnotationMotivation(),
     ElementType: new Manifesto.ElementType(),
     IIIFResourceType: new Manifesto.IIIFResourceType(),
     ManifestType: new Manifesto.ManifestType(),
-    MetadataItem: Manifesto.MetadataItem.prototype,
+    MetadataItem: Manifesto.MetadataItem,
     RenderingFormat: new Manifesto.RenderingFormat(),
     ResourceFormat: new Manifesto.ResourceFormat(),
     ResourceType: new Manifesto.ResourceType(),
@@ -2291,6 +2318,7 @@ global.manifesto = global.Manifesto = module.exports = {
 /// <reference path="./TreeNode.ts" />
 /// <reference path="./TreeNodeType.ts" />
 /// <reference path="./Utils.ts" />
+/// <reference path="./MetadataItem.ts" />
 /// <reference path="./Manifesto.ts" /> 
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2358,33 +2386,6 @@ var Manifesto;
 
 
 
-
-var Manifesto;
-(function (Manifesto) {
-    var MetadataItem = (function () {
-        function MetadataItem(item, defaultLocale) {
-            this.defaultLocale = defaultLocale;
-            this.label = Manifesto.TranslationCollection.parse(item.label, this.defaultLocale);
-            this.value = Manifesto.TranslationCollection.parse(item.value, this.defaultLocale);
-        }
-        MetadataItem.prototype.getLabel = function () {
-            var _this = this;
-            if (this.label.length) {
-                return this.label.en().where(function (x) { return x.locale === _this.defaultLocale; }).first().value;
-            }
-            return null;
-        };
-        MetadataItem.prototype.getValue = function () {
-            var _this = this;
-            if (this.value.length) {
-                return this.value.en().where(function (x) { return x.locale === _this.defaultLocale; }).first().value;
-            }
-            return null;
-        };
-        return MetadataItem;
-    }());
-    Manifesto.MetadataItem = MetadataItem;
-})(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -13399,8 +13400,7 @@ var Manifold;
         MetadataGroup.prototype.addMetadata = function (metadata, isRootLevel) {
             if (isRootLevel === void 0) { isRootLevel = false; }
             for (var i = 0; i < metadata.length; i++) {
-                var item = metadata[i];
-                var metadataItem = new Manifold.MetadataItem(item.label, item.value);
+                var metadataItem = metadata[i];
                 metadataItem.isRootLevel = isRootLevel;
                 this.addItem(metadataItem);
             }
@@ -13419,8 +13419,8 @@ var Manifold;
 (function (Manifold) {
     var MetadataItem = (function (_super) {
         __extends(MetadataItem, _super);
-        function MetadataItem() {
-            _super.apply(this, arguments);
+        function MetadataItem(item, defaultLocale) {
+            _super.call(this, item, defaultLocale);
         }
         MetadataItem.prototype.setLabel = function (value) {
             var _this = this;
