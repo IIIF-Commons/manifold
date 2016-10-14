@@ -1517,6 +1517,14 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
+    interface IMetadataItem extends Manifesto.MetadataItem {
+        isRootLevel: boolean;
+        setLabel(value: string): void;
+        setValue(value: string): void;
+    }
+}
+
+declare namespace Manifold {
     interface IMultiSelectable {
         multiSelected: boolean;
         multiSelectEnabled: boolean;
