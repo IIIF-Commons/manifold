@@ -2,7 +2,7 @@ namespace Manifold {
     export class MetadataGroup {
         public resource: Manifesto.IManifestResource;
         public label: string;
-        public items: MetadataItem[] = [];
+        public items: Manifold.MetadataItem[] = [];
 
         constructor(resource: Manifesto.IManifestResource, label?: string) {
             this.resource = resource;
@@ -10,15 +10,21 @@ namespace Manifold {
         }
 
         public addItem(item: Manifold.MetadataItem): void {
-            this.items.push(item);
+            var metadataItem: Manifold.MetadataItem = this._convertItem(item);
+            this.items.push(metadataItem);
         }
 
-        public addMetadata(metadata: Manifold.MetadataItem[], isRootLevel: boolean = false): void {
+        public addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel: boolean = false): void {
             for (var i = 0; i < metadata.length; i++) {
-                var metadataItem: Manifold.MetadataItem = <Manifold.MetadataItem>metadata[i];
+                var item: Manifesto.MetadataItem = metadata[i];
+                var metadataItem: Manifold.MetadataItem = this._convertItem(item);
                 metadataItem.isRootLevel = isRootLevel;
                 this.addItem(metadataItem);
             }
+        }
+
+        private _convertItem(item: Manifesto.MetadataItem): Manifold.MetadataItem {
+            return new Manifold.MetadataItem(item.resource, item.defaultLocale);
         }
     }
 }

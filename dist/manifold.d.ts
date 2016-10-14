@@ -287,10 +287,11 @@ declare namespace Manifold {
     class MetadataGroup {
         resource: Manifesto.IManifestResource;
         label: string;
-        items: MetadataItem[];
+        items: Manifold.MetadataItem[];
         constructor(resource: Manifesto.IManifestResource, label?: string);
         addItem(item: Manifold.MetadataItem): void;
-        addMetadata(metadata: Manifold.MetadataItem[], isRootLevel?: boolean): void;
+        addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel?: boolean): void;
+        private _convertItem(item);
     }
 }
 

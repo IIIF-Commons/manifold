@@ -921,15 +921,20 @@ var Manifold;
             this.label = label;
         }
         MetadataGroup.prototype.addItem = function (item) {
-            this.items.push(item);
+            var metadataItem = this._convertItem(item);
+            this.items.push(metadataItem);
         };
         MetadataGroup.prototype.addMetadata = function (metadata, isRootLevel) {
             if (isRootLevel === void 0) { isRootLevel = false; }
             for (var i = 0; i < metadata.length; i++) {
-                var metadataItem = metadata[i];
+                var item = metadata[i];
+                var metadataItem = this._convertItem(item);
                 metadataItem.isRootLevel = isRootLevel;
                 this.addItem(metadataItem);
             }
+        };
+        MetadataGroup.prototype._convertItem = function (item) {
+            return new Manifold.MetadataItem(item.resource, item.defaultLocale);
         };
         return MetadataGroup;
     }());
