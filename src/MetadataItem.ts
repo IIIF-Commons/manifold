@@ -9,14 +9,14 @@ namespace Manifold {
         public setLabel(value: string): void {
             if (this.label.length) {
                 var t: Manifesto.Translation = this.label.en().where(x => x.locale === this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(this.defaultLocale)).first();
-                t.value = value;
+                if (t) t.value = value;
             }
         }
 
         public setValue(value: string): void {
             if (this.value.length) {
                 var t: Manifesto.Translation = this.value.en().where(x => x.locale === this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(this.defaultLocale)).first();
-                t.value = value;
+                if (t) t.value = value;
             }
         }
     }
