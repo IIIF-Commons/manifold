@@ -12924,7 +12924,7 @@ var Manifold;
             if (manifestMetadata && manifestMetadata.length) {
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
-            if (this.manifest.getDescription()) {
+            if (this.manifest.getDescription().length) {
                 var item = {
                     label: "description",
                     value: Manifesto.TranslationCollection.getValue(this.manifest.getDescription())
@@ -12933,7 +12933,7 @@ var Manifold;
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
-            if (this.manifest.getAttribution()) {
+            if (this.manifest.getAttribution().length) {
                 var item = {
                     label: "attribution",
                     value: Manifesto.TranslationCollection.getValue(this.manifest.getAttribution())

@@ -212,7 +212,7 @@ namespace Manifold {
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
 
-            if (this.manifest.getDescription()){
+            if (this.manifest.getDescription().length){
                 var item: any = {
                     label: "description",
                     value: Manifesto.TranslationCollection.getValue(this.manifest.getDescription())
@@ -222,7 +222,7 @@ namespace Manifold {
                 manifestGroup.addItem(metadataItem);
             }
 
-            if (this.manifest.getAttribution()){
+            if (this.manifest.getAttribution().length){
                 var item: any = {
                     label: "attribution",
                     value: Manifesto.TranslationCollection.getValue(this.manifest.getAttribution())
