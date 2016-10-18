@@ -299,7 +299,7 @@ declare namespace Manifold {
 declare namespace Manifold {
     class MetadataItem extends Manifesto.MetadataItem {
         isRootLevel: boolean;
-        constructor(item: any, defaultLocale: string);
+        constructor(defaultLocale: string);
         setLabel(value: string): void;
         setValue(value: string): void;
     }

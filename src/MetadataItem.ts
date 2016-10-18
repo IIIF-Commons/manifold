@@ -2,8 +2,8 @@ namespace Manifold {
     export class MetadataItem extends Manifesto.MetadataItem {
         public isRootLevel: boolean; // if the property exists outside of the manifest's metadata node
 
-        constructor(item: any, defaultLocale: string) {
-            super(item, defaultLocale);
+        constructor(defaultLocale: string) {
+            super(defaultLocale);
         }
 
         public setLabel(value: string): void {

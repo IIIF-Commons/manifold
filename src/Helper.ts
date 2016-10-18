@@ -213,21 +213,17 @@ namespace Manifold {
             }
 
             if (this.manifest.getDescription().length){
-                var item: any = {
-                    label: "description",
-                    value: Manifesto.TranslationCollection.getValue(this.manifest.getDescription())
-                };
-                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                var metadataItem: MetadataItem = new MetadataItem(this.options.locale);
+                metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
+                metadataItem.value = this.manifest.getDescription();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
 
             if (this.manifest.getAttribution().length){
-                var item: any = {
-                    label: "attribution",
-                    value: Manifesto.TranslationCollection.getValue(this.manifest.getAttribution())
-                };
-                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                var metadataItem: MetadataItem = new MetadataItem(this.options.locale);
+                metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
+                metadataItem.value = this.manifest.getAttribution();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
@@ -237,7 +233,8 @@ namespace Manifold {
                     label: "license",
                     value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
                 };
-                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                var metadataItem: MetadataItem = new MetadataItem(this.options.locale);
+                metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
@@ -247,7 +244,8 @@ namespace Manifold {
                     label: "logo",
                     value: '<img src="' + this.manifest.getLogo() + '"/>'
                 };
-                var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
+                var metadataItem: MetadataItem = new MetadataItem(this.options.locale);
+                metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }

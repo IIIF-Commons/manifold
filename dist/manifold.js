@@ -413,20 +413,16 @@ var Manifold;
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
             if (this.manifest.getDescription().length) {
-                var item = {
-                    label: "description",
-                    value: Manifesto.TranslationCollection.getValue(this.manifest.getDescription())
-                };
-                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
+                metadataItem.value = this.manifest.getDescription();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
             if (this.manifest.getAttribution().length) {
-                var item = {
-                    label: "attribution",
-                    value: Manifesto.TranslationCollection.getValue(this.manifest.getAttribution())
-                };
-                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
+                metadataItem.value = this.manifest.getAttribution();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
@@ -435,7 +431,8 @@ var Manifold;
                     label: "license",
                     value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
                 };
-                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
@@ -444,7 +441,8 @@ var Manifold;
                     label: "logo",
                     value: '<img src="' + this.manifest.getLogo() + '"/>'
                 };
-                var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
+                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
@@ -935,7 +933,9 @@ var Manifold;
             }
         };
         MetadataGroup.prototype._convertItem = function (item) {
-            return new Manifold.MetadataItem(item.resource, item.defaultLocale);
+            var metadataItem = new Manifold.MetadataItem(item.defaultLocale);
+            metadataItem.parse(item.resource);
+            return metadataItem;
         };
         return MetadataGroup;
     }());
@@ -951,8 +951,8 @@ var Manifold;
 (function (Manifold) {
     var MetadataItem = (function (_super) {
         __extends(MetadataItem, _super);
-        function MetadataItem(item, defaultLocale) {
-            _super.call(this, item, defaultLocale);
+        function MetadataItem(defaultLocale) {
+            _super.call(this, defaultLocale);
         }
         MetadataItem.prototype.setLabel = function (value) {
             var _this = this;

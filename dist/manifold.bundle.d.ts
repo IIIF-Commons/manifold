@@ -948,7 +948,8 @@ declare module Manifesto {
         value: TranslationCollection;
         defaultLocale: string;
         resource: any;
-        constructor(resource: any, defaultLocale: string);
+        constructor(defaultLocale: string);
+        parse(resource: any): void;
         getLabel(): string;
         getValue(): string;
     }
@@ -1576,7 +1577,7 @@ declare namespace Manifold {
 declare namespace Manifold {
     class MetadataItem extends Manifesto.MetadataItem {
         isRootLevel: boolean;
-        constructor(item: any, defaultLocale: string);
+        constructor(defaultLocale: string);
         setLabel(value: string): void;
         setValue(value: string): void;
     }

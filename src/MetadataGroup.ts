@@ -24,7 +24,9 @@ namespace Manifold {
         }
 
         private _convertItem(item: Manifesto.MetadataItem): Manifold.MetadataItem {
-            return new Manifold.MetadataItem(item.resource, item.defaultLocale);
+            var metadataItem: Manifold.MetadataItem = new Manifold.MetadataItem(item.defaultLocale);
+            metadataItem.parse(item.resource);
+            return metadataItem;
         }
     }
 }
