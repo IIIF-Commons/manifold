@@ -13452,7 +13452,8 @@ var Manifold;
         };
         MetadataGroup.prototype._convertItem = function (item) {
             var metadataItem = new Manifold.MetadataItem(item.defaultLocale);
-            metadataItem.parse(item.resource);
+            if (item.resource)
+                metadataItem.parse(item.resource);
             return metadataItem;
         };
         return MetadataGroup;
