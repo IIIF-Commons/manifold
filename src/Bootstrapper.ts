@@ -6,6 +6,7 @@ namespace Manifold {
         
         constructor(options: Manifold.IManifoldOptions){
             this._options = options;
+            this._options.locale = this._options.locale || 'en-GB'; // default locale
         }
 
         public bootstrap(): Promise<Manifold.IHelper> {
@@ -54,7 +55,7 @@ namespace Manifold {
         private _loaded(bootstrapper: Bootstrapper, json: string, resolve: (helper: IHelper) => void, reject: (error:any) => void): void {
             
             var iiifResource: Manifesto.IIIIFResource = manifesto.create(json, <Manifesto.IManifestoOptions>{
-                locale: bootstrapper._options.locale || 'en-GB'
+                locale: bootstrapper._options.locale
             });
             
             // only set the root IIIFResource on the first load

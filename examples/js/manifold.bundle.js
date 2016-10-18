@@ -12564,6 +12564,7 @@ var Manifold;
     var Bootstrapper = (function () {
         function Bootstrapper(options) {
             this._options = options;
+            this._options.locale = this._options.locale || 'en-GB'; // default locale
         }
         Bootstrapper.prototype.bootstrap = function () {
             var that = this;
@@ -12600,7 +12601,7 @@ var Manifold;
         };
         Bootstrapper.prototype._loaded = function (bootstrapper, json, resolve, reject) {
             var iiifResource = manifesto.create(json, {
-                locale: bootstrapper._options.locale || 'en-GB'
+                locale: bootstrapper._options.locale
             });
             // only set the root IIIFResource on the first load
             if (!bootstrapper._options.iiifResource) {
