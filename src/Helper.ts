@@ -215,7 +215,7 @@ namespace Manifold {
             if (this.manifest.getDescription()){
                 var item: any = {
                     label: "description",
-                    value: this.manifest.getDescription()
+                    value: Manifesto.TranslationCollection.getValue(this.manifest.getDescription())
                 };
                 var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
                 metadataItem.isRootLevel = true;
@@ -225,7 +225,7 @@ namespace Manifold {
             if (this.manifest.getAttribution()){
                 var item: any = {
                     label: "attribution",
-                    value: this.manifest.getAttribution()
+                    value: Manifesto.TranslationCollection.getValue(this.manifest.getAttribution())
                 };
                 var metadataItem: MetadataItem = new MetadataItem(item, this.options.locale);
                 metadataItem.isRootLevel = true;

@@ -12915,7 +12915,7 @@ var Manifold;
             if (this.manifest.getDescription()) {
                 var item = {
                     label: "description",
-                    value: this.manifest.getDescription()
+                    value: Manifesto.TranslationCollection.getValue(this.manifest.getDescription())
                 };
                 var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
                 metadataItem.isRootLevel = true;
@@ -12924,7 +12924,7 @@ var Manifold;
             if (this.manifest.getAttribution()) {
                 var item = {
                     label: "attribution",
-                    value: this.manifest.getAttribution()
+                    value: Manifesto.TranslationCollection.getValue(this.manifest.getAttribution())
                 };
                 var metadataItem = new Manifold.MetadataItem(item, this.options.locale);
                 metadataItem.isRootLevel = true;
