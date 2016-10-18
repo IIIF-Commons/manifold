@@ -25,6 +25,8 @@ namespace Manifold {
 
         private _convertItem(item: Manifesto.MetadataItem): Manifold.MetadataItem {
             var metadataItem: Manifold.MetadataItem = new Manifold.MetadataItem(item.defaultLocale);
+            if (item.label) metadataItem.label;
+            if (item.value) metadataItem.value;
             if (item.resource) metadataItem.parse(item.resource);
             return metadataItem;
         }
