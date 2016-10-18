@@ -2,12 +2,13 @@ namespace Manifold {
     
     export interface IHelper {
         
+        canvasIndex: number;
+        collectionIndex: number;
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
-        collectionIndex: number;
         manifestIndex: number;
-        canvasIndex: number;
+        options: IManifoldOptions;
         sequenceIndex: number;
         
         // getters //

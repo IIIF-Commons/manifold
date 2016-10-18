@@ -156,12 +156,13 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     interface IHelper {
+        canvasIndex: number;
+        collectionIndex: number;
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
-        collectionIndex: number;
         manifestIndex: number;
-        canvasIndex: number;
+        options: IManifoldOptions;
         sequenceIndex: number;
         getAutoCompleteService(): Manifesto.IService;
         getAttribution(): string;
