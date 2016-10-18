@@ -413,14 +413,14 @@ var Manifold;
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
             if (this.manifest.getDescription().length) {
-                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
                 metadataItem.value = this.manifest.getDescription();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
             if (this.manifest.getAttribution().length) {
-                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
                 metadataItem.value = this.manifest.getAttribution();
                 metadataItem.isRootLevel = true;
@@ -431,7 +431,7 @@ var Manifold;
                     label: "license",
                     value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
                 };
-                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
@@ -441,7 +441,7 @@ var Manifold;
                     label: "logo",
                     value: '<img src="' + this.manifest.getLogo() + '"/>'
                 };
-                var metadataItem = new Manifold.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
@@ -920,64 +920,19 @@ var Manifold;
             this.label = label;
         }
         MetadataGroup.prototype.addItem = function (item) {
-            var metadataItem = this._convertItem(item);
-            this.items.push(metadataItem);
+            this.items.push(item);
         };
         MetadataGroup.prototype.addMetadata = function (metadata, isRootLevel) {
             if (isRootLevel === void 0) { isRootLevel = false; }
             for (var i = 0; i < metadata.length; i++) {
                 var item = metadata[i];
-                var metadataItem = this._convertItem(item);
-                metadataItem.isRootLevel = isRootLevel;
-                this.addItem(metadataItem);
+                item.isRootLevel = isRootLevel;
+                this.addItem(item);
             }
-        };
-        MetadataGroup.prototype._convertItem = function (item) {
-            var metadataItem = new Manifold.MetadataItem(item.defaultLocale);
-            if (item.label)
-                metadataItem.label;
-            if (item.value)
-                metadataItem.value;
-            if (item.resource)
-                metadataItem.parse(item.resource);
-            return metadataItem;
         };
         return MetadataGroup;
     }());
     Manifold.MetadataGroup = MetadataGroup;
-})(Manifold || (Manifold = {}));
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Manifold;
-(function (Manifold) {
-    var MetadataItem = (function (_super) {
-        __extends(MetadataItem, _super);
-        function MetadataItem(defaultLocale) {
-            _super.call(this, defaultLocale);
-        }
-        MetadataItem.prototype.setLabel = function (value) {
-            var _this = this;
-            if (this.label.length) {
-                var t = this.label.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
-                if (t)
-                    t.value = value;
-            }
-        };
-        MetadataItem.prototype.setValue = function (value) {
-            var _this = this;
-            if (this.value.length) {
-                var t = this.value.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
-                if (t)
-                    t.value = value;
-            }
-        };
-        return MetadataItem;
-    }(Manifesto.MetadataItem));
-    Manifold.MetadataItem = MetadataItem;
 })(Manifold || (Manifold = {}));
 
 var Manifold;

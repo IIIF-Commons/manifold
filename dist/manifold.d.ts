@@ -251,8 +251,6 @@ declare namespace Manifold {
 declare namespace Manifold {
     interface IMetadataItem extends Manifesto.MetadataItem {
         isRootLevel: boolean;
-        setLabel(value: string): void;
-        setValue(value: string): void;
     }
 }
 
@@ -288,20 +286,10 @@ declare namespace Manifold {
     class MetadataGroup {
         resource: Manifesto.IManifestResource;
         label: string;
-        items: Manifold.MetadataItem[];
+        items: Manifold.IMetadataItem[];
         constructor(resource: Manifesto.IManifestResource, label?: string);
-        addItem(item: Manifold.MetadataItem): void;
+        addItem(item: Manifold.IMetadataItem): void;
         addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel?: boolean): void;
-        private _convertItem(item);
-    }
-}
-
-declare namespace Manifold {
-    class MetadataItem extends Manifesto.MetadataItem {
-        isRootLevel: boolean;
-        constructor(defaultLocale: string);
-        setLabel(value: string): void;
-        setValue(value: string): void;
     }
 }
 
