@@ -33,7 +33,7 @@ namespace Manifold {
         }
         
         public getAttribution(): string {
-            return this.manifest.getAttribution();
+            return Manifesto.TranslationCollection.getValue(this.manifest.getAttribution());
         }
         
         public getCanvases(): Manifesto.ICanvas[] {
@@ -172,7 +172,7 @@ namespace Manifold {
         }
         
         public getLabel(): string {
-            return this.manifest.getLabel();
+            return Manifesto.TranslationCollection.getValue(this.manifest.getLabel());
         }
         
         public getLastCanvasLabel(alphanumeric?: boolean): string {
@@ -205,10 +205,10 @@ namespace Manifold {
         public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
             var metadataGroups: MetadataGroup[] = [];
-            var manifestMetadata: Manifold.MetadataItem[] = this.manifest.getMetadata();
+            var manifestMetadata: Manifesto.MetadataItem[] = this.manifest.getMetadata();
             var manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
 
-            if (manifestMetadata && manifestMetadata.length){
+            if (manifestMetadata && manifestMetadata.length) {
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
 

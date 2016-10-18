@@ -275,7 +275,7 @@ var Manifold;
             return service.getService(manifesto.ServiceProfile.autoComplete());
         };
         Helper.prototype.getAttribution = function () {
-            return this.manifest.getAttribution();
+            return Manifesto.TranslationCollection.getValue(this.manifest.getAttribution());
         };
         Helper.prototype.getCanvases = function () {
             return this.getCurrentSequence().getCanvases();
@@ -382,7 +382,7 @@ var Manifold;
             }
         };
         Helper.prototype.getLabel = function () {
-            return this.manifest.getLabel();
+            return Manifesto.TranslationCollection.getValue(this.manifest.getLabel());
         };
         Helper.prototype.getLastCanvasLabel = function (alphanumeric) {
             return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
