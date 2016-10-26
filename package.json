@@ -1,6 +1,6 @@
 {
   "name": "manifold",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "gulpfile.config.js",
   "scripts": {
@@ -24,8 +24,8 @@
     "gulp-connect": "^4.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-typescript": "^2.13.4",
-    "gulp-utils": "git://github.com/viewdir/gulp-utils.git",
-    "manifesto": "git://github.com/viewdir/manifesto.git#metadata",
+    "gulp-utils": "viewdir/gulp-utils.git",
+    "manifesto": "viewdir/manifesto#v1.0.0",
     "merge2": "^1.0.2",
     "path": "^0.12.7",
     "require-dir": "^0.3.0",
