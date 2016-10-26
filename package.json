@@ -24,7 +24,7 @@
     "gulp-connect": "^4.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-typescript": "^2.13.4",
-    "gulp-utils": "viewdir/gulp-utils.git",
+    "gulp-utils": "viewdir/gulp-utils",
     "manifesto": "viewdir/manifesto#v1.0.0",
     "merge2": "^1.0.2",
     "path": "^0.12.7",
