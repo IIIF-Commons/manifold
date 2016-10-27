@@ -150,7 +150,7 @@ namespace Manifold {
                         id += '/';
                     }
 
-                    if (manifesto.isImageProfile(service.getProfile())){
+                    if (manifesto.Utils.isImageProfile(service.getProfile())){
                         infoUri = id + 'info.json';
                     }
                 }
@@ -438,7 +438,7 @@ namespace Manifold {
             } else {
                 var topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
                 
-                var root: ITreeNode = <ITreeNode>manifesto.getTreeNode();
+                var root: ITreeNode = new manifesto.TreeNode();
                 root.label = 'root';
                 root.data = this.iiifResource;
                 
@@ -450,7 +450,7 @@ namespace Manifold {
                 }
             }
 
-            var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
+            var sortedTree: ITreeNode = new manifesto.TreeNode();
             
             switch (sortType.toString()){
                 case TreeSortType.DATE.toString():
@@ -611,7 +611,7 @@ namespace Manifold {
                 var year = this.getNodeYear(node);
                 var month = this.getNodeMonth(node);
 
-                var dateNode = manifesto.getTreeNode();
+                var dateNode = new manifesto.TreeNode();
                 dateNode.id = node.id;
                 dateNode.label = this.getNodeDisplayDate(node);
                 dateNode.data = node.data;
@@ -645,7 +645,7 @@ namespace Manifold {
                 var endYear = Number(year.toString().substr(0, 3) + "9");
 
                 if(!this.getDecadeNode(rootNode, year)){
-                    decadeNode = <ITreeNode>manifesto.getTreeNode();
+                    decadeNode = new manifesto.TreeNode();
                     decadeNode.label = year + " - " + endYear;
                     decadeNode.navDate = node.navDate;
                     decadeNode.data.startYear = year;
@@ -666,7 +666,7 @@ namespace Manifold {
                 var yearNode = this.getYearNode(decadeNode, year);
 
                 if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)){
-                    monthNode = <ITreeNode>manifesto.getTreeNode();
+                    monthNode = <ITreeNode>new manifesto.TreeNode();
                     monthNode.label = this.getNodeDisplayMonth(node);
                     monthNode.navDate = node.navDate;
                     monthNode.data.year = year;
@@ -685,7 +685,7 @@ namespace Manifold {
                 var decadeNode = this.getDecadeNode(rootNode, year);
 
                 if(decadeNode && !this.getYearNode(decadeNode, year)){
-                    yearNode = <ITreeNode>manifesto.getTreeNode();
+                    yearNode = <ITreeNode>new manifesto.TreeNode();
                     yearNode.label = year.toString();
                     yearNode.navDate = node.navDate;
                     yearNode.data.year = year;

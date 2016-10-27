@@ -157,9 +157,9 @@ var Manifold;
             this._parseAuthServices(resource);
         }
         ExternalResource.prototype._parseAuthServices = function (resource) {
-            this.clickThroughService = manifesto.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
-            this.loginService = manifesto.getService(resource, manifesto.ServiceProfile.login().toString());
-            this.restrictedService = manifesto.getService(resource, manifesto.ServiceProfile.restricted().toString());
+            this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
+            this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
+            this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
             // todo: create this.preferredService?
             if (this.clickThroughService) {
                 this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
@@ -366,7 +366,7 @@ var Manifold;
                     if (!id.endsWith('/')) {
                         id += '/';
                     }
-                    if (manifesto.isImageProfile(service.getProfile())) {
+                    if (manifesto.Utils.isImageProfile(service.getProfile())) {
                         infoUri = id + 'info.json';
                     }
                 }
@@ -596,7 +596,7 @@ var Manifold;
             }
             else {
                 var topRanges = this.iiifResource.getTopRanges();
-                var root = manifesto.getTreeNode();
+                var root = new manifesto.TreeNode();
                 root.label = 'root';
                 root.data = this.iiifResource;
                 if (topRanges.length) {
@@ -607,7 +607,7 @@ var Manifold;
                     return root;
                 }
             }
-            var sortedTree = manifesto.getTreeNode();
+            var sortedTree = new manifesto.TreeNode();
             switch (sortType.toString()) {
                 case Manifold.TreeSortType.DATE.toString():
                     // returns a list of treenodes for each decade.
@@ -728,7 +728,7 @@ var Manifold;
                 var node = nodes[i];
                 var year = this.getNodeYear(node);
                 var month = this.getNodeMonth(node);
-                var dateNode = manifesto.getTreeNode();
+                var dateNode = new manifesto.TreeNode();
                 dateNode.id = node.id;
                 dateNode.label = this.getNodeDisplayDate(node);
                 dateNode.data = node.data;
@@ -755,7 +755,7 @@ var Manifold;
                 var decade = Number(year.toString().substr(2, 1));
                 var endYear = Number(year.toString().substr(0, 3) + "9");
                 if (!this.getDecadeNode(rootNode, year)) {
-                    decadeNode = manifesto.getTreeNode();
+                    decadeNode = new manifesto.TreeNode();
                     decadeNode.label = year + " - " + endYear;
                     decadeNode.navDate = node.navDate;
                     decadeNode.data.startYear = year;
@@ -773,7 +773,7 @@ var Manifold;
                 var decadeNode = this.getDecadeNode(rootNode, year);
                 var yearNode = this.getYearNode(decadeNode, year);
                 if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)) {
-                    monthNode = manifesto.getTreeNode();
+                    monthNode = new manifesto.TreeNode();
                     monthNode.label = this.getNodeDisplayMonth(node);
                     monthNode.navDate = node.navDate;
                     monthNode.data.year = year;
@@ -789,7 +789,7 @@ var Manifold;
                 var year = this.getNodeYear(node);
                 var decadeNode = this.getDecadeNode(rootNode, year);
                 if (decadeNode && !this.getYearNode(decadeNode, year)) {
-                    yearNode = manifesto.getTreeNode();
+                    yearNode = new manifesto.TreeNode();
                     yearNode.label = year.toString();
                     yearNode.navDate = node.navDate;
                     yearNode.data.year = year;
