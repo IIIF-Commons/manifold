@@ -7,6 +7,7 @@ namespace Manifold {
         public dataUri: string;
         public error: any;
         public height: number;
+        public index: number;
         public isResponseHandled: boolean = false;
         public loginService: Manifesto.IService;
         public logoutService: Manifesto.IService;

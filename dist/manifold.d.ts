@@ -1,4 +1,4 @@
-// manifold v1.1.2 https://github.com/viewdir/manifold#readme
+// manifold v1.1.4 https://github.com/viewdir/manifold#readme
 declare namespace Manifold {
     class StringValue {
         value: string;
@@ -36,6 +36,7 @@ declare namespace Manifold {
         dataUri: string;
         error: any;
         height: number;
+        index: number;
         isResponseHandled: boolean;
         loginService: Manifesto.IService;
         logoutService: Manifesto.IService;
