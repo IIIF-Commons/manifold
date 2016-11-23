@@ -1,4 +1,4 @@
-// manifold v1.1.5 https://github.com/viewdir/manifold#readme
+// manifold v1.1.6 https://github.com/viewdir/manifold#readme
 declare namespace Manifold {
     class StringValue {
         value: string;
