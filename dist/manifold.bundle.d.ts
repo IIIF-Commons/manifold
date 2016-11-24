@@ -1597,6 +1597,31 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
+    class SearchResult {
+        canvasIndex: number;
+        rects: SearchResultRect[];
+        constructor(resource: any, canvasIndex: number);
+        addRect(resource: any): void;
+    }
+}
+
+declare namespace Manifold {
+    class SearchResultRect {
+        canvasIndex: number;
+        chars: string;
+        height: number;
+        index: number;
+        isVisible: boolean;
+        viewportX: number;
+        viewportY: number;
+        width: number;
+        x: number;
+        y: number;
+        constructor(result: any);
+    }
+}
+
+declare namespace Manifold {
     class Translation {
         value: string;
         locale: string;
