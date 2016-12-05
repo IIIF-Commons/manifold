@@ -55,6 +55,7 @@ namespace Manifold {
 
         public getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource> {
             var that = this;
+            that.data = {};
 
             return new Promise<Manifesto.IExternalResource>((resolve, reject) => {
 
@@ -92,7 +93,6 @@ namespace Manifold {
                     // if it's a resource without an info.json
                     // todo: if resource doesn't have a @profile
                     if (!data){
-                        that.data = {};
                         that.status = HTTPStatusCode.OK;
                         resolve(that);
                     } else {

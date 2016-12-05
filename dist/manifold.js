@@ -185,6 +185,7 @@ var Manifold;
         };
         ExternalResource.prototype.getData = function (accessToken) {
             var that = this;
+            that.data = {};
             return new Promise(function (resolve, reject) {
                 // check if dataUri ends with info.json
                 // if not issue a HEAD request.
@@ -216,7 +217,6 @@ var Manifold;
                     // if it's a resource without an info.json
                     // todo: if resource doesn't have a @profile
                     if (!data) {
-                        that.data = {};
                         that.status = HTTPStatusCode.OK;
                         resolve(that);
                     }
