@@ -697,7 +697,7 @@ var Manifold;
             return this.isPagingEnabled() && this.getTotalCanvases() > 2;
         };
         Helper.prototype.isPagingEnabled = function () {
-            return this.getCurrentSequence().isPagingEnabled();
+            return (this.manifest.isPagingEnabled() || this.getCurrentSequence().isPagingEnabled());
         };
         Helper.prototype.isRightToLeft = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();

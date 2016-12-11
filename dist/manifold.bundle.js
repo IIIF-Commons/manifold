@@ -1115,6 +1115,9 @@ var Manifesto;
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
         };
+        Manifest.prototype.isPagingEnabled = function () {
+            return this.getViewingHint().toString() === Manifesto.ViewingHint.PAGED.toString();
+        };
         Manifest.prototype.getViewingDirection = function () {
             if (this.getProperty('viewingDirection')) {
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
@@ -13476,7 +13479,7 @@ var Manifold;
             return this.isPagingEnabled() && this.getTotalCanvases() > 2;
         };
         Helper.prototype.isPagingEnabled = function () {
-            return this.getCurrentSequence().isPagingEnabled();
+            return (this.manifest.isPagingEnabled() || this.getCurrentSequence().isPagingEnabled());
         };
         Helper.prototype.isRightToLeft = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
