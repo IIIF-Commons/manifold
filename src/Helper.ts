@@ -503,6 +503,7 @@ namespace Manifold {
 
         public hasRelatedPage(): boolean {
             var related: any = this.getRelated();
+            if (!related) return false;
             if (related.length){
                 related = related[0];
             }
