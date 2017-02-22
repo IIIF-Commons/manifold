@@ -17,19 +17,9 @@
   },
   "homepage": "https://github.com/viewdir/manifold#readme",
   "devDependencies": {
-    "del": "^2.2.0",
     "gulp": "^3.9.1",
-    "gulp-bump": "^2.1.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-connect": "^4.0.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-typescript": "^2.13.4",
-    "gulp-utils": "viewdir/gulp-utils",
     "manifesto.js": "viewdir/manifesto#v2.0.7",
-    "merge2": "^1.0.2",
-    "path": "^0.12.7",
-    "require-dir": "^0.3.0",
-    "run-sequence": "^1.2.1",
-    "yargs": "^4.7.1"
+    "gulp-tasks": "viewdir/gulp-tasks#v1.0.5",
+    "typings": "^2.1.0"
   }
 }

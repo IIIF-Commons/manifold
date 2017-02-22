@@ -13,7 +13,7 @@ namespace Manifold {
         
         // getters //
         
-        getAutoCompleteService(): Manifesto.IService;
+        getAutoCompleteService(): Manifesto.IService | null;
         getAttribution(): string;
         getCanvases(): Manifesto.ICanvas[];
         getCanvasById(id: string): Manifesto.ICanvas;
@@ -21,15 +21,15 @@ namespace Manifold {
         getCanvasByIndex(index: number): Manifesto.ICanvas;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string): number;
-        getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
+        getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
-        getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
+        getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null;
         getCurrentCanvas(): Manifesto.ICanvas;
         getCurrentElement(): Manifesto.IElement;
         getCurrentSequence(): Manifesto.ISequence;
         getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
         getFirstPageIndex(): number;
-        getInfoUri(canvas: Manifesto.ICanvas): string;
+        getInfoUri(canvas: Manifesto.ICanvas): string | null;
         getLabel(): string;
         getLastCanvasLabel(alphanumeric?: boolean): string;
         getLastPageIndex(): number;
@@ -46,7 +46,7 @@ namespace Manifold {
         getSearchWithinService(): Manifesto.IService;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
-        getShareServiceUrl(): string;
+        getShareServiceUrl(): string | null;
         getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void;
         getStartCanvasIndex(): number;
         getThumbs(width: number, height: number): Manifesto.IThumb[];

@@ -1,3 +1,5 @@
+type NullableTreeNode = Manifold.ITreeNode | null;
+
 namespace Manifold {
     
     export class Helper implements IHelper {
@@ -11,9 +13,9 @@ namespace Manifold {
         public manifest: Manifesto.IManifest;
         public manifestIndex: number;
         public options: IManifoldOptions;
-        public sequenceIndex: number;        
+        public sequenceIndex: number;
         
-        constructor(options: IManifoldOptions){
+        constructor(options: IManifoldOptions) {
             this.options = options;
             this.iiifResource = this.options.iiifResource;
             this.iiifResourceUri = this.options.iiifResourceUri;
@@ -26,8 +28,8 @@ namespace Manifold {
         
         // getters //
         
-        public getAutoCompleteService(): Manifesto.IService {
-            var service: Manifesto.IService = this.getSearchWithinService();
+        public getAutoCompleteService(): Manifesto.IService | null {
+            const service: Manifesto.IService = this.getSearchWithinService();
             if (!service) return null;
             return service.getService(manifesto.ServiceProfile.autoComplete());
         }
@@ -45,10 +47,10 @@ namespace Manifold {
         }
 
         public getCanvasesById(ids: string[]): Manifesto.ICanvas[] {
-            var canvases: Manifesto.ICanvas[] = [];
+            const canvases: Manifesto.ICanvas[] = [];
 
-            for (var i = 0; i < ids.length; i++) {
-                var id: string = ids[i];
+            for (let i = 0; i < ids.length; i++) {
+                const id: string = ids[i];
                 canvases.push(this.getCanvasById(id));
             }
 
@@ -64,16 +66,16 @@ namespace Manifold {
         }
         
         public getCanvasIndexByLabel(label: string): number {
-            var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
+            const foliated: boolean = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
             return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
         }
         
-        public getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange {
-            var ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
+        public getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null {
+            const ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
             
             if (path){
-                for (var i = 0; i < ranges.length; i++) {
-                    var range: Manifesto.IRange = ranges[i];
+                for (let i = 0; i < ranges.length; i++) {
+                    const range: Manifesto.IRange = ranges[i];
 
                     if (range.path === path){
                         return range;
@@ -97,9 +99,9 @@ namespace Manifold {
             return canvas.ranges;
         }
 
-        public getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number {
+        public getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null {
             // todo: support nested collections. walk up parents adding to array and return csv string.
-            var index: number;
+            let index: number | null = null;
             if (iiifResource.parentCollection) {
                 index = iiifResource.parentCollection.index;
             }
@@ -129,22 +131,22 @@ namespace Manifold {
             return 0;
         }
         
-        public getInfoUri(canvas: Manifesto.ICanvas): string{
+        public getInfoUri(canvas: Manifesto.ICanvas): string | null {
             
-            var images: Manifesto.IAnnotation[] = canvas.getImages();
+            const images: Manifesto.IAnnotation[] = canvas.getImages();
 
             // if the canvas has images it's IIIF
             if (images && images.length){
 
-                var infoUri: string;
+                let infoUri: string | null = null;
 
-                var firstImage = images[0];
-                var resource: Manifesto.IResource = firstImage.getResource();
-                var services: Manifesto.IService[] = resource.getServices();
+                const firstImage = images[0];
+                const resource: Manifesto.IResource = firstImage.getResource();
+                const services: Manifesto.IService[] = resource.getServices();
 
-                for (var i = 0; i < services.length; i++) {
-                    var service: Manifesto.IService = services[i];
-                    var id = service.id;
+                for (let i = 0; i < services.length; i++) {
+                    const service: Manifesto.IService = services[i];
+                    let id = service.id;
 
                     if (!id.endsWith('/')) {
                         id += '/';
@@ -160,9 +162,9 @@ namespace Manifold {
             } else {
 
                 // IxIF
-                var service = canvas.getService(manifesto.ServiceProfile.ixif());
+                const service: Manifesto.IService = canvas.getService(manifesto.ServiceProfile.ixif());
 
-                if (service){ // todo: deprecate
+                if (service) { // todo: deprecate
                     return service.getInfoUri();
                 }
 
@@ -192,7 +194,7 @@ namespace Manifold {
         }
 
         public getManifestType(): Manifesto.ManifestType{
-            var manifestType = this.manifest.getManifestType();
+            let manifestType = this.manifest.getManifestType();
 
             // default to monograph
             if (manifestType.toString() === ""){
@@ -204,16 +206,16 @@ namespace Manifold {
         
         public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
-            var metadataGroups: MetadataGroup[] = [];
-            var manifestMetadata: Manifesto.MetadataItem[] = this.manifest.getMetadata();
-            var manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
+            const metadataGroups: MetadataGroup[] = [];
+            const manifestMetadata: Manifesto.MetadataItem[] = this.manifest.getMetadata();
+            const manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
 
             if (manifestMetadata && manifestMetadata.length) {
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
 
             if (this.manifest.getDescription().length){
-                var metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
                 metadataItem.value = this.manifest.getDescription();
                 (<IMetadataItem>metadataItem).isRootLevel = true;
@@ -221,7 +223,7 @@ namespace Manifold {
             }
 
             if (this.manifest.getAttribution().length){
-                var metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
                 metadataItem.value = this.manifest.getAttribution();
                 (<IMetadataItem>metadataItem).isRootLevel = true;
@@ -229,22 +231,22 @@ namespace Manifold {
             }
 
             if (this.manifest.getLicense()){
-                var item: any = {
+                const item: any = {
                     label: "license",
                     value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
                 };
-                var metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.parse(item);
                 (<IMetadataItem>metadataItem).isRootLevel = true;
                 manifestGroup.addItem(<IMetadataItem>metadataItem);
             }
 
             if (this.manifest.getLogo()){
-                var item: any = {
+                const item: any = {
                     label: "logo",
                     value: '<img src="' + this.manifest.getLogo() + '"/>'
                 };
-                var metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.parse(item);
                 (<IMetadataItem>metadataItem).isRootLevel = true;
                 manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -262,43 +264,43 @@ namespace Manifold {
         private _parseMetadataOptions(options: MetadataOptions, metadataGroups: MetadataGroup[]): MetadataGroup[] {
 
             // get sequence metadata
-            var sequence: Manifesto.ISequence = this.getCurrentSequence();
-            var sequenceMetadata: any[] = sequence.getMetadata();
+            const sequence: Manifesto.ISequence = this.getCurrentSequence();
+            const sequenceMetadata: any[] = sequence.getMetadata();
 
             if (sequenceMetadata && sequenceMetadata.length) {
-                var sequenceGroup: MetadataGroup = new MetadataGroup(sequence);
+                const sequenceGroup: MetadataGroup = new MetadataGroup(sequence);
                 sequenceGroup.addMetadata(sequenceMetadata);
                 metadataGroups.push(sequenceGroup);
             }
 
             // get range metadata
             if (options.range) {
-                var rangeGroups: MetadataGroup[] = this._getRangeMetadata([], options.range);
+                let rangeGroups: MetadataGroup[] = this._getRangeMetadata([], options.range);
                 rangeGroups = rangeGroups.reverse();
                 metadataGroups = metadataGroups.concat(rangeGroups);
             }
 
             // get canvas metadata
             if (options.canvases && options.canvases.length) {
-                for (var i = 0; i < options.canvases.length; i++) {
-                    var canvas: Manifesto.ICanvas = options.canvases[i];
-                    var canvasMetadata: any[] = canvas.getMetadata();
+                for (let i = 0; i < options.canvases.length; i++) {
+                    const canvas: Manifesto.ICanvas = options.canvases[i];
+                    const canvasMetadata: any[] = canvas.getMetadata();
 
                     if (canvasMetadata && canvasMetadata.length) {
-                        var canvasGroup: MetadataGroup = new MetadataGroup(canvas);
+                        const canvasGroup: MetadataGroup = new MetadataGroup(canvas);
                         canvasGroup.addMetadata(canvas.getMetadata());
                         metadataGroups.push(canvasGroup);
                     }
 
                     // add image metadata
-                    var images: Manifesto.IAnnotation[] = canvas.getImages();
+                    const images: Manifesto.IAnnotation[] = canvas.getImages();
 
-                    for (var j = 0; j < images.length; j++) {
-                        var image: Manifesto.IAnnotation = images[j];
-                        var imageMetadata: any[] = image.getMetadata();
+                    for (let j = 0; j < images.length; j++) {
+                        const image: Manifesto.IAnnotation = images[j];
+                        const imageMetadata: any[] = image.getMetadata();
 
                         if (imageMetadata && imageMetadata.length) {
-                            var imageGroup: MetadataGroup = new MetadataGroup(image);
+                            const imageGroup: MetadataGroup = new MetadataGroup(image);
                             imageGroup.addMetadata(imageMetadata);
                             metadataGroups.push(imageGroup);
                         }
@@ -310,10 +312,10 @@ namespace Manifold {
         }
 
         private _getRangeMetadata(metadataGroups: MetadataGroup[], range: Manifesto.IRange): MetadataGroup[] {
-            var rangeMetadata: any[] = range.getMetadata();
+            const rangeMetadata: any[] = range.getMetadata();
 
             if (rangeMetadata && rangeMetadata.length) {
-                var rangeGroup: MetadataGroup = new MetadataGroup(range);
+                const rangeGroup: MetadataGroup = new MetadataGroup(range);
                 rangeGroup.addMetadata(rangeMetadata);
                 metadataGroups.push(rangeGroup);
             }
@@ -339,12 +341,12 @@ namespace Manifold {
             return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();
         }
         
-        public getRangeByPath(path: string): any{
+        public getRangeByPath(path: string): any {
             return this.manifest.getRangeByPath(path);
         }
         
         public getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
-            var ids: string[] = range.getCanvasIds();
+            const ids: string[] = range.getCanvasIds();
             return this.getCanvasesById(ids);
         }
 
@@ -353,7 +355,7 @@ namespace Manifold {
         }
 
         public getResources(): Manifesto.IAnnotation[] {
-            var element: Manifesto.IElement = this.getCurrentElement();
+            const element: Manifesto.IElement = this.getCurrentElement();
             return element.getResources();
         }
         
@@ -369,13 +371,13 @@ namespace Manifold {
             return this.manifest.getSequenceByIndex(index);
         }
 
-        public getShareServiceUrl(): string {
-            var url: string;
-            var shareService: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
+        public getShareServiceUrl(): string | null {
+            let url: string | null = null;
+            let shareService: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
 
             if (shareService){
                 if ((<any>shareService).length){
-                    shareService = shareService[0];
+                    shareService = (<any>shareService)[0];
                 }
                 url = shareService.__jsonld.shareUrl;
             }
@@ -385,14 +387,14 @@ namespace Manifold {
 
         public getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
 
-            var all: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
+            const all: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
                 .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString() ||
                             n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
 
             //var collections: ITreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
             //    .where((n) => n.data.type === ITreeNodeType.collection().toString()).toArray();
 
-            var manifests: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
+            const manifests: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
                 .where((n) => n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
 
             this.createDecadeNodes(sortedTree, all);
@@ -431,26 +433,26 @@ namespace Manifold {
             // if it's a collection, use IIIFResource.getDefaultTree()
             // otherwise, get the top range by index and use Range.getTree()
 
-            var tree: ITreeNode;
+            let tree: ITreeNode;
 
             if (this.iiifResource.isCollection()){
                 tree = <ITreeNode>this.iiifResource.getDefaultTree();
             } else {
-                var topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
+                const topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
                 
-                var root: ITreeNode = new manifesto.TreeNode();
+                const root: ITreeNode = new manifesto.TreeNode();
                 root.label = 'root';
                 root.data = this.iiifResource;
                 
                 if (topRanges.length){
-                    var range: Manifesto.IRange = topRanges[topRangeIndex];                    
+                    const range: Manifesto.IRange = topRanges[topRangeIndex];                    
                     tree = <ITreeNode>range.getTree(root);
                 } else {
                     return root;
                 }
             }
 
-            var sortedTree: ITreeNode = new manifesto.TreeNode();
+            let sortedTree: ITreeNode = new manifesto.TreeNode();
             
             switch (sortType.toString()){
                 case TreeSortType.DATE.toString():
@@ -470,12 +472,12 @@ namespace Manifold {
         }
         
         public treeHasNavDates(tree: ITreeNode): boolean {
-            var node: Manifesto.ITreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
+            const node: Manifesto.ITreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
             return (node)? true : false;
         }
         
         public getViewingDirection(): Manifesto.ViewingDirection {
-            var viewingDirection: Manifesto.ViewingDirection = this.getCurrentSequence().getViewingDirection();
+            let viewingDirection: Manifesto.ViewingDirection = this.getCurrentSequence().getViewingDirection();
 
             if (!viewingDirection.toString()) {
                 viewingDirection = this.manifest.getViewingDirection();
@@ -485,7 +487,7 @@ namespace Manifold {
         }
 
         public getViewingHint(): Manifesto.ViewingHint {
-            var viewingHint: Manifesto.ViewingHint = this.getCurrentSequence().getViewingHint();
+            let viewingHint: Manifesto.ViewingHint = this.getCurrentSequence().getViewingHint();
 
             if (!viewingHint.toString()) {
                 viewingHint = this.manifest.getViewingHint();
@@ -502,7 +504,7 @@ namespace Manifold {
         }
 
         public hasRelatedPage(): boolean {
-            var related: any = this.getRelated();
+            let related: any = this.getRelated();
             if (!related) return false;
             if (related.length){
                 related = related[0];
@@ -584,10 +586,10 @@ namespace Manifold {
         }
 
         public isUIEnabled(name: string): boolean {
-            var uiExtensions: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+            const uiExtensions: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
 
             if (uiExtensions){
-                var disableUI: string[] = uiExtensions.getProperty('disableUI');
+                const disableUI: string[] = uiExtensions.getProperty('disableUI');
 
                 if (disableUI) {
                     if (disableUI.contains(name) || disableUI.contains(name.toLowerCase())) {
@@ -606,13 +608,13 @@ namespace Manifold {
 
         // dates //     
         
-        public createDateNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-            for (var i = 0; i < nodes.length; i++) {
-                var node: ITreeNode = <ITreeNode>nodes[i];
-                var year = this.getNodeYear(node);
-                var month = this.getNodeMonth(node);
+        public createDateNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void {
+            for (let i = 0; i < nodes.length; i++) {
+                const node: ITreeNode = <ITreeNode>nodes[i];
+                const year: number = this.getNodeYear(node);
+                const month: number = this.getNodeMonth(node);
 
-                var dateNode = new manifesto.TreeNode();
+                const dateNode: ITreeNode = new manifesto.TreeNode();
                 dateNode.id = node.id;
                 dateNode.label = this.getNodeDisplayDate(node);
                 dateNode.data = node.data;
@@ -620,13 +622,13 @@ namespace Manifold {
                 dateNode.data.year = year;
                 dateNode.data.month = month;
 
-                var decadeNode = this.getDecadeNode(rootNode, year);
+                const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
 
                 if (decadeNode) {
-                    var yearNode = this.getYearNode(decadeNode, year);
+                    const yearNode: NullableTreeNode = this.getYearNode(decadeNode, year);
 
-                    if (yearNode){
-                        var monthNode = this.getMonthNode(yearNode, month);
+                    if (yearNode) {
+                        const monthNode: NullableTreeNode = this.getMonthNode(yearNode, month);
 
                         if (monthNode){
                             monthNode.addNode(dateNode);
@@ -636,17 +638,15 @@ namespace Manifold {
             }
         }
         
-        public createDecadeNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-            var decadeNode: ITreeNode;
+        public createDecadeNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void {
 
-            for (var i = 0; i < nodes.length; i++) {
-                var node: ITreeNode = nodes[i];
-                var year = this.getNodeYear(node);
-                var decade = Number(year.toString().substr(2, 1));
-                var endYear = Number(year.toString().substr(0, 3) + "9");
+            for (let i = 0; i < nodes.length; i++) {
+                const node: ITreeNode = nodes[i];
+                const year: number = this.getNodeYear(node);
+                const endYear: number = Number(year.toString().substr(0, 3) + "9");
 
-                if(!this.getDecadeNode(rootNode, year)){
-                    decadeNode = new manifesto.TreeNode();
+                if (!this.getDecadeNode(rootNode, year)) {
+                    const decadeNode: Manifesto.ITreeNode = new manifesto.TreeNode();
                     decadeNode.label = year + " - " + endYear;
                     decadeNode.navDate = node.navDate;
                     decadeNode.data.startYear = year;
@@ -657,17 +657,20 @@ namespace Manifold {
         }
         
         public createMonthNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-            var monthNode: ITreeNode;
 
-            for (var i = 0; i < nodes.length; i++) {
-                var node: ITreeNode = nodes[i];
-                var year = this.getNodeYear(node);
-                var month = this.getNodeMonth(node);
-                var decadeNode = this.getDecadeNode(rootNode, year);
-                var yearNode = this.getYearNode(decadeNode, year);
+            for (let i = 0; i < nodes.length; i++) {
+                const node: ITreeNode = nodes[i];
+                const year = this.getNodeYear(node);
+                const month = this.getNodeMonth(node);
+                const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
+                let yearNode: NullableTreeNode = null;
+                
+                if (decadeNode) {
+                    yearNode = this.getYearNode(decadeNode, year);
+                }
 
-                if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)){
-                    monthNode = <ITreeNode>new manifesto.TreeNode();
+                if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)) {
+                    const monthNode: ITreeNode = <ITreeNode>new manifesto.TreeNode();
                     monthNode.label = this.getNodeDisplayMonth(node);
                     monthNode.navDate = node.navDate;
                     monthNode.data.year = year;
@@ -678,15 +681,14 @@ namespace Manifold {
         }
         
         public createYearNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-            var yearNode: ITreeNode;
 
-            for (var i = 0; i < nodes.length; i++) {
-                var node: ITreeNode = nodes[i];
-                var year = this.getNodeYear(node);
-                var decadeNode = this.getDecadeNode(rootNode, year);
+            for (let i = 0; i < nodes.length; i++) {
+                const node: ITreeNode = nodes[i];
+                const year: number = this.getNodeYear(node);
+                const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
 
-                if(decadeNode && !this.getYearNode(decadeNode, year)){
-                    yearNode = <ITreeNode>new manifesto.TreeNode();
+                if (decadeNode && !this.getYearNode(decadeNode, year)) {
+                    const yearNode: ITreeNode = <ITreeNode>new manifesto.TreeNode();
                     yearNode.label = year.toString();
                     yearNode.navDate = node.navDate;
                     yearNode.data.year = year;
@@ -696,18 +698,18 @@ namespace Manifold {
             }
         }
         
-        public getDecadeNode(rootNode: ITreeNode, year: number): ITreeNode{
-            for (var i = 0; i < rootNode.nodes.length; i++){
-                var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
+        public getDecadeNode(rootNode: ITreeNode, year: number): ITreeNode | null {
+            for (let i = 0; i < rootNode.nodes.length; i++) {
+                const n: ITreeNode = <ITreeNode>rootNode.nodes[i];
                 if (year >= n.data.startYear && year <= n.data.endYear) return n;
             }
 
             return null;
         }
         
-        public getMonthNode(yearNode: ITreeNode, month: Number): ITreeNode{
-            for (var i = 0; i < yearNode.nodes.length; i++){
-                var n: ITreeNode = <ITreeNode>yearNode.nodes[i];
+        public getMonthNode(yearNode: ITreeNode, month: Number): ITreeNode | null {
+            for (let i = 0; i < yearNode.nodes.length; i++) {
+                const n: ITreeNode = <ITreeNode>yearNode.nodes[i];
                 if (month === this.getNodeMonth(n)) return n;
             }
 
@@ -719,7 +721,7 @@ namespace Manifold {
         }
         
         public getNodeDisplayMonth(node: ITreeNode): string{
-            var months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             return months[node.navDate.getMonth()];
         }        
 
@@ -731,9 +733,9 @@ namespace Manifold {
             return node.navDate.getFullYear();
         }
 
-        public getYearNode(decadeNode: ITreeNode, year: Number): ITreeNode{
-            for (var i = 0; i < decadeNode.nodes.length; i++){
-                var n: ITreeNode = <ITreeNode>decadeNode.nodes[i];
+        public getYearNode(decadeNode: ITreeNode, year: Number): ITreeNode | null {
+            for (let i = 0; i < decadeNode.nodes.length; i++){
+                const n: ITreeNode = <ITreeNode>decadeNode.nodes[i];
                 if (year === this.getNodeYear(n)) return n;
             }
 
@@ -742,17 +744,17 @@ namespace Manifold {
         
         // delete any empty decades
         public pruneDecadeNodes(rootNode: ITreeNode): void {
-            var pruned: ITreeNode[] = [];
+            const pruned: ITreeNode[] = [];
 
-            for (var i = 0; i < rootNode.nodes.length; i++){
-                var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
+            for (let i = 0; i < rootNode.nodes.length; i++){
+                const n: ITreeNode = <ITreeNode>rootNode.nodes[i];
                 if (!n.nodes.length){
                     pruned.push(n);
                 }
             }
 
-            for (var j = 0; j < pruned.length; j++){
-                var p: ITreeNode = <ITreeNode>pruned[j];
+            for (let j = 0; j < pruned.length; j++){
+                const p: ITreeNode = <ITreeNode>pruned[j];
 
                 rootNode.nodes.remove(p);
             }
@@ -765,11 +767,11 @@ namespace Manifold {
         }
         
         public sortMonthNodes(rootNode: ITreeNode): void {
-            for (var i = 0; i < rootNode.nodes.length; i++){
-                var decadeNode = rootNode.nodes[i];
+            for (let i = 0; i < rootNode.nodes.length; i++) {
+                const decadeNode: Manifesto.ITreeNode = rootNode.nodes[i];
 
-                for (var j = 0; j < decadeNode.nodes.length; j++){
-                    var monthNode = decadeNode.nodes[j];
+                for (let j = 0; j < decadeNode.nodes.length; j++){
+                    const monthNode: Manifesto.ITreeNode = decadeNode.nodes[j];
 
                     monthNode.nodes = monthNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
                         return this.getNodeMonth(a) - this.getNodeMonth(b);
@@ -779,8 +781,8 @@ namespace Manifold {
         }
         
         public sortYearNodes(rootNode: ITreeNode): void {
-            for (var i = 0; i < rootNode.nodes.length; i++){
-                var decadeNode = rootNode.nodes[i];
+            for (let i = 0; i < rootNode.nodes.length; i++) {
+                const decadeNode: Manifesto.ITreeNode = rootNode.nodes[i];
 
                 decadeNode.nodes = decadeNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
                     return (this.getNodeYear(a) - this.getNodeYear(b));

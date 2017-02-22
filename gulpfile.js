@@ -1,12 +1,13 @@
-var c = require('./gulpfile.config');
-var config = new c();
-var gulp = require('gulp');
-var requireDir = require('require-dir');
-var runSequence = require('run-sequence');
-var tasks = requireDir('./tasks');
+const gulp = require('gulp');
+const metadata = require('./package');
+const tasks = require('gulp-tasks');
 
-gulp.task('default', function(cb) {
-    runSequence('clean:dist', 'build', 'browserify', 'minify', 'bundle', 'bundle:typings', 'prependHeaders', 'sync', cb);
+tasks.init({
+    metadata: metadata,
+    // libs that MUST be included in a consuming app for this component to work
+    libs: [
+        'node_modules/manifesto.js/dist/client/manifesto.bundle.js'
+    ],
+    // libs that MAY be included in a consuming app but are used here for example purposes
+    examples: []
 });
-
-gulp.task('sync', ['copy:bundle' ,'copy:typings']);

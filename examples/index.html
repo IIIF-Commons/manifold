@@ -4,7 +4,8 @@
     <title>examples</title>
     <meta charset="utf-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-    <script src="js/manifold.bundle.js"></script>
+    <script src="js/manifesto.bundle.js"></script>
+    <script src="js/manifold.js"></script>
 </head>
 <body>
     
@@ -36,10 +37,10 @@
                     range: helper.getRanges()[0],
                     showAllLanguages: true
                 });
-                //console.log(helper.hasRelatedPage());
+                console.log(helper.hasRelatedPage());
                 //multiSelectState = helper.getMultiSelectState();  
-            }).catch(function() {
-                console.error('failed to load manifest');
+            }).catch(function(e) {
+                console.error(e);
             });
 
         });

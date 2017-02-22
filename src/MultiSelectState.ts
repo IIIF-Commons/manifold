@@ -36,7 +36,7 @@ namespace Manifold {
         public getCanvasesByIds(ids: string[]): ICanvas[] {
             var canvases: ICanvas[] = [];
 
-            for (var i = 0; i < ids.length; i++) {
+            for (let i = 0; i < ids.length; i++) {
                 var id: string = ids[i];
                 canvases.push(this.getCanvasById(id));
             }
@@ -97,7 +97,7 @@ namespace Manifold {
             
             var items: IMultiSelectable[] = this.getAll();
 
-            for (var i = 0; i < items.length; i++){
+            for (let i = 0; i < items.length; i++){
                 var item: IMultiSelectable = items[i];
                 item.multiSelectEnabled = this.isEnabled;
                 if (!enabled){

@@ -1,7 +1,7 @@
 namespace Manifold {
     export class MetadataGroup {
         public resource: Manifesto.IManifestResource;
-        public label: string;
+        public label: string | undefined;
         public items: Manifold.IMetadataItem[] = [];
 
         constructor(resource: Manifesto.IManifestResource, label?: string) {
@@ -14,7 +14,7 @@ namespace Manifold {
         }
 
         public addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel: boolean = false): void {
-            for (var i = 0; i < metadata.length; i++) {
+            for (let i = 0; i < metadata.length; i++) {
                 var item: Manifesto.MetadataItem = metadata[i];
                 (<Manifold.IMetadataItem>item).isRootLevel = isRootLevel;
                 this.addItem(<Manifold.IMetadataItem>item);
