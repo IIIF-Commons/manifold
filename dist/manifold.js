@@ -19,11 +19,16 @@ var Manifold;
     Manifold.StringValue = StringValue;
 })(Manifold || (Manifold = {}));
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Manifold;
 (function (Manifold) {
     var TreeSortType = (function (_super) {
@@ -68,7 +73,7 @@ var Manifold;
                             jsonpCallback: 'manifestCallback'
                         };
                         $.ajax(settings);
-                        window.manifestCallback = function (json) {
+                        global.manifestCallback = function (json) {
                             that._loaded(that, JSON.stringify(json), resolve, reject);
                         };
                     }
@@ -132,7 +137,7 @@ var Manifold;
             }
         };
         Bootstrapper.prototype._msieversion = function () {
-            var ua = window.navigator.userAgent;
+            var ua = global.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
             if (msie > 0) {
                 return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
@@ -255,6 +260,7 @@ var Manifold;
     Manifold.ExternalResource = ExternalResource;
 })(Manifold || (Manifold = {}));
 
+///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
 var Manifold;
 (function (Manifold) {
     var Helper = (function () {
@@ -511,8 +517,8 @@ var Manifold;
         Helper.prototype.getMultiSelectState = function () {
             if (!this._multiSelectState) {
                 this._multiSelectState = new Manifold.MultiSelectState();
-                this._multiSelectState.ranges = this.getRanges().clone();
-                this._multiSelectState.canvases = this.getCurrentSequence().getCanvases().clone();
+                this._multiSelectState.ranges = this.getRanges().slice(0);
+                this._multiSelectState.canvases = this.getCurrentSequence().getCanvases().slice(0);
             }
             return this._multiSelectState;
         };
@@ -714,7 +720,7 @@ var Manifold;
             if (uiExtensions) {
                 var disableUI = uiExtensions.getProperty('disableUI');
                 if (disableUI) {
-                    if (disableUI.contains(name) || disableUI.contains(name.toLowerCase())) {
+                    if (disableUI.indexOf(name) !== -1 || disableUI.indexOf(name.toLowerCase()) !== -1) {
                         return false;
                     }
                 }
@@ -846,7 +852,10 @@ var Manifold;
             }
             for (var j = 0; j < pruned.length; j++) {
                 var p = pruned[j];
-                rootNode.nodes.remove(p);
+                var index = rootNode.nodes.indexOf(p);
+                if (index > -1) {
+                    rootNode.nodes.splice(index, 1);
+                }
             }
         };
         Helper.prototype.sortDecadeNodes = function (rootNode) {

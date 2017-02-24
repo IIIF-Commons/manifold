@@ -21,5 +21,8 @@
     "manifesto.js": "viewdir/manifesto#es6",
     "gulp-tasks": "viewdir/gulp-tasks#v1.0.5",
     "typings": "^2.1.0"
+  },
+  "dependencies": {
+    "@types/jquery": "^2.0.40"
   }
 }

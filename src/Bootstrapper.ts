@@ -18,9 +18,9 @@ namespace Manifold {
                 var msie = that._msieversion();
 
                 // if not a recent version of IE
-                if (msie > 0 && msie < 11){
+                if (msie > 0 && msie < 11) {
                     
-                    if (msie === 9){
+                    if (msie === 9) {
                         // CORS not available, use jsonp
 
                         var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
@@ -33,11 +33,11 @@ namespace Manifold {
 
                         $.ajax(settings);
 
-                        window.manifestCallback = (json: any) => {
+                        global.manifestCallback = (json: any) => {
                             that._loaded(that, JSON.stringify(json), resolve, reject);
                         };
 
-                    } else if (msie === 10){
+                    } else if (msie === 10) {
                         $.getJSON(that._options.iiifResourceUri, (json) => {
                             that._loaded(that, JSON.stringify(json), resolve, reject);
                         });
@@ -106,7 +106,7 @@ namespace Manifold {
         }
 
         private _msieversion(): number{
-            var ua = window.navigator.userAgent;
+            var ua = global.navigator.userAgent;
             var msie = ua.indexOf("MSIE ");
 
             if (msie > 0){  // If Internet Explorer, return version number

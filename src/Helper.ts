@@ -1,3 +1,5 @@
+///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
+
 type NullableTreeNode = Manifold.ITreeNode | null;
 
 namespace Manifold {
@@ -330,8 +332,8 @@ namespace Manifold {
         public getMultiSelectState(): Manifold.MultiSelectState {
             if (!this._multiSelectState) {
                 this._multiSelectState = new Manifold.MultiSelectState();
-                this._multiSelectState.ranges = this.getRanges().clone();
-                this._multiSelectState.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases().clone();
+                this._multiSelectState.ranges = this.getRanges().slice(0);
+                this._multiSelectState.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases().slice(0);
             }
 
             return this._multiSelectState;
@@ -592,7 +594,7 @@ namespace Manifold {
                 const disableUI: string[] = uiExtensions.getProperty('disableUI');
 
                 if (disableUI) {
-                    if (disableUI.contains(name) || disableUI.contains(name.toLowerCase())) {
+                    if (disableUI.indexOf(name) !== -1 || disableUI.indexOf(name.toLowerCase()) !== -1) {
                         return false;
                     }
                 }
@@ -746,17 +748,20 @@ namespace Manifold {
         public pruneDecadeNodes(rootNode: ITreeNode): void {
             const pruned: ITreeNode[] = [];
 
-            for (let i = 0; i < rootNode.nodes.length; i++){
+            for (let i = 0; i < rootNode.nodes.length; i++) {
                 const n: ITreeNode = <ITreeNode>rootNode.nodes[i];
-                if (!n.nodes.length){
+                if (!n.nodes.length) {
                     pruned.push(n);
                 }
             }
 
-            for (let j = 0; j < pruned.length; j++){
+            for (let j = 0; j < pruned.length; j++) {
                 const p: ITreeNode = <ITreeNode>pruned[j];
+                const index: number = rootNode.nodes.indexOf(p);
 
-                rootNode.nodes.remove(p);
+                if (index > -1) {
+                    rootNode.nodes.splice(index, 1);
+                }
             }
         }
 

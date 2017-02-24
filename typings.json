@@ -2,9 +2,8 @@
   "name": "manifold",
   "dependencies": {},
   "globalDependencies": {
-    "core-js": "registry:dt/core-js#0.9.7+20161130133742",
-    "jquery": "registry:dt/jquery#1.10.0+20170123093700",
-    "manifesto.bundle": "github:viewdir/manifesto/dist/manifesto.bundle.d.ts",
-    "node": "registry:dt/node#7.0.0+20170204020307"
+    "ex": "github:BSick7/exjs/dist/ex.d.ts",
+    "http-status-codes": "github:edsilv/http-status-codes/dist/http-status-codes.d.ts",
+    "manifesto": "github:viewdir/manifesto/dist/manifesto.d.ts"
   }
 }

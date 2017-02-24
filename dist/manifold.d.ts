@@ -2,6 +2,11 @@
 interface Window {
     manifestCallback: any;
 }
+interface JQueryXHR {
+    setRequestHeader: (name: string, value: string) => void;
+}
+declare function escape(s: string): string;
+declare function unescape(s: string): string;
 
 declare namespace Manifold {
     class StringValue {
@@ -55,6 +60,7 @@ declare namespace Manifold {
     }
 }
 
+/// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 declare type NullableTreeNode = Manifold.ITreeNode | null;
 declare namespace Manifold {
     class Helper implements IHelper {
