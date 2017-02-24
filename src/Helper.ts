@@ -1,5 +1,3 @@
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
-
 type NullableTreeNode = Manifold.ITreeNode | null;
 
 namespace Manifold {

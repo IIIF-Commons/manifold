@@ -1,4 +1,5 @@
 // manifold v1.1.11 https://github.com/viewdir/manifold#readme
+/// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 interface Window {
     manifestCallback: any;
 }
@@ -60,7 +61,6 @@ declare namespace Manifold {
     }
 }
 
-/// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 declare type NullableTreeNode = Manifold.ITreeNode | null;
 declare namespace Manifold {
     class Helper implements IHelper {
