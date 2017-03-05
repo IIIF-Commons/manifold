@@ -11,11 +11,11 @@ namespace Manifold {
 
         public bootstrap(): Promise<Manifold.IHelper> {
 
-            var that = this;
+            const that = this;
 
             return new Promise<Manifold.IHelper>((resolve, reject) => {
 
-                var msie = that._msieversion();
+                const msie = that._msieversion();
 
                 // if not a recent version of IE
                 if (msie > 0 && msie < 11) {
@@ -23,7 +23,7 @@ namespace Manifold {
                     if (msie === 9) {
                         // CORS not available, use jsonp
 
-                        var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
+                        const settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
                             url: that._options.iiifResourceUri,
                             type: 'GET',
                             dataType: 'jsonp',
@@ -54,20 +54,20 @@ namespace Manifold {
 
         private _loaded(bootstrapper: Bootstrapper, json: string, resolve: (helper: IHelper) => void, reject: (error:any) => void): void {
             
-            var iiifResource: Manifesto.IIIIFResource = manifesto.create(json, <Manifesto.IManifestoOptions>{
+            const iiifResource: Manifesto.IIIIFResource = manifesto.create(json, <Manifesto.IManifestoOptions>{
                 locale: bootstrapper._options.locale
             });
             
             // only set the root IIIFResource on the first load
-            if (!bootstrapper._options.iiifResource){
+            if (!bootstrapper._options.iiifResource) {
                 bootstrapper._options.iiifResource = iiifResource;
             }
 
-            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
+            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
                 // if it's a collection and has child collections, get the collection by index
-                var collections: Manifesto.ICollection[] = (<Manifesto.ICollection>iiifResource).getCollections();
+                const collections: Manifesto.ICollection[] = (<Manifesto.ICollection>iiifResource).getCollections();
 
-                if (collections && collections.length){
+                if (collections && collections.length) {
 
                     (<Manifesto.ICollection>iiifResource).getCollectionByIndex(bootstrapper._options.collectionIndex).then((collection: Manifesto.ICollection) => {
 
@@ -87,29 +87,29 @@ namespace Manifold {
 
                         collection.getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifesto.IManifest) => {
                             bootstrapper._options.manifest = manifest;
-                            var helper: Manifold.Helper = new Helper(bootstrapper._options);
+                            const helper: Manifold.Helper = new Helper(bootstrapper._options);
                             resolve(helper);
                         });
                     });
                 } else {
                     (<Manifesto.ICollection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifesto.IManifest) => {
                         bootstrapper._options.manifest = manifest;
-                        var helper: Manifold.Helper = new Helper(bootstrapper._options);
+                        const helper: Manifold.Helper = new Helper(bootstrapper._options);
                         resolve(helper);
                     });
                 }
             } else {
                 bootstrapper._options.manifest = <Manifesto.IManifest>iiifResource;
-                var helper: Manifold.Helper = new Helper(bootstrapper._options);
+                const helper: Manifold.Helper = new Helper(bootstrapper._options);
                 resolve(helper);
             }
         }
 
-        private _msieversion(): number{
-            var ua = global.navigator.userAgent;
-            var msie = ua.indexOf("MSIE ");
+        private _msieversion(): number {
+            const ua = global.navigator.userAgent;
+            const msie = ua.indexOf("MSIE ");
 
-            if (msie > 0){  // If Internet Explorer, return version number
+            if (msie > 0) {  // If Internet Explorer, return version number
                 return parseInt (ua.substring (msie+5, ua.indexOf (".", msie)));
             } else {        // If another browser, return 0
                 return 0;

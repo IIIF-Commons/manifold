@@ -67,7 +67,7 @@ declare namespace Manifold {
         private _multiSelectState;
         canvasIndex: number;
         collectionIndex: number;
-        iiifResource: Manifesto.IIIIFResource;
+        iiifResource: Manifesto.IIIIFResource | null;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         manifestIndex: number;
@@ -116,7 +116,7 @@ declare namespace Manifold {
         getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
-        getTree(topRangeIndex?: number, sortType?: TreeSortType): ITreeNode;
+        getTree(topRangeIndex?: number, sortType?: TreeSortType): NullableTreeNode;
         treeHasNavDates(tree: ITreeNode): boolean;
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
@@ -167,7 +167,7 @@ declare namespace Manifold {
     interface IHelper {
         canvasIndex: number;
         collectionIndex: number;
-        iiifResource: Manifesto.IIIIFResource;
+        iiifResource: Manifesto.IIIIFResource | null;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         manifestIndex: number;
@@ -213,7 +213,7 @@ declare namespace Manifold {
         getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
-        getTree(topRangeIndex?: number, sortType?: TreeSortType): ITreeNode;
+        getTree(topRangeIndex?: number, sortType?: TreeSortType): NullableTreeNode;
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         hasParentCollection(): boolean;
@@ -247,7 +247,7 @@ interface IManifold {
 declare namespace Manifold {
     interface IManifoldOptions {
         iiifResourceUri: string;
-        iiifResource: Manifesto.IIIIFResource;
+        iiifResource: Manifesto.IIIIFResource | null;
         locale: string;
         manifest: Manifesto.IManifest;
         collectionIndex: number;

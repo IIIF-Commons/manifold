@@ -4,7 +4,7 @@ namespace Manifold {
         
         canvasIndex: number;
         collectionIndex: number;
-        iiifResource: Manifesto.IIIIFResource;
+        iiifResource: Manifesto.IIIIFResource | null;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         manifestIndex: number;
@@ -53,7 +53,7 @@ namespace Manifold {
         getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
-        getTree(topRangeIndex?: number, sortType?: TreeSortType): ITreeNode;   
+        getTree(topRangeIndex?: number, sortType?: TreeSortType): NullableTreeNode;   
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         

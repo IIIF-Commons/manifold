@@ -8,7 +8,7 @@ namespace Manifold {
 
         public canvasIndex: number;
         public collectionIndex: number;
-        public iiifResource: Manifesto.IIIIFResource;
+        public iiifResource: Manifesto.IIIIFResource | null;
         public iiifResourceUri: string;
         public manifest: Manifesto.IManifest;
         public manifestIndex: number;
@@ -121,7 +121,7 @@ namespace Manifold {
         }
 
         public getElementType(element?: Manifesto.IElement): Manifesto.ElementType {
-            if (!element){
+            if (!element) {
                 element = this.getCurrentCanvas();
             }
             return element.getType();
@@ -136,7 +136,7 @@ namespace Manifold {
             const images: Manifesto.IAnnotation[] = canvas.getImages();
 
             // if the canvas has images it's IIIF
-            if (images && images.length){
+            if (images && images.length) {
 
                 let infoUri: string | null = null;
 
@@ -193,7 +193,7 @@ namespace Manifold {
             return this.manifest.getLogo();
         }
 
-        public getManifestType(): Manifesto.ManifestType{
+        public getManifestType(): Manifesto.ManifestType {
             let manifestType = this.manifest.getManifestType();
 
             // default to monograph
@@ -214,7 +214,7 @@ namespace Manifold {
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
 
-            if (this.manifest.getDescription().length){
+            if (this.manifest.getDescription().length) {
                 const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
                 metadataItem.value = this.manifest.getDescription();
@@ -222,7 +222,7 @@ namespace Manifold {
                 manifestGroup.addItem(<IMetadataItem>metadataItem);
             }
 
-            if (this.manifest.getAttribution().length){
+            if (this.manifest.getAttribution().length) {
                 const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
                 metadataItem.value = this.manifest.getAttribution();
@@ -230,7 +230,7 @@ namespace Manifold {
                 manifestGroup.addItem(<IMetadataItem>metadataItem);
             }
 
-            if (this.manifest.getLicense()){
+            if (this.manifest.getLicense()) {
                 const item: any = {
                     label: "license",
                     value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
@@ -241,7 +241,7 @@ namespace Manifold {
                 manifestGroup.addItem(<IMetadataItem>metadataItem);
             }
 
-            if (this.manifest.getLogo()){
+            if (this.manifest.getLogo()) {
                 const item: any = {
                     label: "logo",
                     value: '<img src="' + this.manifest.getLogo() + '"/>'
@@ -375,7 +375,7 @@ namespace Manifold {
             let url: string | null = null;
             let shareService: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
 
-            if (shareService){
+            if (shareService) {
                 if ((<any>shareService).length){
                     shareService = (<any>shareService)[0];
                 }
@@ -428,14 +428,18 @@ namespace Manifold {
             return this.manifest.getTrackingLabel();
         }
 
-        public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): ITreeNode {
+        public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): NullableTreeNode {
 
             // if it's a collection, use IIIFResource.getDefaultTree()
             // otherwise, get the top range by index and use Range.getTree()
 
+            if (!this.iiifResource) {
+                return null;
+            }
+
             let tree: ITreeNode;
 
-            if (this.iiifResource.isCollection()){
+            if (this.iiifResource.isCollection()) {
                 tree = <ITreeNode>this.iiifResource.getDefaultTree();
             } else {
                 const topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
@@ -444,7 +448,7 @@ namespace Manifold {
                 root.label = 'root';
                 root.data = this.iiifResource;
                 
-                if (topRanges.length){
+                if (topRanges.length) {
                     const range: Manifesto.IRange = topRanges[topRangeIndex];                    
                     tree = <ITreeNode>range.getTree(root);
                 } else {
@@ -454,7 +458,7 @@ namespace Manifold {
 
             let sortedTree: ITreeNode = new manifesto.TreeNode();
             
-            switch (sortType.toString()){
+            switch (sortType.toString()) {
                 case TreeSortType.DATE.toString():
                     // returns a list of treenodes for each decade.
                     // expanding a decade generates a list of years

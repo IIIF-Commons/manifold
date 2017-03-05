@@ -34,10 +34,10 @@ namespace Manifold {
         }
         
         public getCanvasesByIds(ids: string[]): ICanvas[] {
-            var canvases: ICanvas[] = [];
+            const canvases: ICanvas[] = [];
 
             for (let i = 0; i < ids.length; i++) {
-                var id: string = ids[i];
+                const id: string = ids[i];
                 canvases.push(this.getCanvasById(id));
             }
 
@@ -45,7 +45,7 @@ namespace Manifold {
         }
         
         public getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
-            var ids: string[] = range.getCanvasIds();
+            const ids: string[] = range.getCanvasIds();
             return this.getCanvasesByIds(ids);
         }
         
@@ -55,7 +55,7 @@ namespace Manifold {
         }
 
         public selectCanvas(canvas: ICanvas, selected: boolean): void {
-            var c: ICanvas = this.canvases.en().where(c => c.id === canvas.id).first();
+            const c: ICanvas = this.canvases.en().where(c => c.id === canvas.id).first();
             c.multiSelected = selected;
         }
         
@@ -64,17 +64,17 @@ namespace Manifold {
         }
         
         public selectCanvases(canvases: ICanvas[], selected: boolean): void {
-            for(var j = 0; j < canvases.length; j++) {
-                var canvas: ICanvas = canvases[j];
+            for(let j = 0; j < canvases.length; j++) {
+                const canvas: ICanvas = canvases[j];
                 canvas.multiSelected = selected;
             }
         }
         
         public selectRange(range: IRange, selected: boolean): void {
-            var r: IRange = this.ranges.en().where(r => r.id === range.id).first();
+            const r: IRange = this.ranges.en().where(r => r.id === range.id).first();
             r.multiSelected = selected;
 
-            var canvases: ICanvas[] = <ICanvas[]>this.getRangeCanvases(r);
+            const canvases: ICanvas[] = <ICanvas[]>this.getRangeCanvases(r);
 
             this.selectCanvases(canvases, selected);
         }
@@ -84,10 +84,10 @@ namespace Manifold {
         }
         
         public selectRanges(ranges: IRange[], selected: boolean): void {
-            for(var i = 0; i < ranges.length; i++) {
-                var range: IRange = ranges[i];
+            for(let i = 0; i < ranges.length; i++) {
+                const range: IRange = ranges[i];
                 range.multiSelected = selected;
-                var canvases: ICanvas[] = this.getCanvasesByIds(range.getCanvasIds());
+                const canvases: ICanvas[] = this.getCanvasesByIds(range.getCanvasIds());
                 this.selectCanvases(canvases, selected);
             }
         }
@@ -95,10 +95,10 @@ namespace Manifold {
         public setEnabled(enabled: boolean): void {
             this.isEnabled = enabled;
             
-            var items: IMultiSelectable[] = this.getAll();
+            const items: IMultiSelectable[] = this.getAll();
 
             for (let i = 0; i < items.length; i++){
-                var item: IMultiSelectable = items[i];
+                const item: IMultiSelectable = items[i];
                 item.multiSelectEnabled = this.isEnabled;
                 if (!enabled){
                     item.multiSelected = false;

@@ -596,6 +596,9 @@ var Manifold;
             // otherwise, get the top range by index and use Range.getTree()
             if (topRangeIndex === void 0) { topRangeIndex = 0; }
             if (sortType === void 0) { sortType = Manifold.TreeSortType.NONE; }
+            if (!this.iiifResource) {
+                return null;
+            }
             var tree;
             if (this.iiifResource.isCollection()) {
                 tree = this.iiifResource.getDefaultTree();

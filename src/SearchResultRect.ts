@@ -13,7 +13,7 @@ namespace Manifold {
         public y: number;
 
         constructor(result: any) {
-            var xywh = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
+            const xywh: any = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
             this.x = Number(xywh[1]);
             this.y = Number(xywh[2]);
             this.width = Number(xywh[3]);

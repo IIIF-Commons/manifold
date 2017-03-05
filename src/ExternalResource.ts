@@ -30,10 +30,10 @@ namespace Manifold {
             this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
 
             // todo: create this.preferredService?
-            if (this.clickThroughService){
+            if (this.clickThroughService) {
                 this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
                 this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
-            } else if (this.loginService){
+            } else if (this.loginService) {
                 this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
                 this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
             } else if (this.restrictedService) {
@@ -43,7 +43,7 @@ namespace Manifold {
         }
 
         public isAccessControlled(): boolean {
-            if(this.clickThroughService || this.loginService || this.restrictedService){
+            if (this.clickThroughService || this.loginService || this.restrictedService) {
                 return true;
             }
             return false;
@@ -54,7 +54,7 @@ namespace Manifold {
         }
 
         public getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource> {
-            var that = this;
+            const that = this;
             that.data = {};
 
             return new Promise<Manifesto.IExternalResource>((resolve, reject) => {
@@ -62,7 +62,7 @@ namespace Manifold {
                 // check if dataUri ends with info.json
                 // if not issue a HEAD request.
 
-                var type: string = 'GET';
+                let type: string = 'GET';
 
                 if (!that.hasServiceDescriptor()){
                     // If access control is unnecessary, short circuit the process.
@@ -92,11 +92,11 @@ namespace Manifold {
 
                     // if it's a resource without an info.json
                     // todo: if resource doesn't have a @profile
-                    if (!data){
+                    if (!data) {
                         that.status = HTTPStatusCode.OK;
                         resolve(that);
                     } else {
-                        var uri = unescape(data['@id']);
+                        let uri = unescape(data['@id']);
 
                         that.data = data;
                         that._parseAuthServices(that.data);
@@ -106,7 +106,7 @@ namespace Manifold {
                             uri = uri.substr(0, uri.lastIndexOf('/'));
                         }
 
-                        var dataUri = that.dataUri;
+                        let dataUri = that.dataUri;
 
                         if (dataUri.endsWith('/info.json')){
                             dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
