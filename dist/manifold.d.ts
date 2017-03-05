@@ -67,7 +67,7 @@ declare namespace Manifold {
         private _multiSelectState;
         canvasIndex: number;
         collectionIndex: number;
-        iiifResource: Manifesto.IIIIFResource | null;
+        iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         manifestIndex: number;
@@ -167,7 +167,7 @@ declare namespace Manifold {
     interface IHelper {
         canvasIndex: number;
         collectionIndex: number;
-        iiifResource: Manifesto.IIIIFResource | null;
+        iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         manifestIndex: number;
@@ -247,7 +247,7 @@ interface IManifold {
 declare namespace Manifold {
     interface IManifoldOptions {
         iiifResourceUri: string;
-        iiifResource: Manifesto.IIIIFResource | null;
+        iiifResource: Manifesto.IIIIFResource;
         locale: string;
         manifest: Manifesto.IManifest;
         collectionIndex: number;

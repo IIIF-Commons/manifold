@@ -8,7 +8,7 @@ namespace Manifold {
 
         public canvasIndex: number;
         public collectionIndex: number;
-        public iiifResource: Manifesto.IIIIFResource | null;
+        public iiifResource: Manifesto.IIIIFResource;
         public iiifResourceUri: string;
         public manifest: Manifesto.IManifest;
         public manifestIndex: number;
