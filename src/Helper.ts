@@ -29,20 +29,30 @@ namespace Manifold {
         // getters //
         
         public getAutoCompleteService(): Manifesto.IService | null {
-            const service: Manifesto.IService = this.getSearchWithinService();
-            if (!service) return null;
-            return service.getService(manifesto.ServiceProfile.autoComplete());
+            const service: Manifesto.IService | null = this.getSearchService();
+           
+            if (service) {
+                return service.getService(manifesto.ServiceProfile.autoComplete());
+            }
+            
+            return null;
         }
         
-        public getAttribution(): string {
-            return Manifesto.TranslationCollection.getValue(this.manifest.getAttribution());
+        public getAttribution(): string | null {
+            const attribution: Manifesto.TranslationCollection | null = this.manifest.getAttribution();
+
+            if (attribution) {
+                return Manifesto.TranslationCollection.getValue(attribution);
+            }
+            
+            return null;
         }
         
         public getCanvases(): Manifesto.ICanvas[] {
             return this.getCurrentSequence().getCanvases();
         }
 
-        public getCanvasById(id: string): Manifesto.ICanvas {
+        public getCanvasById(id: string): Manifesto.ICanvas | null {
             return this.getCurrentSequence().getCanvasById(id);
         }
 
@@ -51,7 +61,10 @@ namespace Manifold {
 
             for (let i = 0; i < ids.length; i++) {
                 const id: string = ids[i];
-                canvases.push(this.getCanvasById(id));
+                const canvas: Manifesto.ICanvas | null = this.getCanvasById(id);
+                if (canvas) {
+                    canvases.push(canvas);
+                }
             }
 
             return canvases;
@@ -61,7 +74,7 @@ namespace Manifold {
             return this.getCurrentSequence().getCanvasByIndex(index);
         }
         
-        public getCanvasIndexById(id: string): number {
+        public getCanvasIndexById(id: string): number | null {
             return this.getCurrentSequence().getCanvasIndexById(id);
         }
         
@@ -73,11 +86,11 @@ namespace Manifold {
         public getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null {
             const ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
             
-            if (path){
+            if (path) {
                 for (let i = 0; i < ranges.length; i++) {
                     const range: Manifesto.IRange = ranges[i];
 
-                    if (range.path === path){
+                    if (range.path === path) {
                         return range;
                     }
                 }
@@ -162,7 +175,7 @@ namespace Manifold {
             } else {
 
                 // IxIF
-                const service: Manifesto.IService = canvas.getService(manifesto.ServiceProfile.ixif());
+                const service: Manifesto.IService | null = canvas.getService(manifesto.ServiceProfile.ixif());
 
                 if (service) { // todo: deprecate
                     return service.getInfoUri();
@@ -173,8 +186,14 @@ namespace Manifold {
             }
         }
         
-        public getLabel(): string {
-            return Manifesto.TranslationCollection.getValue(this.manifest.getLabel());
+        public getLabel(): string | null {
+            const label: Manifesto.TranslationCollection | null = this.manifest.getLabel();
+
+            if (label) {
+                return Manifesto.TranslationCollection.getValue(label);
+            }
+            
+            return null;
         }
         
         public getLastCanvasLabel(alphanumeric?: boolean): string {
@@ -185,11 +204,11 @@ namespace Manifold {
             return this.getTotalCanvases() - 1;
         }
         
-        public getLicense(): string {
+        public getLicense(): string | null {
             return this.manifest.getLicense();
         }
 
-        public getLogo(): string {
+        public getLogo(): string | null {
             return this.manifest.getLogo();
         }
 
@@ -230,10 +249,12 @@ namespace Manifold {
                 manifestGroup.addItem(<IMetadataItem>metadataItem);
             }
 
-            if (this.manifest.getLicense()) {
+            const license: string | null = this.manifest.getLicense();
+
+            if (license) {
                 const item: any = {
                     label: "license",
-                    value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
+                    value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
                 };
                 const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.parse(item);
@@ -359,8 +380,8 @@ namespace Manifold {
             return element.getResources();
         }
         
-        public getSearchWithinService(): Manifesto.IService {
-            return this.manifest.getService(manifesto.ServiceProfile.searchWithin());
+        public getSearchService(): Manifesto.IService | null {
+            return this.manifest.getService(manifesto.ServiceProfile.search());
         }
         
         public getSeeAlso(): any {
@@ -373,13 +394,13 @@ namespace Manifold {
 
         public getShareServiceUrl(): string | null {
             let url: string | null = null;
-            let shareService: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
+            let shareService: Manifesto.IService | null = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
 
             if (shareService) {
-                if ((<any>shareService).length){
+                if ((<any>shareService).length) {
                     shareService = (<any>shareService)[0];
                 }
-                url = shareService.__jsonld.shareUrl;
+                url = (<any>shareService).__jsonld.shareUrl;
             }
 
             return url;
@@ -590,9 +611,9 @@ namespace Manifold {
         }
 
         public isUIEnabled(name: string): boolean {
-            const uiExtensions: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+            const uiExtensions: Manifesto.IService | null = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
 
-            if (uiExtensions){
+            if (uiExtensions) {
                 const disableUI: string[] = uiExtensions.getProperty('disableUI');
 
                 if (disableUI) {

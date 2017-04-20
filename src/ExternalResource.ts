@@ -2,18 +2,19 @@ namespace Manifold {
 
     export class ExternalResource implements Manifesto.IExternalResource {
 
-        public clickThroughService: Manifesto.IService;
+        public clickThroughService: Manifesto.IService | null = null;
         public data: any;
         public dataUri: string;
         public error: any;
+        public externalService: Manifesto.IService | null = null;
         public height: number;
         public index: number;
         public isResponseHandled: boolean = false;
-        public loginService: Manifesto.IService;
-        public logoutService: Manifesto.IService;
-        public restrictedService: Manifesto.IService;
+        public kioskService: Manifesto.IService;
+        public loginService: Manifesto.IService | null = null;
+        public logoutService: Manifesto.IService | null = null;
         public status: number;
-        public tokenService: Manifesto.IService;
+        public tokenService: Manifesto.IService | null = null;
         public width: number;
         public x: number;
         public y: number;
@@ -25,25 +26,28 @@ namespace Manifold {
         }
 
         private _parseAuthServices(resource: any): void {
-            this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
-            this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
-            this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
+            this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
+            this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
+            this.kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
+            this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
 
-            // todo: create this.preferredService?
             if (this.clickThroughService) {
-                this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
-                this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
+                this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Token().toString());
             } else if (this.loginService) {
-                this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
-                this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
-            } else if (this.restrictedService) {
-                this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
-                this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
+                this.logoutService = this.loginService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.loginService.getService(manifesto.ServiceProfile.auth1Token().toString());
+            } else if (this.externalService) {
+                this.logoutService = this.externalService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.externalService.getService(manifesto.ServiceProfile.auth1Token().toString());
+            } else if (this.kioskService) {
+                this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
             }
         }
 
         public isAccessControlled(): boolean {
-            if (this.clickThroughService || this.loginService || this.restrictedService) {
+            if (this.clickThroughService || this.loginService || this.externalService || this.kioskService) {
                 return true;
             }
             return false;

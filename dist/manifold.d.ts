@@ -38,18 +38,19 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     class ExternalResource implements Manifesto.IExternalResource {
-        clickThroughService: Manifesto.IService;
+        clickThroughService: Manifesto.IService | null;
         data: any;
         dataUri: string;
         error: any;
+        externalService: Manifesto.IService | null;
         height: number;
         index: number;
         isResponseHandled: boolean;
-        loginService: Manifesto.IService;
-        logoutService: Manifesto.IService;
-        restrictedService: Manifesto.IService;
+        kioskService: Manifesto.IService;
+        loginService: Manifesto.IService | null;
+        logoutService: Manifesto.IService | null;
         status: number;
-        tokenService: Manifesto.IService;
+        tokenService: Manifesto.IService | null;
         width: number;
         x: number;
         y: number;
@@ -75,12 +76,12 @@ declare namespace Manifold {
         sequenceIndex: number;
         constructor(options: IManifoldOptions);
         getAutoCompleteService(): Manifesto.IService | null;
-        getAttribution(): string;
+        getAttribution(): string | null;
         getCanvases(): Manifesto.ICanvas[];
-        getCanvasById(id: string): Manifesto.ICanvas;
+        getCanvasById(id: string): Manifesto.ICanvas | null;
         getCanvasesById(ids: string[]): Manifesto.ICanvas[];
         getCanvasByIndex(index: number): Manifesto.ICanvas;
-        getCanvasIndexById(id: string): number;
+        getCanvasIndexById(id: string): number | null;
         getCanvasIndexByLabel(label: string): number;
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
@@ -91,11 +92,11 @@ declare namespace Manifold {
         getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
         getFirstPageIndex(): number;
         getInfoUri(canvas: Manifesto.ICanvas): string | null;
-        getLabel(): string;
+        getLabel(): string | null;
         getLastCanvasLabel(alphanumeric?: boolean): string;
         getLastPageIndex(): number;
-        getLicense(): string;
-        getLogo(): string;
+        getLicense(): string | null;
+        getLogo(): string | null;
         getManifestType(): Manifesto.ManifestType;
         getMetadata(options?: MetadataOptions): MetadataGroup[];
         private _parseMetadataOptions(options, metadataGroups);
@@ -106,7 +107,7 @@ declare namespace Manifold {
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
         getRelated(): any;
         getResources(): Manifesto.IAnnotation[];
-        getSearchWithinService(): Manifesto.IService;
+        getSearchService(): Manifesto.IService | null;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
         getShareServiceUrl(): string | null;
@@ -174,12 +175,12 @@ declare namespace Manifold {
         options: IManifoldOptions;
         sequenceIndex: number;
         getAutoCompleteService(): Manifesto.IService | null;
-        getAttribution(): string;
+        getAttribution(): string | null;
         getCanvases(): Manifesto.ICanvas[];
-        getCanvasById(id: string): Manifesto.ICanvas;
+        getCanvasById(id: string): Manifesto.ICanvas | null;
         getCanvasesById(ids: string[]): Manifesto.ICanvas[];
         getCanvasByIndex(index: number): Manifesto.ICanvas;
-        getCanvasIndexById(id: string): number;
+        getCanvasIndexById(id: string): number | null;
         getCanvasIndexByLabel(label: string): number;
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
@@ -190,11 +191,11 @@ declare namespace Manifold {
         getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
         getFirstPageIndex(): number;
         getInfoUri(canvas: Manifesto.ICanvas): string | null;
-        getLabel(): string;
+        getLabel(): string | null;
         getLastCanvasLabel(alphanumeric?: boolean): string;
         getLastPageIndex(): number;
-        getLicense(): string;
-        getLogo(): string;
+        getLicense(): string | null;
+        getLogo(): string | null;
         getManifestType(): Manifesto.ManifestType;
         getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;
@@ -203,7 +204,7 @@ declare namespace Manifold {
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
         getRelated(): any;
         getResources(): Manifesto.IAnnotation[];
-        getSearchWithinService(): Manifesto.IService;
+        getSearchService(): Manifesto.IService | null;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
         getShareServiceUrl(): string | null;

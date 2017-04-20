@@ -156,31 +156,40 @@ var Manifold;
 (function (Manifold) {
     var ExternalResource = (function () {
         function ExternalResource(resource, dataUriFunc) {
+            this.clickThroughService = null;
+            this.externalService = null;
             this.isResponseHandled = false;
+            this.loginService = null;
+            this.logoutService = null;
+            this.tokenService = null;
             resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
             this._parseAuthServices(resource);
         }
         ExternalResource.prototype._parseAuthServices = function (resource) {
-            this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
-            this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
-            this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
-            // todo: create this.preferredService?
+            this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
+            this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
+            this.kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
+            this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
             if (this.clickThroughService) {
-                this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
-                this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
+                this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Token().toString());
             }
             else if (this.loginService) {
-                this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
-                this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
+                this.logoutService = this.loginService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.loginService.getService(manifesto.ServiceProfile.auth1Token().toString());
             }
-            else if (this.restrictedService) {
-                this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
-                this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
+            else if (this.externalService) {
+                this.logoutService = this.externalService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.externalService.getService(manifesto.ServiceProfile.auth1Token().toString());
+            }
+            else if (this.kioskService) {
+                this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
+                this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
             }
         };
         ExternalResource.prototype.isAccessControlled = function () {
-            if (this.clickThroughService || this.loginService || this.restrictedService) {
+            if (this.clickThroughService || this.loginService || this.externalService || this.kioskService) {
                 return true;
             }
             return false;
@@ -276,13 +285,18 @@ var Manifold;
         }
         // getters //
         Helper.prototype.getAutoCompleteService = function () {
-            var service = this.getSearchWithinService();
-            if (!service)
-                return null;
-            return service.getService(manifesto.ServiceProfile.autoComplete());
+            var service = this.getSearchService();
+            if (service) {
+                return service.getService(manifesto.ServiceProfile.autoComplete());
+            }
+            return null;
         };
         Helper.prototype.getAttribution = function () {
-            return Manifesto.TranslationCollection.getValue(this.manifest.getAttribution());
+            var attribution = this.manifest.getAttribution();
+            if (attribution) {
+                return Manifesto.TranslationCollection.getValue(attribution);
+            }
+            return null;
         };
         Helper.prototype.getCanvases = function () {
             return this.getCurrentSequence().getCanvases();
@@ -294,7 +308,10 @@ var Manifold;
             var canvases = [];
             for (var i = 0; i < ids.length; i++) {
                 var id = ids[i];
-                canvases.push(this.getCanvasById(id));
+                var canvas = this.getCanvasById(id);
+                if (canvas) {
+                    canvases.push(canvas);
+                }
             }
             return canvases;
         };
@@ -389,7 +406,11 @@ var Manifold;
             }
         };
         Helper.prototype.getLabel = function () {
-            return Manifesto.TranslationCollection.getValue(this.manifest.getLabel());
+            var label = this.manifest.getLabel();
+            if (label) {
+                return Manifesto.TranslationCollection.getValue(label);
+            }
+            return null;
         };
         Helper.prototype.getLastCanvasLabel = function (alphanumeric) {
             return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
@@ -432,10 +453,11 @@ var Manifold;
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
-            if (this.manifest.getLicense()) {
+            var license = this.manifest.getLicense();
+            if (license) {
                 var item = {
                     label: "license",
-                    value: (options && options.licenseFormatter) ? options.licenseFormatter.format(this.manifest.getLicense()) : this.manifest.getLicense()
+                    value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
                 };
                 var metadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.parse(item);
@@ -539,8 +561,8 @@ var Manifold;
             var element = this.getCurrentElement();
             return element.getResources();
         };
-        Helper.prototype.getSearchWithinService = function () {
-            return this.manifest.getService(manifesto.ServiceProfile.searchWithin());
+        Helper.prototype.getSearchService = function () {
+            return this.manifest.getService(manifesto.ServiceProfile.search());
         };
         Helper.prototype.getSeeAlso = function () {
             return this.manifest.getSeeAlso();
