@@ -53,13 +53,13 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var Annotation = (function () {
-        function Annotation(resource, canvasIndex) {
+    var AnnotationGroup = (function () {
+        function AnnotationGroup(resource, canvasIndex) {
             this.rects = [];
             this.canvasIndex = canvasIndex;
             this.addRect(resource);
         }
-        Annotation.prototype.addRect = function (resource) {
+        AnnotationGroup.prototype.addRect = function (resource) {
             var rect = new Manifold.AnnotationRect(resource);
             rect.canvasIndex = this.canvasIndex;
             rect.index = this.rects.length;
@@ -69,9 +69,9 @@ var Manifold;
                 return a.index - b.index;
             });
         };
-        return Annotation;
+        return AnnotationGroup;
     }());
-    Manifold.Annotation = Annotation;
+    Manifold.AnnotationGroup = AnnotationGroup;
 })(Manifold || (Manifold = {}));
 
 var Manifold;

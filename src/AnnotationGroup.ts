@@ -1,6 +1,6 @@
 namespace Manifold {
     
-    export class Annotation {
+    export class AnnotationGroup {
         public canvasIndex: number;
         public rects: AnnotationRect[] = [];
 

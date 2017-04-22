@@ -27,7 +27,7 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    class Annotation {
+    class AnnotationGroup {
         canvasIndex: number;
         rects: AnnotationRect[];
         constructor(resource: any, canvasIndex: number);
