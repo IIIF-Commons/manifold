@@ -53,6 +53,46 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
+    var Annotation = (function () {
+        function Annotation(resource, canvasIndex) {
+            this.rects = [];
+            this.canvasIndex = canvasIndex;
+            this.addRect(resource);
+        }
+        Annotation.prototype.addRect = function (resource) {
+            var rect = new Manifold.AnnotationRect(resource);
+            rect.canvasIndex = this.canvasIndex;
+            rect.index = this.rects.length;
+            this.rects.push(rect);
+            // sort ascending
+            this.rects.sort(function (a, b) {
+                return a.index - b.index;
+            });
+        };
+        return Annotation;
+    }());
+    Manifold.Annotation = Annotation;
+})(Manifold || (Manifold = {}));
+
+var Manifold;
+(function (Manifold) {
+    var AnnotationRect = (function () {
+        function AnnotationRect(result) {
+            this.isVisible = true;
+            var xywh = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
+            this.x = Number(xywh[1]);
+            this.y = Number(xywh[2]);
+            this.width = Number(xywh[3]);
+            this.height = Number(xywh[4]);
+            this.chars = result.resource.chars;
+        }
+        return AnnotationRect;
+    }());
+    Manifold.AnnotationRect = AnnotationRect;
+})(Manifold || (Manifold = {}));
+
+var Manifold;
+(function (Manifold) {
     var Bootstrapper = (function () {
         function Bootstrapper(options) {
             this._options = options;
@@ -1060,46 +1100,6 @@ var Manifold;
         return MultiSelectState;
     }());
     Manifold.MultiSelectState = MultiSelectState;
-})(Manifold || (Manifold = {}));
-
-var Manifold;
-(function (Manifold) {
-    var SearchResult = (function () {
-        function SearchResult(resource, canvasIndex) {
-            this.rects = [];
-            this.canvasIndex = canvasIndex;
-            this.addRect(resource);
-        }
-        SearchResult.prototype.addRect = function (resource) {
-            var rect = new Manifold.SearchResultRect(resource);
-            rect.canvasIndex = this.canvasIndex;
-            rect.index = this.rects.length;
-            this.rects.push(rect);
-            // sort ascending
-            this.rects.sort(function (a, b) {
-                return a.index - b.index;
-            });
-        };
-        return SearchResult;
-    }());
-    Manifold.SearchResult = SearchResult;
-})(Manifold || (Manifold = {}));
-
-var Manifold;
-(function (Manifold) {
-    var SearchResultRect = (function () {
-        function SearchResultRect(result) {
-            this.isVisible = true;
-            var xywh = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
-            this.x = Number(xywh[1]);
-            this.y = Number(xywh[2]);
-            this.width = Number(xywh[3]);
-            this.height = Number(xywh[4]);
-            this.chars = result.resource.chars;
-        }
-        return SearchResultRect;
-    }());
-    Manifold.SearchResultRect = SearchResultRect;
 })(Manifold || (Manifold = {}));
 
 var Manifold;
