@@ -74,6 +74,7 @@ declare namespace Manifold {
         kioskService: Manifesto.IService;
         loginService: Manifesto.IService | null;
         logoutService: Manifesto.IService | null;
+        restrictedService: Manifesto.IService | null;
         status: number;
         tokenService: Manifesto.IService | null;
         width: number;

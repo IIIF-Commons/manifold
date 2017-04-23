@@ -13,6 +13,7 @@ namespace Manifold {
         public kioskService: Manifesto.IService;
         public loginService: Manifesto.IService | null = null;
         public logoutService: Manifesto.IService | null = null;
+        public restrictedService: Manifesto.IService | null;
         public status: number;
         public tokenService: Manifesto.IService | null = null;
         public width: number;
