@@ -63,6 +63,7 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     class ExternalResource implements Manifesto.IExternalResource {
+        authAPIVersion: number;
         clickThroughService: Manifesto.IService | null;
         data: any;
         dataUri: string;

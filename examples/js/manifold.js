@@ -196,6 +196,7 @@ var Manifold;
 (function (Manifold) {
     var ExternalResource = (function () {
         function ExternalResource(resource, dataUriFunc) {
+            this.authAPIVersion = 0.9;
             this.clickThroughService = null;
             this.externalService = null;
             this.isResponseHandled = false;
