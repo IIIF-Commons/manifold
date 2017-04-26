@@ -91,7 +91,7 @@ namespace Manifold {
 
                 let type: string = 'GET';
 
-                if (!that.hasServiceDescriptor()){
+                if (!that.hasServiceDescriptor()) {
                     // If access control is unnecessary, short circuit the process.
                     // Note that isAccessControlled check for short-circuiting only
                     // works in the "binary resource" context, since in that case,
