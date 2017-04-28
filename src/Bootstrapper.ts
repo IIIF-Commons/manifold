@@ -18,12 +18,12 @@ namespace Manifold {
                 const msie = that._detectIE();
 
                 if (msie === false) {
-                    manifesto.loadManifest(that._options.iiifResourceUri).then(function(json){                     
+                    manifesto.loadManifest(that._options.iiifResourceUri).then(function(json) {                     
                         that._loaded(that, json, resolve, reject)
                     });
                 } else {
                     // if not a recent version of IE
-                    if (msie > 0 && msie < 11) {
+                    if (msie > 0) {
                         
                         if (msie === 9) {
                             // CORS not available, use jsonp

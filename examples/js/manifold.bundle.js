@@ -12847,7 +12847,7 @@ var Manifold;
                 }
                 else {
                     // if not a recent version of IE
-                    if (msie > 0 && msie < 11) {
+                    if (msie > 0) {
                         if (msie === 9) {
                             // CORS not available, use jsonp
                             var settings = {
