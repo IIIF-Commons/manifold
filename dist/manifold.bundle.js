@@ -255,30 +255,30 @@ var Manifesto;
 
 var Manifesto;
 (function (Manifesto) {
-    class ResourceFormat extends Manifesto.StringValue {
+    class MediaType extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
         jpg() {
-            return new ResourceFormat(ResourceFormat.JPG.toString());
+            return new MediaType(MediaType.JPG.toString());
         }
         mp4() {
-            return new ResourceFormat(ResourceFormat.MP4.toString());
+            return new MediaType(MediaType.MP4.toString());
         }
         pdf() {
-            return new ResourceFormat(ResourceFormat.PDF.toString());
+            return new MediaType(MediaType.PDF.toString());
         }
         threejs() {
-            return new ResourceFormat(ResourceFormat.THREEJS.toString());
+            return new MediaType(MediaType.THREEJS.toString());
         }
         webm() {
-            return new ResourceFormat(ResourceFormat.WEBM.toString());
+            return new MediaType(MediaType.WEBM.toString());
         }
     }
-    ResourceFormat.JPG = new ResourceFormat("image/jpeg");
-    ResourceFormat.MP4 = new ResourceFormat("video/mp4");
-    ResourceFormat.PDF = new ResourceFormat("application/pdf");
-    ResourceFormat.THREEJS = new ResourceFormat("application/vnd.threejs+json");
-    ResourceFormat.WEBM = new ResourceFormat("video/webm");
-    Manifesto.ResourceFormat = ResourceFormat;
+    MediaType.JPG = new MediaType("image/jpeg");
+    MediaType.MP4 = new MediaType("video/mp4");
+    MediaType.PDF = new MediaType("application/pdf");
+    MediaType.THREEJS = new MediaType("application/vnd.threejs+json");
+    MediaType.WEBM = new MediaType("video/webm");
+    Manifesto.MediaType = MediaType;
 })(Manifesto || (Manifesto = {}));
 
 var Manifesto;
@@ -422,7 +422,7 @@ var Manifesto;
     ServiceProfile.AUTHLOGOUT = new ServiceProfile("http://iiif.io/api/auth/0/logout");
     ServiceProfile.AUTHRESTRICTED = new ServiceProfile("http://iiif.io/api/auth/0/login/restricted");
     ServiceProfile.AUTHTOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
-    ServiceProfile.AUTH1CLICKTHROUGH = new ServiceProfile("http://iiif.io/api/auth/1/login/clickthrough");
+    ServiceProfile.AUTH1CLICKTHROUGH = new ServiceProfile("http://iiif.io/api/auth/1/clickthrough");
     ServiceProfile.AUTH1EXTERNAL = new ServiceProfile("http://iiif.io/api/auth/1/external");
     ServiceProfile.AUTH1KIOSK = new ServiceProfile("http://iiif.io/api/auth/1/kiosk");
     ServiceProfile.AUTH1LOGIN = new ServiceProfile("http://iiif.io/api/auth/1/login");
@@ -649,7 +649,7 @@ var Manifesto;
             const rotation = 0;
             let quality = 'default';
             let width = w;
-            var size;
+            let size;
             // if an info.json has been loaded
             if (this.externalResource && this.externalResource.data && this.externalResource.data['@id']) {
                 id = this.externalResource.data['@id'];
@@ -666,16 +666,16 @@ var Manifesto;
             }
             else {
                 // info.json hasn't been loaded yet
-                var images = this.getImages();
+                const images = this.getImages();
                 if (images && images.length) {
-                    var firstImage = images[0];
-                    var resource = firstImage.getResource();
-                    var services = resource.getServices();
+                    const firstImage = images[0];
+                    const resource = firstImage.getResource();
+                    const services = resource.getServices();
                     if (!width) {
                         width = resource.getWidth();
                     }
                     if (services.length) {
-                        var service = services[0];
+                        const service = services[0];
                         id = service.id;
                         quality = Manifesto.Utils.getImageQuality(service.getProfile());
                     }
@@ -687,7 +687,7 @@ var Manifesto;
                 }
             }
             size = width + ',';
-            var uri = [id, region, size, rotation, quality + '.jpg'].join('/');
+            const uri = [id, region, size, rotation, quality + '.jpg'].join('/');
             return uri;
         }
         // Presentation API 3.0
@@ -705,8 +705,8 @@ var Manifesto;
             }
             const annotations = annotationPage.getItems();
             for (let i = 0; i < annotations.length; i++) {
-                var a = annotations[i];
-                var annotation = new Manifesto.Annotation(a, this.options);
+                const a = annotations[i];
+                const annotation = new Manifesto.Annotation(a, this.options);
                 content.push(annotation);
             }
             return content;
@@ -716,8 +716,8 @@ var Manifesto;
             if (!this.__jsonld.images)
                 return images;
             for (let i = 0; i < this.__jsonld.images.length; i++) {
-                var a = this.__jsonld.images[i];
-                var annotation = new Manifesto.Annotation(a, this.options);
+                const a = this.__jsonld.images[i];
+                const annotation = new Manifesto.Annotation(a, this.options);
                 images.push(annotation);
             }
             return images;
@@ -1701,10 +1701,10 @@ var url = require("url");
 var Manifesto;
 (function (Manifesto) {
     class Utils {
-        static getResourceFormat(format) {
-            format = format.toLowerCase();
-            format = format.split(';')[0];
-            return format.trim();
+        static getMediaType(type) {
+            type = type.toLowerCase();
+            type = type.split(';')[0];
+            return type.trim();
         }
         static getImageQuality(profile) {
             const p = profile.toString();
@@ -1875,10 +1875,10 @@ var Manifesto;
                 request.end();
             });
         }
-        static loadExternalResourcesAuth1(resources, openContentProviderWindow, openTokenService, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages) {
+        static loadExternalResourcesAuth1(resources, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
             return new Promise((resolve, reject) => {
                 const promises = resources.map((resource) => {
-                    return Utils.loadExternalResourceAuth1(resource, openContentProviderWindow, openTokenService, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages);
+                    return Utils.loadExternalResourceAuth1(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages);
                 });
                 Promise.all(promises)
                     .then(() => {
@@ -1888,16 +1888,19 @@ var Manifesto;
                 });
             });
         }
-        static loadExternalResourceAuth1(resource, openContentProviderWindow, openTokenService, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages) {
+        static loadExternalResourceAuth1(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
             return __awaiter(this, void 0, void 0, function* () {
                 yield resource.getData();
                 if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY || resource.status === HTTPStatusCode.UNAUTHORIZED) {
-                    yield Utils.doAuthChain(resource, openContentProviderWindow, openTokenService, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages);
+                    yield Utils.doAuthChain(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages);
                 }
-                return resource;
+                if (resource.status === HTTPStatusCode.OK) {
+                    return resource;
+                }
+                throw Utils.createAuthorizationFailedError();
             });
         }
-        static doAuthChain(resource, openContentProviderWindow, openTokenService, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages) {
+        static doAuthChain(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
             return __awaiter(this, void 0, void 0, function* () {
                 // This function enters the flowchart at the < External? > junction
                 // http://iiif.io/api/auth/1.0/#workflow-from-the-browser-client-perspective
@@ -1912,30 +1915,25 @@ var Manifesto;
                 if (serviceToTry) {
                     serviceToTry.options = resource.options;
                     lastAttempted = serviceToTry;
-                    //let success = 
                     yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
-                    //if (success) return resource;
+                    return resource;
                 }
                 // Looking for kiosk pattern
                 serviceToTry = resource.kioskService;
                 if (serviceToTry) {
                     serviceToTry.options = resource.options;
                     lastAttempted = serviceToTry;
-                    let kioskWindow = openContentProviderWindow(serviceToTry);
-                    if (kioskWindow) {
-                        yield userInteractionWithContentProvider(kioskWindow);
-                        //let success = 
+                    let kioskInteraction = openContentProviderInteraction(serviceToTry);
+                    if (kioskInteraction) {
+                        yield userInteractedWithContentProvider(kioskInteraction);
                         yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
-                        //if (success) return resource;
-                    }
-                    else {
-                        // Could not open kiosk window
+                        return resource;
                     }
                 }
                 // The code for the next two patterns is identical (other than the profile name).
                 // The difference is in the expected behaviour of
                 //
-                //    await userInteractionWithContentProvider(contentProviderWindow);
+                //    await userInteractedWithContentProvider(contentProviderInteraction);
                 // 
                 // For clickthrough the opened window should close immediately having established
                 // a session, whereas for login the user might spend some time entering credentials etc.
@@ -1944,13 +1942,12 @@ var Manifesto;
                 if (serviceToTry) {
                     serviceToTry.options = resource.options;
                     lastAttempted = serviceToTry;
-                    let contentProviderWindow = yield getContentProviderWindow(serviceToTry);
-                    if (contentProviderWindow) {
+                    let contentProviderInteraction = yield getContentProviderInteraction(serviceToTry);
+                    if (contentProviderInteraction) {
                         // should close immediately
-                        yield userInteractionWithContentProvider(contentProviderWindow);
-                        //let success = 
+                        yield userInteractedWithContentProvider(contentProviderInteraction);
                         yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
-                        //if (success) return resource;
+                        return resource;
                     }
                 }
                 // Looking for login pattern
@@ -1958,13 +1955,12 @@ var Manifesto;
                 if (serviceToTry) {
                     serviceToTry.options = resource.options;
                     lastAttempted = serviceToTry;
-                    let contentProviderWindow = yield getContentProviderWindow(serviceToTry);
-                    if (contentProviderWindow) {
+                    let contentProviderInteraction = yield getContentProviderInteraction(serviceToTry);
+                    if (contentProviderInteraction) {
                         // we expect the user to spend some time interacting
-                        yield userInteractionWithContentProvider(contentProviderWindow);
-                        //let success = 
+                        yield userInteractedWithContentProvider(contentProviderInteraction);
                         yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
-                        //if (success) return resource;
+                        return resource;
                     }
                 }
                 // nothing worked! Use the most recently tried service as the source of
@@ -1972,7 +1968,6 @@ var Manifesto;
                 if (lastAttempted) {
                     showOutOfOptionsMessages(lastAttempted);
                 }
-                return resource;
             });
         }
         static attemptResourceWithToken(resource, openTokenService, authService) {
@@ -1983,11 +1978,10 @@ var Manifesto;
                     // found token service: " + tokenService["@id"]);
                     let tokenMessage = yield openTokenService(tokenService);
                     if (tokenMessage && tokenMessage.accessToken) {
-                        yield resource.getData();
+                        yield resource.getData(tokenMessage);
+                        return resource;
                     }
                 }
-                // Didn't get a 200 info response.
-                return resource;
             });
         }
         static loadExternalResourcesAuth09(resources, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
@@ -2389,9 +2383,9 @@ global.manifesto = global.Manifesto = module.exports = {
     ElementType: new Manifesto.ElementType(),
     IIIFResourceType: new Manifesto.IIIFResourceType(),
     ManifestType: new Manifesto.ManifestType(),
+    MediaType: new Manifesto.MediaType(),
     MetadataItem: Manifesto.MetadataItem,
     RenderingFormat: new Manifesto.RenderingFormat(),
-    ResourceFormat: new Manifesto.ResourceFormat(),
     ResourceType: new Manifesto.ResourceType(),
     ServiceProfile: new Manifesto.ServiceProfile(),
     Translation: Manifesto.Translation,
@@ -2467,7 +2461,7 @@ var Manifesto;
         getFormat() {
             const format = this.getProperty('format');
             if (format) {
-                return new Manifesto.ResourceFormat(Manifesto.Utils.getResourceFormat(format));
+                return new Manifesto.MediaType(Manifesto.Utils.getMediaType(format));
             }
             return null;
         }
@@ -2524,7 +2518,7 @@ var Manifesto;
         getFormat() {
             const format = this.getProperty('format');
             if (format) {
-                return new Manifesto.ResourceFormat(format.toLowerCase());
+                return new Manifesto.MediaType(format.toLowerCase());
             }
             return null;
         }
