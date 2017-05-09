@@ -146,10 +146,22 @@ namespace Manifold {
         
         public getInfoUri(canvas: Manifesto.ICanvas): string | null {
             
+            const content: Manifesto.IAnnotation[] = canvas.getContent();
             const images: Manifesto.IAnnotation[] = canvas.getImages();
 
-            // if the canvas has images it's IIIF
-            if (images && images.length) {
+
+            if (content && content.length) {
+
+                const annotation: Manifesto.IAnnotation = content[0];
+                const annotationBody: Manifesto.IAnnotationBody[] = annotation.getBody();
+
+                if (annotationBody.length) {
+                    return annotationBody[0].id;
+                }
+
+                return null;
+
+            } else if (images && images.length) {
 
                 let infoUri: string | null = null;
 
