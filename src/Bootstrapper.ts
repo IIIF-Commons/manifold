@@ -65,7 +65,8 @@ namespace Manifold {
                 bootstrapper._options.iiifResource = iiifResource;
             }
 
-            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
+            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString() ||
+                iiifResource.getIIIFResourceType().toString().toLowerCase() === 'collection') { // todo: use constant
                 // if it's a collection and has child collections, get the collection by index
                 const collections: Manifesto.ICollection[] = (<Manifesto.ICollection>iiifResource).getCollections();
 
