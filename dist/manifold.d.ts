@@ -1,4 +1,4 @@
-// manifold v1.1.12 https://github.com/viewdir/manifold#readme
+// manifold v1.2.0 https://github.com/viewdir/manifold#readme
 /// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 interface Window {
     manifestCallback: any;
