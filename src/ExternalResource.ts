@@ -4,6 +4,7 @@ namespace Manifold {
 
         public authAPIVersion: number;
         public clickThroughService: Manifesto.IService | null = null;
+        public contentProviderInteractionEnabled: boolean = true;
         public data: any;
         public dataUri: string;
         public error: any;
