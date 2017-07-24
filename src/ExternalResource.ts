@@ -2,7 +2,7 @@ namespace Manifold {
 
     export class ExternalResource implements Manifesto.IExternalResource {
 
-        public authAPIVersion: number = 0.9;
+        public authAPIVersion: number;
         public clickThroughService: Manifesto.IService | null = null;
         public data: any;
         public dataUri: string;
@@ -21,9 +21,10 @@ namespace Manifold {
         public x: number;
         public y: number;
 
-        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string) {
+        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string, authApiVersion: number = 0.9) {
             resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
+            this.authAPIVersion = authApiVersion;
             this._parseAuthServices(resource);
         }
 

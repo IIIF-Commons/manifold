@@ -218,8 +218,8 @@ var Manifold;
 var Manifold;
 (function (Manifold) {
     var ExternalResource = (function () {
-        function ExternalResource(resource, dataUriFunc) {
-            this.authAPIVersion = 0.9;
+        function ExternalResource(resource, dataUriFunc, authApiVersion) {
+            if (authApiVersion === void 0) { authApiVersion = 0.9; }
             this.clickThroughService = null;
             this.externalService = null;
             this.isResponseHandled = false;
@@ -228,6 +228,7 @@ var Manifold;
             this.tokenService = null;
             resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
+            this.authAPIVersion = authApiVersion;
             this._parseAuthServices(resource);
         }
         ExternalResource.prototype._parseAuthServices = function (resource) {
@@ -1004,6 +1005,7 @@ var Manifold;
     }());
     Manifold.Helper = Helper;
 })(Manifold || (Manifold = {}));
+
 
 
 
