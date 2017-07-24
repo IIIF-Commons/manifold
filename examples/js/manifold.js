@@ -221,6 +221,7 @@ var Manifold;
         function ExternalResource(resource, dataUriFunc, index, authApiVersion) {
             if (authApiVersion === void 0) { authApiVersion = 0.9; }
             this.clickThroughService = null;
+            this.contentProviderInteractionEnabled = true;
             this.externalService = null;
             this.isResponseHandled = false;
             this.loginService = null;
