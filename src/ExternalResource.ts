@@ -21,9 +21,10 @@ namespace Manifold {
         public x: number;
         public y: number;
 
-        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string, authApiVersion: number = 0.9) {
+        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string, index: number, authApiVersion: number = 0.9) {
             resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
+            this.index = index;
             this.authAPIVersion = authApiVersion;
             this._parseAuthServices(resource);
         }

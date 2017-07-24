@@ -81,7 +81,7 @@ declare namespace Manifold {
         width: number;
         x: number;
         y: number;
-        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string, authApiVersion?: number);
+        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string, index: number, authApiVersion?: number);
         private _parseAuthServices(resource);
         isAccessControlled(): boolean;
         hasServiceDescriptor(): boolean;
@@ -188,14 +188,6 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     interface ICanvas extends IMultiSelectable, Manifesto.ICanvas {
-    }
-}
-
-declare namespace Manifesto {
-    interface IExternalResourceOptions {
-        authAPIVersion: number;
-        dataUri: string;
-        dataUriFunc: (r: Manifesto.IManifestResource) => string;
     }
 }
 
