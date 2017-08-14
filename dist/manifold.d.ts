@@ -1,4 +1,4 @@
-// manifold v1.2.1 https://github.com/viewdir/manifold#readme
+// manifold v1.2.2 https://github.com/viewdir/manifold#readme
 /// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 interface Window {
     manifestCallback: any;
@@ -64,8 +64,8 @@ declare namespace Manifold {
 declare namespace Manifold {
     class ExternalResource implements Manifesto.IExternalResource {
         authAPIVersion: number;
+        authHoldingPage: any;
         clickThroughService: Manifesto.IService | null;
-        contentProviderInteractionEnabled: boolean;
         data: any;
         dataUri: string;
         error: any;
