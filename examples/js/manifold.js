@@ -452,6 +452,13 @@ var Manifold;
         Helper.prototype.getCurrentSequence = function () {
             return this.getSequenceByIndex(this.sequenceIndex);
         };
+        Helper.prototype.getDescription = function () {
+            var description = this.manifest.getDescription();
+            if (description) {
+                return Manifesto.TranslationCollection.getValue(description);
+            }
+            return null;
+        };
         Helper.prototype.getElementType = function (element) {
             if (!element) {
                 element = this.getCurrentCanvas();

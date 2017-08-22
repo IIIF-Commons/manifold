@@ -133,6 +133,16 @@ namespace Manifold {
             return this.getSequenceByIndex(this.sequenceIndex);
         }
 
+        public getDescription(): string | null {
+            const description: Manifesto.TranslationCollection | null = this.manifest.getDescription();
+
+            if (description) {
+                return Manifesto.TranslationCollection.getValue(description);
+            }
+            
+            return null;
+        }
+
         public getElementType(element?: Manifesto.IElement): Manifesto.ElementType {
             if (!element) {
                 element = this.getCurrentCanvas();

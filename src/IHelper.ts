@@ -27,6 +27,7 @@ namespace Manifold {
         getCurrentCanvas(): Manifesto.ICanvas;
         getCurrentElement(): Manifesto.IElement;
         getCurrentSequence(): Manifesto.ISequence;
+        getDescription(): string | null;
         getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
         getFirstPageIndex(): number;
         getInfoUri(canvas: Manifesto.ICanvas): string | null;
