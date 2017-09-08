@@ -124,11 +124,7 @@ namespace Manifold {
         public getCurrentCanvas(): Manifesto.ICanvas {
             return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
         }
-        
-        public getCurrentElement(): Manifesto.IElement {
-            return <Manifesto.IElement>this.getCanvasByIndex(this.canvasIndex);
-        }
-        
+                
         public getCurrentSequence(): Manifesto.ISequence {
             return this.getSequenceByIndex(this.sequenceIndex);
         }
@@ -141,13 +137,6 @@ namespace Manifold {
             }
             
             return null;
-        }
-
-        public getElementType(element?: Manifesto.IElement): Manifesto.ElementType {
-            if (!element) {
-                element = this.getCurrentCanvas();
-            }
-            return element.getType();
         }
         
         public getFirstPageIndex(): number {
@@ -396,11 +385,6 @@ namespace Manifold {
         public getRelated(): any {
             return this.manifest.getRelated();
         }
-
-        public getResources(): Manifesto.IAnnotation[] {
-            const element: Manifesto.IElement = this.getCurrentElement();
-            return element.getResources();
-        }
         
         public getSearchService(): Manifesto.IService | null {
             return this.manifest.getService(manifesto.ServiceProfile.search());
@@ -560,7 +544,8 @@ namespace Manifold {
         }
 
         public hasResources(): boolean {
-            return this.getResources().length > 0;
+            const canvas: Manifesto.ICanvas = this.getCurrentCanvas();
+            return canvas.getResources().length > 0;
         }
         
         public isBottomToTop(): boolean {

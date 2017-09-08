@@ -446,9 +446,6 @@ var Manifold;
         Helper.prototype.getCurrentCanvas = function () {
             return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
         };
-        Helper.prototype.getCurrentElement = function () {
-            return this.getCanvasByIndex(this.canvasIndex);
-        };
         Helper.prototype.getCurrentSequence = function () {
             return this.getSequenceByIndex(this.sequenceIndex);
         };
@@ -458,12 +455,6 @@ var Manifold;
                 return Manifesto.TranslationCollection.getValue(description);
             }
             return null;
-        };
-        Helper.prototype.getElementType = function (element) {
-            if (!element) {
-                element = this.getCurrentCanvas();
-            }
-            return element.getType();
         };
         Helper.prototype.getFirstPageIndex = function () {
             return 0;
@@ -658,10 +649,6 @@ var Manifold;
         Helper.prototype.getRelated = function () {
             return this.manifest.getRelated();
         };
-        Helper.prototype.getResources = function () {
-            var element = this.getCurrentElement();
-            return element.getResources();
-        };
         Helper.prototype.getSearchService = function () {
             return this.manifest.getService(manifesto.ServiceProfile.search());
         };
@@ -787,7 +774,8 @@ var Manifold;
             return related['format'] === 'text/html';
         };
         Helper.prototype.hasResources = function () {
-            return this.getResources().length > 0;
+            var canvas = this.getCurrentCanvas();
+            return canvas.getResources().length > 0;
         };
         Helper.prototype.isBottomToTop = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString();

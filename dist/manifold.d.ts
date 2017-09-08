@@ -115,10 +115,8 @@ declare namespace Manifold {
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null;
         getCurrentCanvas(): Manifesto.ICanvas;
-        getCurrentElement(): Manifesto.IElement;
         getCurrentSequence(): Manifesto.ISequence;
         getDescription(): string | null;
-        getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
         getFirstPageIndex(): number;
         getInfoUri(canvas: Manifesto.ICanvas): string | null;
         getLabel(): string | null;
@@ -135,7 +133,6 @@ declare namespace Manifold {
         getRangeByPath(path: string): any;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
         getRelated(): any;
-        getResources(): Manifesto.IAnnotation[];
         getSearchService(): Manifesto.IService | null;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
@@ -215,10 +212,8 @@ declare namespace Manifold {
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null;
         getCurrentCanvas(): Manifesto.ICanvas;
-        getCurrentElement(): Manifesto.IElement;
         getCurrentSequence(): Manifesto.ISequence;
         getDescription(): string | null;
-        getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
         getFirstPageIndex(): number;
         getInfoUri(canvas: Manifesto.ICanvas): string | null;
         getLabel(): string | null;
@@ -233,7 +228,6 @@ declare namespace Manifold {
         getRangeByPath(path: string): any;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
         getRelated(): any;
-        getResources(): Manifesto.IAnnotation[];
         getSearchService(): Manifesto.IService | null;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
