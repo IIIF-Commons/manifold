@@ -18,7 +18,7 @@
   "homepage": "https://github.com/viewdir/manifold#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "manifesto.js": "viewdir/manifesto#dev",
+    "manifesto.js": "viewdir/manifesto#v2.1.8",
     "gulp-tasks": "viewdir/gulp-tasks#v1.0.5",
     "typings": "^2.1.0"
   },
