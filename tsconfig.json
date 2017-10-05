@@ -18,6 +18,7 @@
         "src/TreeSortType.ts"
     ],
     "include": [
+        "node_modules/typescript/lib/lib.es6.d.ts",
         "src/**/*",
         "typings/**/*"
     ]
