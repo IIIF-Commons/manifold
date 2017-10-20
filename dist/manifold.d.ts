@@ -1,4 +1,4 @@
-// manifold v1.2.8 https://github.com/viewdir/manifold#readme
+// manifold v1.2.9 https://github.com/iiif-commons/manifold#readme
 interface Window {
     manifestCallback: any;
 }
