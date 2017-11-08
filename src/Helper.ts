@@ -148,7 +148,6 @@ namespace Manifold {
             const content: Manifesto.IAnnotation[] = canvas.getContent();
             const images: Manifesto.IAnnotation[] = canvas.getImages();
 
-
             if (content && content.length) {
 
                 const annotation: Manifesto.IAnnotation = content[0];
@@ -168,20 +167,25 @@ namespace Manifold {
                 const resource: Manifesto.IResource = firstImage.getResource();
                 const services: Manifesto.IService[] = resource.getServices();
 
-                for (let i = 0; i < services.length; i++) {
-                    const service: Manifesto.IService = services[i];
-                    let id = service.id;
-
-                    if (!id.endsWith('/')) {
-                        id += '/';
+                if (services.length) {
+                    for (let i = 0; i < services.length; i++) {
+                        const service: Manifesto.IService = services[i];
+                        let id = service.id;
+    
+                        if (!id.endsWith('/')) {
+                            id += '/';
+                        }
+    
+                        if (manifesto.Utils.isImageProfile(service.getProfile())){
+                            infoUri = id + 'info.json';
+                        }
                     }
 
-                    if (manifesto.Utils.isImageProfile(service.getProfile())){
-                        infoUri = id + 'info.json';
-                    }
+                    return infoUri;
                 }
 
-                return infoUri;
+                // no image services. return the image id
+                return resource.id;
 
             } else {
 
