@@ -6,35 +6,89 @@ namespace Manifold {
         public authHoldingPage: any = null;
         public clickThroughService: Manifesto.IService | null = null;
         public data: any;
-        public dataUri: string;
+        public dataUri: string | null;
         public error: any;
         public externalService: Manifesto.IService | null = null;
         public height: number;
         public index: number;
         public isResponseHandled: boolean = false;
-        public kioskService: Manifesto.IService;
+        public kioskService: Manifesto.IService | null = null;
         public loginService: Manifesto.IService | null = null;
         public logoutService: Manifesto.IService | null = null;
-        public restrictedService: Manifesto.IService | null;
+        public restrictedService: Manifesto.IService | null = null;
         public status: number;
         public tokenService: Manifesto.IService | null = null;
         public width: number;
-        public x: number;
-        public y: number;
 
-        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string, index: number, authApiVersion: number = 0.9) {
+        constructor(canvas: Manifesto.ICanvas, options: Manifesto.IExternalResourceOptions) {
             
-            // todo: just pass canvas as first param (name it canvas to avoid confusion)
-            // canvas already has an index property. use that
-            // do you need to pass in the dataUriFunc? it's already in manifold.
-            // use manifesto utils to get the height and width of the resource if available
+            // todo:
+            // get the height and width of the resource if available
             // and set on externalresource
             
-            resource.externalResource = this;
-            this.dataUri = dataUriFunc(resource);
-            this.index = index;
-            this.authAPIVersion = authApiVersion;
-            this._parseAuthServices(resource);
+            canvas.externalResource = <Manifesto.IExternalResource>this;
+            this.dataUri = this._getDataUri(canvas);
+            this.index = canvas.index;
+            this.authAPIVersion = options.authApiVersion;
+            this._parseAuthServices(canvas);
+        }
+
+        private _getDataUri(canvas: Manifesto.ICanvas): string | null {
+            
+            const content: Manifesto.IAnnotation[] = canvas.getContent();
+            const images: Manifesto.IAnnotation[] = canvas.getImages();
+
+            if (content && content.length) {
+
+                const annotation: Manifesto.IAnnotation = content[0];
+                const annotationBody: Manifesto.IAnnotationBody[] = annotation.getBody();
+
+                if (annotationBody.length) {
+                    return annotationBody[0].id;
+                }
+
+                return null;
+
+            } else if (images && images.length) {
+
+                let infoUri: string | null = null;
+
+                const firstImage: Manifesto.IAnnotation = images[0];
+                const resource: Manifesto.IResource = firstImage.getResource();
+                const services: Manifesto.IService[] = resource.getServices();
+
+                if (services.length) {
+                    for (let i = 0; i < services.length; i++) {
+                        const service: Manifesto.IService = services[i];
+                        let id: string = service.id;
+    
+                        if (!id.endsWith('/')) {
+                            id += '/';
+                        }
+    
+                        if (manifesto.Utils.isImageProfile(service.getProfile())) {
+                            infoUri = id + 'info.json';
+                        }
+                    }
+
+                    return infoUri;
+                }
+
+                // no image services. return the image id
+                return resource.id;
+
+            } else {
+
+                // Legacy IxIF
+                const service: Manifesto.IService | null = canvas.getService(manifesto.ServiceProfile.ixif());
+
+                if (service) { // todo: deprecate
+                    return service.getInfoUri();
+                }
+
+                // return the canvas id.
+                return canvas.id;
+            }
         }
 
         private _parseAuthServices(resource: any): void {
@@ -87,7 +141,11 @@ namespace Manifold {
         }
 
         public hasServiceDescriptor(): boolean {
-            return this.dataUri.endsWith('info.json');
+            if (this.dataUri) {
+                return this.dataUri.endsWith('info.json');
+            }
+            
+            return false;
         }
 
         public getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource> {
@@ -95,6 +153,10 @@ namespace Manifold {
             that.data = {};
 
             return new Promise<Manifesto.IExternalResource>((resolve, reject) => {
+
+                if (!this.dataUri) {
+                    reject('There is no dataUri to fetch');
+                }
 
                 // check if dataUri ends with info.json
                 // if not issue a HEAD request.
@@ -121,11 +183,11 @@ namespace Manifold {
                     type: type,
                     dataType: 'json',
                     beforeSend: (xhr) => {
-                        if (accessToken){
+                        if (accessToken) {
                             xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
                         }
                     }
-                }).done((data) => {
+                }).done((data: any) => {
 
                     // if it's a resource without an info.json
                     // todo: if resource doesn't have a @profile
@@ -133,7 +195,7 @@ namespace Manifold {
                         that.status = HTTPStatusCode.OK;
                         resolve(that);
                     } else {
-                        let uri = unescape(data['@id']);
+                        let uri: string = unescape(data['@id']);
 
                         that.data = data;
                         that._parseAuthServices(that.data);
@@ -143,9 +205,9 @@ namespace Manifold {
                             uri = uri.substr(0, uri.lastIndexOf('/'));
                         }
 
-                        let dataUri = that.dataUri;
+                        let dataUri: string | null = that.dataUri;
 
-                        if (dataUri.endsWith('/info.json')){
+                        if (dataUri && dataUri.endsWith('/info.json')){
                             dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
                         }
 

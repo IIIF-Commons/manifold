@@ -142,65 +142,7 @@ namespace Manifold {
         public getFirstPageIndex(): number {
             return 0;
         }
-        
-        public getInfoUri(canvas: Manifesto.ICanvas): string | null {
-            
-            const content: Manifesto.IAnnotation[] = canvas.getContent();
-            const images: Manifesto.IAnnotation[] = canvas.getImages();
 
-            if (content && content.length) {
-
-                const annotation: Manifesto.IAnnotation = content[0];
-                const annotationBody: Manifesto.IAnnotationBody[] = annotation.getBody();
-
-                if (annotationBody.length) {
-                    return annotationBody[0].id;
-                }
-
-                return null;
-
-            } else if (images && images.length) {
-
-                let infoUri: string | null = null;
-
-                const firstImage = images[0];
-                const resource: Manifesto.IResource = firstImage.getResource();
-                const services: Manifesto.IService[] = resource.getServices();
-
-                if (services.length) {
-                    for (let i = 0; i < services.length; i++) {
-                        const service: Manifesto.IService = services[i];
-                        let id = service.id;
-    
-                        if (!id.endsWith('/')) {
-                            id += '/';
-                        }
-    
-                        if (manifesto.Utils.isImageProfile(service.getProfile())){
-                            infoUri = id + 'info.json';
-                        }
-                    }
-
-                    return infoUri;
-                }
-
-                // no image services. return the image id
-                return resource.id;
-
-            } else {
-
-                // IxIF
-                const service: Manifesto.IService | null = canvas.getService(manifesto.ServiceProfile.ixif());
-
-                if (service) { // todo: deprecate
-                    return service.getInfoUri();
-                }
-
-                // return the canvas id.
-                return canvas.id;
-            }
-        }
-        
         public getLabel(): string | null {
             const label: Manifesto.TranslationCollection | null = this.manifest.getLabel();
 

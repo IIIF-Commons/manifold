@@ -28,7 +28,6 @@ namespace Manifold {
         getCurrentSequence(): Manifesto.ISequence;
         getDescription(): string | null;
         getFirstPageIndex(): number;
-        getInfoUri(canvas: Manifesto.ICanvas): string | null;
         getLabel(): string | null;
         getLastCanvasLabel(alphanumeric?: boolean): string;
         getLastPageIndex(): number;
