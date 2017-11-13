@@ -129,7 +129,7 @@ namespace Manifold {
                 }
             }
         }
-
+        
         private _parseDimensions(canvas: Manifesto.ICanvas): void {
             const images: Manifesto.IAnnotation[] = canvas.getImages();
             
