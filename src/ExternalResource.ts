@@ -23,6 +23,13 @@ namespace Manifold {
         public y: number;
 
         constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string, index: number, authApiVersion: number = 0.9) {
+            
+            // todo: just pass canvas as first param (name it canvas to avoid confusion)
+            // canvas already has an index property. use that
+            // do you need to pass in the dataUriFunc? it's already in manifold.
+            // use manifesto utils to get the height and width of the resource if available
+            // and set on externalresource
+            
             resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
             this.index = index;
