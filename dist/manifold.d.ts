@@ -82,6 +82,7 @@ declare namespace Manifold {
         constructor(canvas: Manifesto.ICanvas, options: Manifesto.IExternalResourceOptions);
         private _getDataUri(canvas);
         private _parseAuthServices(resource);
+        private _parseDimensions(canvas);
         isAccessControlled(): boolean;
         hasServiceDescriptor(): boolean;
         getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource>;

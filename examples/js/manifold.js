@@ -218,9 +218,6 @@ var Manifold;
 (function (Manifold) {
     var ExternalResource = /** @class */ (function () {
         function ExternalResource(canvas, options) {
-            // todo:
-            // get the height and width of the resource if available
-            // and set on externalresource
             this.authHoldingPage = null;
             this.clickThroughService = null;
             this.externalService = null;
@@ -235,6 +232,8 @@ var Manifold;
             this.index = canvas.index;
             this.authAPIVersion = options.authApiVersion;
             this._parseAuthServices(canvas);
+            // get the height and width of the image resource if available
+            this._parseDimensions(canvas);
         }
         ExternalResource.prototype._getDataUri = function (canvas) {
             var content = canvas.getContent();
@@ -317,6 +316,15 @@ var Manifold;
                     this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
                 }
+            }
+        };
+        ExternalResource.prototype._parseDimensions = function (canvas) {
+            var images = canvas.getImages();
+            if (images && images.length) {
+                var firstImage = images[0];
+                var resource = firstImage.getResource();
+                this.width = resource.getWidth();
+                this.height = resource.getHeight();
             }
         };
         ExternalResource.prototype.isAccessControlled = function () {

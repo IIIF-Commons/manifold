@@ -21,16 +21,13 @@ namespace Manifold {
         public width: number;
 
         constructor(canvas: Manifesto.ICanvas, options: Manifesto.IExternalResourceOptions) {
-            
-            // todo:
-            // get the height and width of the resource if available
-            // and set on externalresource
-            
             canvas.externalResource = <Manifesto.IExternalResource>this;
             this.dataUri = this._getDataUri(canvas);
             this.index = canvas.index;
             this.authAPIVersion = options.authApiVersion;
             this._parseAuthServices(canvas);
+            // get the height and width of the image resource if available
+            this._parseDimensions(canvas);
         }
 
         private _getDataUri(canvas: Manifesto.ICanvas): string | null {
@@ -130,6 +127,18 @@ namespace Manifold {
                     this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
                 }
+            }
+        }
+
+        private _parseDimensions(canvas: Manifesto.ICanvas): void {
+            const images: Manifesto.IAnnotation[] = canvas.getImages();
+            
+            if (images && images.length) {
+                const firstImage = images[0];
+                const resource: Manifesto.IResource = firstImage.getResource();
+
+                this.width = resource.getWidth();
+                this.height = resource.getHeight();
             }
         }
 
