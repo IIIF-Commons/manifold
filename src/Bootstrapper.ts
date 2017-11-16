@@ -86,13 +86,13 @@ namespace Manifold {
                             bootstrapper._options.collectionIndex = 0;
                             bootstrapper._options.iiifResourceUri = collection.id;
                             bootstrapper.bootstrap();
+                        } else {
+                            collection.getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifesto.IManifest) => {
+                                bootstrapper._options.manifest = manifest;
+                                const helper: Manifold.Helper = new Helper(bootstrapper._options);
+                                resolve(helper);
+                            });
                         }
-
-                        collection.getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifesto.IManifest) => {
-                            bootstrapper._options.manifest = manifest;
-                            const helper: Manifold.Helper = new Helper(bootstrapper._options);
-                            resolve(helper);
-                        });
                     });
                 } else {
                     (<Manifesto.ICollection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifesto.IManifest) => {

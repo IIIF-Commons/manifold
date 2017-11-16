@@ -158,11 +158,13 @@ var Manifold;
                             bootstrapper._options.iiifResourceUri = collection.id;
                             bootstrapper.bootstrap();
                         }
-                        collection.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
-                            bootstrapper._options.manifest = manifest;
-                            var helper = new Manifold.Helper(bootstrapper._options);
-                            resolve(helper);
-                        });
+                        else {
+                            collection.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
+                                bootstrapper._options.manifest = manifest;
+                                var helper = new Manifold.Helper(bootstrapper._options);
+                                resolve(helper);
+                            });
+                        }
                     });
                 }
                 else {
