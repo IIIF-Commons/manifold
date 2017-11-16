@@ -9,11 +9,17 @@ namespace Manifold {
             this._options.locale = this._options.locale || 'en-GB'; // default locale
         }
 
-        public bootstrap(): Promise<Manifold.IHelper> {
+        public bootstrap(res?: (helper: IHelper) => void, rej?: (error:any) => void): Promise<Manifold.IHelper> {
 
             const that = this;
 
             return new Promise<Manifold.IHelper>((resolve, reject) => {
+
+                // if this is a recursive bootstrap we will have existing resolve & reject methods.
+                if (res && rej) {
+                    resolve = res;
+                    reject = rej;
+                }
 
                 const msie = that._detectIE();
 

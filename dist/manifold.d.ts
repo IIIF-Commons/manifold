@@ -54,7 +54,7 @@ declare namespace Manifold {
     class Bootstrapper {
         private _options;
         constructor(options: Manifold.IManifoldOptions);
-        bootstrap(): Promise<Manifold.IHelper>;
+        bootstrap(res?: (helper: IHelper) => void, rej?: (error: any) => void): Promise<Manifold.IHelper>;
         private _loaded(bootstrapper, json, resolve, reject);
         private _detectIE();
     }

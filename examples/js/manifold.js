@@ -97,9 +97,14 @@ var Manifold;
             this._options = options;
             this._options.locale = this._options.locale || 'en-GB'; // default locale
         }
-        Bootstrapper.prototype.bootstrap = function () {
+        Bootstrapper.prototype.bootstrap = function (res, rej) {
             var that = this;
             return new Promise(function (resolve, reject) {
+                // if this is a recursive bootstrap we will have existing resolve & reject methods.
+                if (res && rej) {
+                    resolve = res;
+                    reject = rej;
+                }
                 var msie = that._detectIE();
                 if (msie === false) {
                     manifesto.loadManifest(that._options.iiifResourceUri).then(function (json) {
