@@ -161,7 +161,7 @@ var Manifold;
                         if (collection.getTotalManifests() === 0 && bootstrapper._options.manifestIndex === 0 && collection.getTotalCollections() > 0) {
                             bootstrapper._options.collectionIndex = 0;
                             bootstrapper._options.iiifResourceUri = collection.id;
-                            bootstrapper.bootstrap();
+                            bootstrapper.bootstrap(resolve, reject);
                         }
                         else {
                             collection.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
