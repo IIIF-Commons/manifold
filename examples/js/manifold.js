@@ -1041,6 +1041,7 @@ var Manifold;
 
 
 
+/// <reference types="manifesto.js" />
 var Manifold;
 (function (Manifold) {
     function loadManifest(options) {

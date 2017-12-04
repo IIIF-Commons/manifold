@@ -20,7 +20,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-tasks": "iiif-commons/gulp-tasks#v1.0.6",
-    "manifesto.js": "iiif-commons/manifesto#v2.1.13",
+    "manifesto.js": "2.2.1",
     "typings": "^2.1.0"
   },
   "dependencies": {

@@ -60,6 +60,7 @@ declare namespace Manifold {
     }
 }
 
+/// <reference types="manifesto.js" />
 declare namespace Manifold {
     class ExternalResource implements Manifesto.IExternalResource {
         authAPIVersion: number;
@@ -89,6 +90,7 @@ declare namespace Manifold {
     }
 }
 
+/// <reference types="manifesto.js" />
 declare type NullableTreeNode = Manifold.ITreeNode | null;
 declare namespace Manifold {
     class Helper implements IHelper {
@@ -188,6 +190,7 @@ declare namespace Manifold {
     }
 }
 
+/// <reference types="manifesto.js" />
 declare namespace Manifold {
     interface IHelper {
         canvasIndex: number;
@@ -266,6 +269,7 @@ interface IManifold {
     loadManifest: (options: Manifold.IManifoldOptions) => Promise<Manifold.IHelper>;
 }
 
+/// <reference types="manifesto.js" />
 declare namespace Manifold {
     interface IManifoldOptions {
         iiifResourceUri: string;
@@ -279,6 +283,7 @@ declare namespace Manifold {
     }
 }
 
+/// <reference types="manifesto.js" />
 declare namespace Manifold {
     interface IMetadataItem extends Manifesto.MetadataItem {
         isRootLevel: boolean;
@@ -313,6 +318,7 @@ declare namespace Manifold {
     function loadManifest(options: Manifold.IManifoldOptions): Promise<IHelper>;
 }
 
+/// <reference types="manifesto.js" />
 declare namespace Manifold {
     class MetadataGroup {
         resource: Manifesto.IManifestResource;
@@ -324,6 +330,7 @@ declare namespace Manifold {
     }
 }
 
+/// <reference types="manifesto.js" />
 declare namespace Manifold {
     class MetadataOptions {
         canvases: Manifesto.ICanvas[];
@@ -332,6 +339,7 @@ declare namespace Manifold {
     }
 }
 
+/// <reference types="manifesto.js" />
 declare namespace Manifold {
     class MultiSelectState {
         isEnabled: boolean;
