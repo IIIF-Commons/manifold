@@ -5,7 +5,6 @@
   "main": "./dist/manifold.js",
   "types": "./dist/manifold.d.ts",
   "scripts": {
-    "postinstall": "typings install"
   },
   "repository": {
     "type": "git",
@@ -19,8 +18,8 @@
   "homepage": "https://github.com/iiif-commons/manifold#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-tasks": "iiif-commons/gulp-tasks#v1.0.6",
-    "manifesto.js": "2.2.1",
+    "gulp-tasks": "iiif-commons/gulp-tasks#v1.0.7",
+    "manifesto.js": "iiif-commons/manifesto#removetypings",
     "typings": "^2.1.0"
   },
   "dependencies": {

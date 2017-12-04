@@ -1,4 +1,5 @@
 /// <reference types="manifesto.js" />
+/// <reference types="http-status-codes" />
 
 namespace Manifold {
     export function loadManifest(options: Manifold.IManifoldOptions) {

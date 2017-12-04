@@ -1042,6 +1042,7 @@ var Manifold;
 
 
 /// <reference types="manifesto.js" />
+/// <reference types="http-status-codes" />
 var Manifold;
 (function (Manifold) {
     function loadManifest(options) {
