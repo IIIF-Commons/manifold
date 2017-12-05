@@ -1,11 +1,10 @@
 {
   "name": "manifold",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "",
   "main": "./dist/manifold.js",
   "types": "./dist/manifold.d.ts",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iiif-commons/manifold.git"
