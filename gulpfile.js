@@ -3,5 +3,8 @@ const metadata = require('./package');
 const tasks = require('gulp-tasks');
 
 tasks.init({
-    metadata: metadata
+    metadata: metadata,
+    libs: [
+        'node_modules/manifesto.js/dist/client/manifesto.bundle.js'
+    ]
 });
