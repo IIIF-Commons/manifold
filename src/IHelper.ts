@@ -14,12 +14,12 @@ namespace Manifold {
         
         // getters //
         
-        getAutoCompleteService(): Manifesto.IService | null;
         getAttribution(): string | null;
-        getCanvases(): Manifesto.ICanvas[];
+        getAutoCompleteService(): Manifesto.IService | null;
         getCanvasById(id: string): Manifesto.ICanvas | null;
-        getCanvasesById(ids: string[]): Manifesto.ICanvas[];
         getCanvasByIndex(index: number): Manifesto.ICanvas;
+        getCanvases(): Manifesto.ICanvas[];
+        getCanvasesById(ids: string[]): Manifesto.ICanvas[];
         getCanvasIndexById(id: string): number | null;
         getCanvasIndexByLabel(label: string): number;
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null;
@@ -37,9 +37,10 @@ namespace Manifold {
         getManifestType(): Manifesto.ManifestType;
         getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;      
-        getRanges(): IRange[];
-        getRangeByPath(path: string): any;
+        getRangeById(id: string): Manifesto.IRange | null;
+        getRangeByPath(path: string): Manifesto.IRange | null;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+        getRanges(): IRange[];
         getRelated(): any;
         getSearchService(): Manifesto.IService | null;
         getSeeAlso(): any;

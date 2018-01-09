@@ -320,8 +320,12 @@ namespace Manifold {
             return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();
         }
         
-        public getRangeByPath(path: string): any {
+        public getRangeByPath(path: string): Manifesto.IRange | null {
             return this.manifest.getRangeByPath(path);
+        }
+
+        public getRangeById(id: string): Manifesto.IRange | null {
+            return this.manifest.getRangeById(id);
         }
         
         public getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
