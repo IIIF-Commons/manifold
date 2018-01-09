@@ -8,5 +8,6 @@ namespace Manifold {
         manifestIndex: number;
         sequenceIndex: number;
         canvasIndex: number;
+        rangeId: string | null;
     }
 }

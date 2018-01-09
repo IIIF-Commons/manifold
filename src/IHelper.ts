@@ -10,6 +10,7 @@ namespace Manifold {
         manifestIndex: number;
         options: IManifoldOptions;
         sequenceIndex: number;
+        rangeId: string | null;
         
         // getters //
         

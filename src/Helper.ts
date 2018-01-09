@@ -14,6 +14,7 @@ namespace Manifold {
         public manifestIndex: number;
         public options: IManifoldOptions;
         public sequenceIndex: number;
+        public rangeId: string | null;
         
         constructor(options: IManifoldOptions) {
             this.options = options;

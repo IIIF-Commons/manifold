@@ -103,6 +103,7 @@ declare namespace Manifold {
         manifestIndex: number;
         options: IManifoldOptions;
         sequenceIndex: number;
+        rangeId: string | null;
         constructor(options: IManifoldOptions);
         getAutoCompleteService(): Manifesto.IService | null;
         getAttribution(): string | null;
@@ -201,6 +202,7 @@ declare namespace Manifold {
         manifestIndex: number;
         options: IManifoldOptions;
         sequenceIndex: number;
+        rangeId: string | null;
         getAutoCompleteService(): Manifesto.IService | null;
         getAttribution(): string | null;
         getCanvases(): Manifesto.ICanvas[];
@@ -280,6 +282,7 @@ declare namespace Manifold {
         manifestIndex: number;
         sequenceIndex: number;
         canvasIndex: number;
+        rangeId: string | null;
     }
 }
 
