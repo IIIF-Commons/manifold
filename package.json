@@ -1,5 +1,5 @@
 {
-  "name": "manifold",
+  "name": "@iiif/manifold",
   "version": "1.2.16",
   "description": "",
   "main": "./dist/manifold.js",
