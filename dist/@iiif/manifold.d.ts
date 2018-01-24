@@ -132,6 +132,8 @@ declare namespace Manifold {
         getCurrentRange(): Manifesto.IRange | null;
         getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null;
         getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null;
+        private _getFlattenedTree(children, extractChildren, level?, parent?);
+        private _extractChildren(treeNode);
         getRanges(): IRange[];
         getRangeByPath(path: string): Manifesto.IRange | null;
         getRangeById(id: string): Manifesto.IRange | null;
@@ -147,6 +149,7 @@ declare namespace Manifold {
         getTopRanges(): Manifesto.IRange[];
         getTotalCanvases(): number;
         getTrackingLabel(): string;
+        private _getTopRanges();
         getTree(topRangeIndex?: number, sortType?: TreeSortType): NullableTreeNode;
         treeHasNavDates(tree: ITreeNode): boolean;
         getViewingDirection(): Manifesto.ViewingDirection;

@@ -358,6 +358,7 @@ namespace Manifold {
 
         public getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null {
 
+            // if a range is passed, use that. otherwise get the current range.
             let currentRange: Manifesto.IRange | null = null;
 
             if (range) {
@@ -367,27 +368,45 @@ namespace Manifold {
             }
 
             if (currentRange) {
+
+                let flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+
+                console.log(flatTree);
                 // get the parent range 
-                const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
+                // const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
 
-                if (parentRange) {
-                    // find the index of the current range within it
-                    const ranges: Manifesto.IRange[] = parentRange.getRanges();
-                    const index: number = ranges.indexOf(currentRange);
+                // if (parentRange) {
+                //     // find the index of the current range within it
+                //     const ranges: Manifesto.IRange[] = parentRange.getRanges();
+                //     const index: number = ranges.indexOf(currentRange);
 
-                    // if the index isn't the last in array, get the next range
-                    if (index < ranges.length - 1) {
-                        return ranges[index + 1];
-                    } else {
-                        // if the index is the last in array, get the parent of the parent range - recurse
-                        return this.getNextRange(parentRange);
-                    }
-                }
+                //     // if the index isn't the last in array, get the next range
+                //     if (index < ranges.length - 1) {
+                //         return ranges[index + 1];
+                //     } else {
+                //         // the index is the last in array
+                //         // get the index of the parent range with respect to its siblings
+                //         // if it's not the last range, and it has child ranges, return the first child range
+                //         // 
+                //         return this.getNextRange(parentRange);
+                //     }
+                // }
             }
 
             return null;
         }
+
+        private _getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any) {
+            return Array.prototype.concat.apply(
+                children.map(x => ({ ...x, level: level || 1, parent: parent || null })), 
+                children.map(x => this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, (<ITreeNode>x).id))
+            );
+        } 
         
+        private _extractChildren(treeNode: NullableTreeNode): NullableTreeNode[] {
+            return (<Manifesto.ITreeNode>treeNode).nodes as NullableTreeNode[];
+        }
+
         public getRanges(): IRange[] {
             return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();
         }
@@ -478,6 +497,10 @@ namespace Manifold {
             return this.manifest.getTrackingLabel();
         }
 
+        private _getTopRanges(): Manifesto.IRange[] {
+            return (<Manifesto.IManifest>this.iiifResource).getTopRanges();
+        }
+
         public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): NullableTreeNode {
 
             // if it's a collection, use IIIFResource.getDefaultTree()
@@ -492,7 +515,7 @@ namespace Manifold {
             if (this.iiifResource.isCollection()) {
                 tree = <ITreeNode>this.iiifResource.getDefaultTree();
             } else {
-                const topRanges: Manifesto.IRange[] = (<Manifesto.IManifest>this.iiifResource).getTopRanges();
+                const topRanges: Manifesto.IRange[] = this._getTopRanges();
                 
                 const root: ITreeNode = new manifesto.TreeNode();
                 root.label = 'root';

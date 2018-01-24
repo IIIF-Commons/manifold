@@ -422,6 +422,14 @@ var Manifold;
     Manifold.ExternalResource = ExternalResource;
 })(Manifold || (Manifold = {}));
 
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 var Manifold;
 (function (Manifold) {
     var Helper = /** @class */ (function () {
@@ -698,6 +706,7 @@ var Manifold;
             return null;
         };
         Helper.prototype.getNextRange = function (range) {
+            // if a range is passed, use that. otherwise get the current range.
             var currentRange = null;
             if (range) {
                 currentRange = range;
@@ -706,23 +715,34 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
+                var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                console.log(flatTree);
                 // get the parent range 
-                var parentRange = currentRange.parentRange;
-                if (parentRange) {
-                    // find the index of the current range within it
-                    var ranges = parentRange.getRanges();
-                    var index = ranges.indexOf(currentRange);
-                    // if the index isn't the last in array, get the next range
-                    if (index < ranges.length - 1) {
-                        return ranges[index + 1];
-                    }
-                    else {
-                        // if the index is the last in array, get the parent of the parent range - recurse
-                        return this.getNextRange(parentRange);
-                    }
-                }
+                // const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
+                // if (parentRange) {
+                //     // find the index of the current range within it
+                //     const ranges: Manifesto.IRange[] = parentRange.getRanges();
+                //     const index: number = ranges.indexOf(currentRange);
+                //     // if the index isn't the last in array, get the next range
+                //     if (index < ranges.length - 1) {
+                //         return ranges[index + 1];
+                //     } else {
+                //         // the index is the last in array
+                //         // get the index of the parent range with respect to its siblings
+                //         // if it's not the last range, and it has child ranges, return the first child range
+                //         // 
+                //         return this.getNextRange(parentRange);
+                //     }
+                // }
             }
             return null;
+        };
+        Helper.prototype._getFlattenedTree = function (children, extractChildren, level, parent) {
+            var _this = this;
+            return Array.prototype.concat.apply(children.map(function (x) { return (__assign({}, x, { level: level || 1, parent: parent || null })); }), children.map(function (x) { return _this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, x.id); }));
+        };
+        Helper.prototype._extractChildren = function (treeNode) {
+            return treeNode.nodes;
         };
         Helper.prototype.getRanges = function () {
             return this.manifest.getAllRanges();
@@ -792,6 +812,9 @@ var Manifold;
         Helper.prototype.getTrackingLabel = function () {
             return this.manifest.getTrackingLabel();
         };
+        Helper.prototype._getTopRanges = function () {
+            return this.iiifResource.getTopRanges();
+        };
         Helper.prototype.getTree = function (topRangeIndex, sortType) {
             // if it's a collection, use IIIFResource.getDefaultTree()
             // otherwise, get the top range by index and use Range.getTree()
@@ -805,7 +828,7 @@ var Manifold;
                 tree = this.iiifResource.getDefaultTree();
             }
             else {
-                var topRanges = this.iiifResource.getTopRanges();
+                var topRanges = this._getTopRanges();
                 var root = new manifesto.TreeNode();
                 root.label = 'root';
                 root.data = this.iiifResource;
