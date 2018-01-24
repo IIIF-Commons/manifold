@@ -315,6 +315,78 @@ namespace Manifold {
 
             return this._multiSelectState;
         }
+
+        public getCurrentRange(): Manifesto.IRange | null {
+            if (this.rangeId) {
+                return this.getRangeById(this.rangeId);
+            }
+
+            return null;            
+        }
+
+        public getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null {
+
+            let currentRange: Manifesto.IRange | null = null;
+
+            if (range) {
+                currentRange = range;
+            } else {
+                currentRange = this.getCurrentRange();
+            }
+
+            if (currentRange) {
+                // get the parent range 
+                const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
+
+                if (parentRange) {
+                    // find the index of the current range within it
+                    const ranges: Manifesto.IRange[] = parentRange.getRanges();
+                    const index: number = ranges.indexOf(currentRange);
+
+                    // if the index is greater than 0, get the previous range
+                    if (index > 0) {
+                        return ranges[index - 1];
+                    } else {
+                        // if the index is 0, get the parent of the parent range - recurse
+                        return this.getPreviousRange(parentRange);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null {
+
+            let currentRange: Manifesto.IRange | null = null;
+
+            if (range) {
+                currentRange = range;
+            } else {
+                currentRange = this.getCurrentRange();
+            }
+
+            if (currentRange) {
+                // get the parent range 
+                const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
+
+                if (parentRange) {
+                    // find the index of the current range within it
+                    const ranges: Manifesto.IRange[] = parentRange.getRanges();
+                    const index: number = ranges.indexOf(currentRange);
+
+                    // if the index isn't the last in array, get the next range
+                    if (index < ranges.length - 1) {
+                        return ranges[index + 1];
+                    } else {
+                        // if the index is the last in array, get the parent of the parent range - recurse
+                        return this.getNextRange(parentRange);
+                    }
+                }
+            }
+
+            return null;
+        }
         
         public getRanges(): IRange[] {
             return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();

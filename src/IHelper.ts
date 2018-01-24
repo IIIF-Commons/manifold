@@ -26,6 +26,7 @@ namespace Manifold {
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null;
         getCurrentCanvas(): Manifesto.ICanvas;
+        getCurrentRange(): Manifesto.IRange | null;
         getCurrentSequence(): Manifesto.ISequence;
         getDescription(): string | null;
         getFirstPageIndex(): number;
@@ -37,6 +38,8 @@ namespace Manifold {
         getManifestType(): Manifesto.ManifestType;
         getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;      
+        getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null;
+        getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null;
         getRangeById(id: string): Manifesto.IRange | null;
         getRangeByPath(path: string): Manifesto.IRange | null;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
