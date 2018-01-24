@@ -687,21 +687,14 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                // get the parent range 
-                var parentRange = currentRange.parentRange;
-                if (parentRange) {
-                    // find the index of the current range within it
-                    var ranges = parentRange.getRanges();
-                    var index = ranges.indexOf(currentRange);
-                    // if the index is greater than 0, get the previous range
-                    if (index > 0) {
-                        return ranges[index - 1];
+                var flatTree_1 = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                flatTree_1.forEach(function (node, index) {
+                    if (node.data.id === currentRange.id) {
+                        if (index > 0) {
+                            return flatTree_1[index - 1].data;
+                        }
                     }
-                    else {
-                        // if the index is 0, get the parent of the parent range - recurse
-                        return this.getPreviousRange(parentRange);
-                    }
-                }
+                });
             }
             return null;
         };
@@ -715,25 +708,14 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
-                console.log(flatTree);
-                // get the parent range 
-                // const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
-                // if (parentRange) {
-                //     // find the index of the current range within it
-                //     const ranges: Manifesto.IRange[] = parentRange.getRanges();
-                //     const index: number = ranges.indexOf(currentRange);
-                //     // if the index isn't the last in array, get the next range
-                //     if (index < ranges.length - 1) {
-                //         return ranges[index + 1];
-                //     } else {
-                //         // the index is the last in array
-                //         // get the index of the parent range with respect to its siblings
-                //         // if it's not the last range, and it has child ranges, return the first child range
-                //         // 
-                //         return this.getNextRange(parentRange);
-                //     }
-                // }
+                var flatTree_2 = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                flatTree_2.forEach(function (node, index) {
+                    if (node.data.id === currentRange.id) {
+                        if (index < flatTree_2.length - 1) {
+                            return flatTree_2[index + 1].data;
+                        }
+                    }
+                });
             }
             return null;
         };

@@ -335,22 +335,15 @@ namespace Manifold {
             }
 
             if (currentRange) {
-                // get the parent range 
-                const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
-
-                if (parentRange) {
-                    // find the index of the current range within it
-                    const ranges: Manifesto.IRange[] = parentRange.getRanges();
-                    const index: number = ranges.indexOf(currentRange);
-
-                    // if the index is greater than 0, get the previous range
-                    if (index > 0) {
-                        return ranges[index - 1];
-                    } else {
-                        // if the index is 0, get the parent of the parent range - recurse
-                        return this.getPreviousRange(parentRange);
+                const flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+                
+                flatTree.forEach((node: NullableTreeNode, index: number) => {
+                    if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
+                        if (index > 0) {
+                            return (<Manifesto.ITreeNode>flatTree[index - 1]).data;
+                        }
                     }
-                }
+                });
             }
 
             return null;
@@ -368,29 +361,15 @@ namespace Manifold {
             }
 
             if (currentRange) {
-
-                let flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
-
-                console.log(flatTree);
-                // get the parent range 
-                // const parentRange: Manifesto.IRange | undefined = currentRange.parentRange;
-
-                // if (parentRange) {
-                //     // find the index of the current range within it
-                //     const ranges: Manifesto.IRange[] = parentRange.getRanges();
-                //     const index: number = ranges.indexOf(currentRange);
-
-                //     // if the index isn't the last in array, get the next range
-                //     if (index < ranges.length - 1) {
-                //         return ranges[index + 1];
-                //     } else {
-                //         // the index is the last in array
-                //         // get the index of the parent range with respect to its siblings
-                //         // if it's not the last range, and it has child ranges, return the first child range
-                //         // 
-                //         return this.getNextRange(parentRange);
-                //     }
-                // }
+                const flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+                
+                flatTree.forEach((node: NullableTreeNode, index: number) => {
+                    if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
+                        if (index < flatTree.length - 1) {
+                            return (<Manifesto.ITreeNode>flatTree[index + 1]).data;
+                        }
+                    }
+                });
             }
 
             return null;
