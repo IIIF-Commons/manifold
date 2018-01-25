@@ -350,6 +350,7 @@ namespace Manifold {
                                 return prevNode.data;
                             }
                         }
+                        
                         break;
                     }
                 }
@@ -387,6 +388,7 @@ namespace Manifold {
                                 return nextNode.data;
                             }
                         }
+
                         break;
                     }
                 }
