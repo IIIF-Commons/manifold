@@ -337,13 +337,16 @@ namespace Manifold {
             if (currentRange) {
                 const flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
                 
-                flatTree.forEach((node: NullableTreeNode, index: number) => {
+                for (let i = 0; i < flatTree.length; i++) {
+                    const node: NullableTreeNode = flatTree[i];
+                    
                     if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
-                        if (index > 0) {
-                            return (<Manifesto.ITreeNode>flatTree[index - 1]).data;
+                        if (i > 0) {
+                            return (<Manifesto.ITreeNode>flatTree[i - 1]).data;
                         }
                     }
-                });
+                }
+
             }
 
             return null;
@@ -363,13 +366,15 @@ namespace Manifold {
             if (currentRange) {
                 const flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
                 
-                flatTree.forEach((node: NullableTreeNode, index: number) => {
+                for (let i = 0; i < flatTree.length; i++) {
+                    const node: NullableTreeNode = flatTree[i];
+                    
                     if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
-                        if (index < flatTree.length - 1) {
-                            return (<Manifesto.ITreeNode>flatTree[index + 1]).data;
+                        if (i < flatTree.length - 1) {
+                            return (<Manifesto.ITreeNode>flatTree[i + 1]).data;
                         }
                     }
-                });
+                }
             }
 
             return null;

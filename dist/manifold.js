@@ -688,14 +688,15 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                var flatTree_1 = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
-                flatTree_1.forEach(function (node, index) {
+                var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                for (var i = 0; i < flatTree.length; i++) {
+                    var node = flatTree[i];
                     if (node.data.id === currentRange.id) {
-                        if (index > 0) {
-                            return flatTree_1[index - 1].data;
+                        if (i > 0) {
+                            return flatTree[i - 1].data;
                         }
                     }
-                });
+                }
             }
             return null;
         };
@@ -709,14 +710,15 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                var flatTree_2 = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
-                flatTree_2.forEach(function (node, index) {
+                var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                for (var i = 0; i < flatTree.length; i++) {
+                    var node = flatTree[i];
                     if (node.data.id === currentRange.id) {
-                        if (index < flatTree_2.length - 1) {
-                            return flatTree_2[index + 1].data;
+                        if (i < flatTree.length - 1) {
+                            return flatTree[i + 1].data;
                         }
                     }
-                });
+                }
             }
             return null;
         };
