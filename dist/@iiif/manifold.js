@@ -690,9 +690,15 @@ var Manifold;
                 var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
                 for (var i = 0; i < flatTree.length; i++) {
                     var node = flatTree[i];
+                    // find current range in flattened tree
                     if (node.data.id === currentRange.id) {
-                        if (i > 0) {
-                            return flatTree[i - 1].data;
+                        // find the first node before it that has canvases
+                        while (i > 0) {
+                            i--;
+                            var prevNode = flatTree[i];
+                            if (prevNode.data.canvases && prevNode.data.canvases.length) {
+                                return prevNode.data;
+                            }
                         }
                     }
                 }
@@ -712,9 +718,15 @@ var Manifold;
                 var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
                 for (var i = 0; i < flatTree.length; i++) {
                     var node = flatTree[i];
+                    // find current range in flattened tree
                     if (node.data.id === currentRange.id) {
-                        if (i < flatTree.length - 1) {
-                            return flatTree[i + 1].data;
+                        // find the first node after it that has canvases
+                        while (i < flatTree.length - 1) {
+                            i++;
+                            var nextNode = flatTree[i];
+                            if (nextNode.data.canvases && nextNode.data.canvases.length) {
+                                return nextNode.data;
+                            }
                         }
                     }
                 }

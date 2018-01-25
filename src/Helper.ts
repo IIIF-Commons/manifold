@@ -340,9 +340,15 @@ namespace Manifold {
                 for (let i = 0; i < flatTree.length; i++) {
                     const node: NullableTreeNode = flatTree[i];
                     
+                    // find current range in flattened tree
                     if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
-                        if (i > 0) {
-                            return (<Manifesto.ITreeNode>flatTree[i - 1]).data;
+                        // find the first node before it that has canvases
+                        while (i > 0) {
+                            i--;
+                            const prevNode: Manifesto.ITreeNode = flatTree[i] as ITreeNode;
+                            if (prevNode.data.canvases && prevNode.data.canvases.length) {
+                                return prevNode.data;
+                            }
                         }
                     }
                 }
@@ -369,9 +375,16 @@ namespace Manifold {
                 for (let i = 0; i < flatTree.length; i++) {
                     const node: NullableTreeNode = flatTree[i];
                     
+                    // find current range in flattened tree
                     if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
-                        if (i < flatTree.length - 1) {
-                            return (<Manifesto.ITreeNode>flatTree[i + 1]).data;
+
+                        // find the first node after it that has canvases
+                        while (i < flatTree.length - 1) {
+                            i++;
+                            const nextNode: Manifesto.ITreeNode = flatTree[i] as ITreeNode;
+                            if (nextNode.data.canvases && nextNode.data.canvases.length) {
+                                return nextNode.data;
+                            }
                         }
                     }
                 }
