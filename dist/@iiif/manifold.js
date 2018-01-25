@@ -700,6 +700,7 @@ var Manifold;
                                 return prevNode.data;
                             }
                         }
+                        break;
                     }
                 }
             }
@@ -728,6 +729,7 @@ var Manifold;
                                 return nextNode.data;
                             }
                         }
+                        break;
                     }
                 }
             }
