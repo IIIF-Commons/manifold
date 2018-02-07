@@ -1,4 +1,4 @@
-// @iiif/manifold v1.2.18 https://github.com/iiif-commons/manifold#readme
+// @iiif/manifold v1.2.19 https://github.com/iiif-commons/manifold#readme
 interface Window {
     manifestCallback: any;
 }
@@ -133,7 +133,8 @@ declare namespace Manifold {
         getCurrentRange(): Manifesto.IRange | null;
         getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null;
         getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null;
-        getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any): any;
+        getFlattenedTree(): ITreeNode[];
+        private _getFlattenedTree(children, extractChildren, level?, parent?);
         private _extractChildren(treeNode);
         getRanges(): IRange[];
         getRangeByPath(path: string): Manifesto.IRange | null;
@@ -226,6 +227,7 @@ declare namespace Manifold {
         getCurrentSequence(): Manifesto.ISequence;
         getDescription(): string | null;
         getFirstPageIndex(): number;
+        getFlattenedTree(): ITreeNode[];
         getLabel(): string | null;
         getLastCanvasLabel(alphanumeric?: boolean): string;
         getLastPageIndex(): number;

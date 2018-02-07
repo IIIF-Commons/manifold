@@ -30,6 +30,7 @@ namespace Manifold {
         getCurrentSequence(): Manifesto.ISequence;
         getDescription(): string | null;
         getFirstPageIndex(): number;
+        getFlattenedTree(): ITreeNode[];
         getLabel(): string | null;
         getLastCanvasLabel(alphanumeric?: boolean): string;
         getLastPageIndex(): number;

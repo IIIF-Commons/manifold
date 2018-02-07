@@ -687,7 +687,7 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                var flatTree = this.getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
                 for (var i = 0; i < flatTree.length; i++) {
                     var node = flatTree[i];
                     // find current range in flattened tree
@@ -716,7 +716,7 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                var flatTree = this.getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                var flatTree = this.getFlattenedTree();
                 for (var i = 0; i < flatTree.length; i++) {
                     var node = flatTree[i];
                     // find current range in flattened tree
@@ -735,9 +735,12 @@ var Manifold;
             }
             return null;
         };
-        Helper.prototype.getFlattenedTree = function (children, extractChildren, level, parent) {
+        Helper.prototype.getFlattenedTree = function () {
+            return this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+        };
+        Helper.prototype._getFlattenedTree = function (children, extractChildren, level, parent) {
             var _this = this;
-            return Array.prototype.concat.apply(children.map(function (x) { return (__assign({}, x, { level: level || 1, parent: parent || null })); }), children.map(function (x) { return _this.getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, x.id); }));
+            return Array.prototype.concat.apply(children.map(function (x) { return (__assign({}, x, { level: level || 1, parent: parent || null })); }), children.map(function (x) { return _this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, x.id); }));
         };
         Helper.prototype._extractChildren = function (treeNode) {
             return treeNode.nodes;
