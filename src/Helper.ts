@@ -335,7 +335,7 @@ namespace Manifold {
             }
 
             if (currentRange) {
-                const flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+                const flatTree: NullableTreeNode[] = this.getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
                 
                 for (let i = 0; i < flatTree.length; i++) {
                     const node: NullableTreeNode = flatTree[i];
@@ -372,7 +372,7 @@ namespace Manifold {
             }
 
             if (currentRange) {
-                const flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+                const flatTree: NullableTreeNode[] = this.getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
                 
                 for (let i = 0; i < flatTree.length; i++) {
                     const node: NullableTreeNode = flatTree[i];
@@ -397,10 +397,10 @@ namespace Manifold {
             return null;
         }
 
-        private _getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any) {
+        public getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any) {
             return Array.prototype.concat.apply(
                 children.map(x => ({ ...x, level: level || 1, parent: parent || null })), 
-                children.map(x => this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, (<ITreeNode>x).id))
+                children.map(x => this.getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, (<ITreeNode>x).id))
             );
         } 
         

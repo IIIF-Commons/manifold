@@ -132,7 +132,7 @@ declare namespace Manifold {
         getCurrentRange(): Manifesto.IRange | null;
         getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null;
         getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null;
-        private _getFlattenedTree(children, extractChildren, level?, parent?);
+        getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any): any;
         private _extractChildren(treeNode);
         getRanges(): IRange[];
         getRangeByPath(path: string): Manifesto.IRange | null;
