@@ -454,7 +454,7 @@ var Manifold;
         Helper.prototype.getAttribution = function () {
             var attribution = this.manifest.getAttribution();
             if (attribution) {
-                return Manifesto.TranslationCollection.getValue(attribution);
+                return Manifesto.TranslationCollection.getValue(attribution, this.options.locale);
             }
             return null;
         };
@@ -526,7 +526,7 @@ var Manifold;
         Helper.prototype.getDescription = function () {
             var description = this.manifest.getDescription();
             if (description) {
-                return Manifesto.TranslationCollection.getValue(description);
+                return Manifesto.TranslationCollection.getValue(description, this.options.locale);
             }
             return null;
         };
@@ -536,7 +536,7 @@ var Manifold;
         Helper.prototype.getLabel = function () {
             var label = this.manifest.getLabel();
             if (label) {
-                return Manifesto.TranslationCollection.getValue(label);
+                return Manifesto.TranslationCollection.getValue(label, this.options.locale);
             }
             return null;
         };
