@@ -43,7 +43,7 @@ namespace Manifold {
             const attribution: Manifesto.TranslationCollection | null = this.manifest.getAttribution();
 
             if (attribution) {
-                return Manifesto.TranslationCollection.getValue(attribution);
+                return Manifesto.TranslationCollection.getValue(attribution, this.options.locale);
             }
             
             return null;
@@ -134,7 +134,7 @@ namespace Manifold {
             const description: Manifesto.TranslationCollection | null = this.manifest.getDescription();
 
             if (description) {
-                return Manifesto.TranslationCollection.getValue(description);
+                return Manifesto.TranslationCollection.getValue(description, this.options.locale);
             }
             
             return null;
@@ -148,7 +148,7 @@ namespace Manifold {
             const label: Manifesto.TranslationCollection | null = this.manifest.getLabel();
 
             if (label) {
-                return Manifesto.TranslationCollection.getValue(label);
+                return Manifesto.TranslationCollection.getValue(label, this.options.locale);
             }
             
             return null;
