@@ -94,39 +94,13 @@ namespace Manifold {
             let auth1_externalService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
             let auth1_kioskService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
 
-            if (
-
-                auth1_clickThroughService || auth1_loginService || auth1_externalService || auth1_kioskService
-
-            ){
-
-              this.authAPIVersion = 1;
-
-            }
-            else {
-
-              this.authAPIVersion = 0.9;
-
+            if (auth1_clickThroughService || auth1_loginService || auth1_externalService || auth1_kioskService){
+                this.authAPIVersion = 1;
+            } else {
+                this.authAPIVersion = 0.9;
             }
 
-            if (this.authAPIVersion === 0.9) {
-
-                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
-                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
-                this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
-
-                if (this.clickThroughService) {
-                    this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
-                } else if (this.loginService) {
-                    this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
-                } else if (this.restrictedService) {
-                    this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
-                }
-
-            } else { // auth 1
+            if (this.authAPIVersion === 1) {
 
                 this.clickThroughService = auth1_clickThroughService;
                 this.loginService = auth1_loginService;
@@ -146,6 +120,23 @@ namespace Manifold {
                     this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
                 }
+
+            } else { // auth 0.9
+                
+                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
+                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
+                this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
+
+                if (this.clickThroughService) {
+                    this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
+                } else if (this.loginService) {
+                    this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
+                } else if (this.restrictedService) {
+                    this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
+                }                
             }
         }
         
