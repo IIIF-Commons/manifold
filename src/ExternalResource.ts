@@ -89,21 +89,12 @@ namespace Manifold {
 
         private _parseAuthServices(resource: any): void {
 
-            let auth09_clickThroughService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
-            let auth09_loginService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
-            let auth09_restrictedService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
-
             let auth1_clickThroughService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
             let auth1_loginService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
             let auth1_externalService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
             let auth1_kioskService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
 
-            if ( auth09_clickThroughService || auth09_loginService || auth09_restrictedService ) {
-
-              this.authAPIVersion = 0.9;
-
-            }
-            else if (
+            if (
 
                 auth1_clickThroughService || auth1_loginService || auth1_externalService || auth1_kioskService
 
@@ -120,9 +111,9 @@ namespace Manifold {
 
             if (this.authAPIVersion === 0.9) {
 
-                this.clickThroughService = auth09_clickThroughService;
-                this.loginService = auth09_loginService;
-                this.restrictedService = auth09_restrictedService;
+                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
+                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
+                this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
 
                 if (this.clickThroughService) {
                     this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
