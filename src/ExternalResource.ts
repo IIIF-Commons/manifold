@@ -24,7 +24,6 @@ namespace Manifold {
             canvas.externalResource = <Manifesto.IExternalResource>this;
             this.dataUri = this._getDataUri(canvas);
             this.index = canvas.index;
-            this.authAPIVersion = options.authApiVersion;
             this._parseAuthServices(canvas);
             // get the height and width of the image resource if available
             this._parseDimensions(canvas);
@@ -90,6 +89,26 @@ namespace Manifold {
 
         private _parseAuthServices(resource: any): void {
 
+            let auth1_clickThroughService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
+            let auth1_loginService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
+            let auth1_externalService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
+            let auth1_kioskService: Manifesto.IService | null = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
+
+            if (
+
+                auth1_clickThroughService || auth1_loginService || auth1_externalService || auth1_kioskService
+
+            ){
+
+              this.authAPIVersion = 1;
+
+            }
+            else {
+
+              this.authAPIVersion = 0.9;
+
+            }
+
             if (this.authAPIVersion === 0.9) {
 
                 this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
@@ -109,10 +128,10 @@ namespace Manifold {
 
             } else { // auth 1
 
-                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
-                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
-                this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
-                this.kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
+                this.clickThroughService = auth1_clickThroughService;
+                this.loginService = auth1_loginService;
+                this.externalService = auth1_externalService;
+                this.kioskService = auth1_kioskService;
 
                 if (this.clickThroughService) {
                     this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Logout().toString());
