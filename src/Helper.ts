@@ -107,7 +107,7 @@ namespace Manifold {
             if (canvas.ranges){
                 return canvas.ranges; // cache
             } else {
-                canvas.ranges = <IRange[]>this.manifest.getAllRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
+                canvas.ranges = <IRange[]>this.manifest.getAllRanges().en().where(range => (range.getCanvasIds().en().any(c => manifesto.Utils.normaliseUrl(c) === manifesto.Utils.normaliseUrl(canvas.id)))).toArray();
             }
 
             return canvas.ranges;
