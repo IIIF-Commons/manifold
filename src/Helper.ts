@@ -335,7 +335,7 @@ namespace Manifold {
             }
 
             if (currentRange) {
-                const flatTree: NullableTreeNode[] = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+                const flatTree: NullableTreeNode[] = this.getFlattenedTree();
                 
                 for (let i = 0; i < flatTree.length; i++) {
                     const node: NullableTreeNode = flatTree[i];
@@ -398,19 +398,37 @@ namespace Manifold {
         }
 
         public getFlattenedTree(): ITreeNode[] {
-            return this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+            return this._flattenTree(this.getTree(), 'nodes');
         }
 
-        private _getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any) {
-            return Array.prototype.concat.apply(
-                children.map(x => ({ ...x, level: level || 1, parent: parent || null })), 
-                children.map(x => this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, (<ITreeNode>x).id))
-            );
-        } 
-        
-        private _extractChildren(treeNode: NullableTreeNode): NullableTreeNode[] {
-            return (<Manifesto.ITreeNode>treeNode).nodes as NullableTreeNode[];
+        private _flattenTree(root, key) {
+            let flatten = [Object.assign({}, root)];
+            delete flatten[0][key];
+          
+            if (root[key] && root[key].length > 0) {
+                return flatten.concat(root[key]
+                    .map((child) => this._flattenTree(child, key))
+                    .reduce((a, b) => a.concat(b), [])
+                );
+            }
+          
+            return flatten;
         }
+
+        // public getFlattenedTree(): ITreeNode[] {
+        //     return this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+        // }
+
+        // private _getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any) {
+        //     return Array.prototype.concat.apply(
+        //         children.map(x => ({ ...x, level: level || 1, parent: parent || null })), 
+        //         children.map(x => this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, (<ITreeNode>x).id))
+        //     );
+        // } 
+        
+        // private _extractChildren(treeNode: NullableTreeNode): NullableTreeNode[] {
+        //     return (<Manifesto.ITreeNode>treeNode).nodes as NullableTreeNode[];
+        // }
 
         public getRanges(): IRange[] {
             return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();
