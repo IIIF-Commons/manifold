@@ -346,9 +346,7 @@ namespace Manifold {
                         while (i > 0) {
                             i--;
                             const prevNode: Manifesto.ITreeNode = flatTree[i] as ITreeNode;
-                            if (prevNode.data.canvases && prevNode.data.canvases.length) {
-                                return prevNode.data;
-                            }
+                            return prevNode.data;
                         }
                         
                         break;
