@@ -153,8 +153,8 @@ declare namespace Manifold {
         private _getTopRanges();
         getTree(topRangeIndex?: number, sortType?: TreeSortType): NullableTreeNode;
         treeHasNavDates(tree: ITreeNode): boolean;
-        getViewingDirection(): Manifesto.ViewingDirection;
-        getViewingHint(): Manifesto.ViewingHint;
+        getViewingDirection(): Manifesto.ViewingDirection | null;
+        getViewingHint(): Manifesto.ViewingHint | null;
         hasParentCollection(): boolean;
         hasRelatedPage(): boolean;
         hasResources(): boolean;
@@ -253,8 +253,8 @@ declare namespace Manifold {
         getTotalCanvases(): number;
         getTrackingLabel(): string;
         getTree(topRangeIndex?: number, sortType?: TreeSortType): NullableTreeNode;
-        getViewingDirection(): Manifesto.ViewingDirection;
-        getViewingHint(): Manifesto.ViewingHint;
+        getViewingDirection(): Manifesto.ViewingDirection | null;
+        getViewingHint(): Manifesto.ViewingHint | null;
         hasParentCollection(): boolean;
         hasRelatedPage(): boolean;
         hasResources(): boolean;

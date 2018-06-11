@@ -57,8 +57,8 @@ namespace Manifold {
         getTotalCanvases(): number;
         getTrackingLabel(): string;
         getTree(topRangeIndex?: number, sortType?: TreeSortType): NullableTreeNode;   
-        getViewingDirection(): Manifesto.ViewingDirection;
-        getViewingHint(): Manifesto.ViewingHint;
+        getViewingDirection(): Manifesto.ViewingDirection | null;
+        getViewingHint(): Manifesto.ViewingHint | null;
         
         // inquiries //
         

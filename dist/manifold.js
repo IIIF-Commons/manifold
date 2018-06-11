@@ -858,14 +858,14 @@ var Manifold;
         };
         Helper.prototype.getViewingDirection = function () {
             var viewingDirection = this.getCurrentSequence().getViewingDirection();
-            if (!viewingDirection.toString()) {
+            if (!viewingDirection) {
                 viewingDirection = this.manifest.getViewingDirection();
             }
             return viewingDirection;
         };
         Helper.prototype.getViewingHint = function () {
             var viewingHint = this.getCurrentSequence().getViewingHint();
-            if (!viewingHint.toString()) {
+            if (!viewingHint) {
                 viewingHint = this.manifest.getViewingHint();
             }
             return viewingHint;
@@ -888,13 +888,21 @@ var Manifold;
             return canvas.getResources().length > 0;
         };
         Helper.prototype.isBottomToTop = function () {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString();
+            var viewingDirection = this.getViewingDirection();
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString();
+            }
+            return false;
         };
         Helper.prototype.isCanvasIndexOutOfRange = function (index) {
             return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
         };
         Helper.prototype.isContinuous = function () {
-            return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
+            var viewingHint = this.getViewingHint();
+            if (viewingHint) {
+                return viewingHint.toString() === manifesto.ViewingHint.continuous().toString();
+            }
+            return false;
         };
         Helper.prototype.isFirstCanvas = function (index) {
             if (typeof index !== 'undefined') {
@@ -912,7 +920,11 @@ var Manifold;
             return this.getCurrentSequence().isLastCanvas(this.canvasIndex);
         };
         Helper.prototype.isLeftToRight = function () {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
+            var viewingDirection = this.getViewingDirection();
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString();
+            }
+            return false;
         };
         Helper.prototype.isMultiCanvas = function () {
             return this.getCurrentSequence().isMultiCanvas();
@@ -921,7 +933,11 @@ var Manifold;
             return this.manifest.isMultiSequence();
         };
         Helper.prototype.isPaged = function () {
-            return this.getViewingHint().toString() === manifesto.ViewingHint.paged().toString();
+            var viewingHint = this.getViewingHint();
+            if (viewingHint) {
+                return viewingHint.toString() === manifesto.ViewingHint.paged().toString();
+            }
+            return false;
         };
         Helper.prototype.isPagingAvailable = function () {
             // paged mode is useless unless you have at least 3 pages...
@@ -931,10 +947,18 @@ var Manifold;
             return (this.manifest.isPagingEnabled() || this.getCurrentSequence().isPagingEnabled());
         };
         Helper.prototype.isRightToLeft = function () {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
+            var viewingDirection = this.getViewingDirection();
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString();
+            }
+            return false;
         };
         Helper.prototype.isTopToBottom = function () {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.topToBottom().toString();
+            var viewingDirection = this.getViewingDirection();
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.topToBottom().toString();
+            }
+            return false;
         };
         Helper.prototype.isTotalCanvasesEven = function () {
             return this.getCurrentSequence().isTotalCanvasesEven();

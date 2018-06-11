@@ -559,20 +559,20 @@ namespace Manifold {
             return (node)? true : false;
         }
         
-        public getViewingDirection(): Manifesto.ViewingDirection {
-            let viewingDirection: Manifesto.ViewingDirection = this.getCurrentSequence().getViewingDirection();
+        public getViewingDirection(): Manifesto.ViewingDirection | null {
+            let viewingDirection: Manifesto.ViewingDirection | null = this.getCurrentSequence().getViewingDirection();
 
-            if (!viewingDirection.toString()) {
+            if (!viewingDirection) {
                 viewingDirection = this.manifest.getViewingDirection();
             }
 
             return viewingDirection;
         }
 
-        public getViewingHint(): Manifesto.ViewingHint {
-            let viewingHint: Manifesto.ViewingHint = this.getCurrentSequence().getViewingHint();
+        public getViewingHint(): Manifesto.ViewingHint | null {
+            let viewingHint: Manifesto.ViewingHint | null = this.getCurrentSequence().getViewingHint();
 
-            if (!viewingHint.toString()) {
+            if (!viewingHint) {
                 viewingHint = this.manifest.getViewingHint();
             }
 
@@ -601,7 +601,14 @@ namespace Manifold {
         }
         
         public isBottomToTop(): boolean {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString()
+
+            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
+
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString();
+            }
+            
+            return false;
         }
         
         public isCanvasIndexOutOfRange(index: number): boolean {
@@ -609,7 +616,14 @@ namespace Manifold {
         }
         
         public isContinuous(): boolean {
-            return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
+
+            const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
+
+            if (viewingHint) {
+                return viewingHint.toString() === manifesto.ViewingHint.continuous().toString();
+            }
+
+            return false;
         }
         
         public isFirstCanvas(index?: number): boolean {
@@ -633,7 +647,14 @@ namespace Manifold {
         }
         
         public isLeftToRight(): boolean {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
+
+            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
+
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString();
+            }
+
+            return false;
         }
         
         public isMultiCanvas(): boolean{
@@ -645,7 +666,14 @@ namespace Manifold {
         }
         
         public isPaged(): boolean {
-            return this.getViewingHint().toString() === manifesto.ViewingHint.paged().toString();
+
+            const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
+
+            if (viewingHint) {
+                return viewingHint.toString() === manifesto.ViewingHint.paged().toString();
+            }
+            
+            return false;
         }
         
         public isPagingAvailable(): boolean {
@@ -658,11 +686,25 @@ namespace Manifold {
         }
         
         public isRightToLeft(): boolean {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
+
+            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
+
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString();
+            }
+            
+            return false;
         }
         
         public isTopToBottom(): boolean {
-            return this.getViewingDirection().toString() === manifesto.ViewingDirection.topToBottom().toString();
+
+            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
+
+            if (viewingDirection) {
+                return viewingDirection.toString() === manifesto.ViewingDirection.topToBottom().toString();
+            }
+
+            return false;
         }
         
         public isTotalCanvasesEven(): boolean {
