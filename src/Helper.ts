@@ -324,6 +324,22 @@ namespace Manifold {
             return null;            
         }
 
+        public getPosterImage(): string | null {
+            const posterCanvas: Manifesto.ICanvas | null = this.manifest.getPosterCanvas();
+
+            if (posterCanvas) {
+                const content: Manifesto.IAnnotation[] = posterCanvas.getContent();
+
+                if (content && content.length) {
+                    const anno: Manifesto.IAnnotation = content[0];
+                    const body: Manifesto.IAnnotationBody[] = anno.getBody();
+                    return body[0].id;
+                }
+            }
+
+            return null;
+        }
+
         public getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null {
 
             let currentRange: Manifesto.IRange | null = null;

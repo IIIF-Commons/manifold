@@ -670,6 +670,18 @@ var Manifold;
             }
             return null;
         };
+        Helper.prototype.getPosterImage = function () {
+            var posterCanvas = this.manifest.getPosterCanvas();
+            if (posterCanvas) {
+                var content = posterCanvas.getContent();
+                if (content && content.length) {
+                    var anno = content[0];
+                    var body = anno.getBody();
+                    return body[0].id;
+                }
+            }
+            return null;
+        };
         Helper.prototype.getPreviousRange = function (range) {
             var currentRange = null;
             if (range) {

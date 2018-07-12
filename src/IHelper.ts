@@ -40,6 +40,7 @@ namespace Manifold {
         getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;      
         getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null;
+        getPosterImage(): string | null;
         getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null;
         getRangeById(id: string): Manifesto.IRange | null;
         getRangeByPath(path: string): Manifesto.IRange | null;
