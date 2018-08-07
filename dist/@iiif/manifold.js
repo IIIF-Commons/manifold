@@ -670,8 +670,11 @@ var Manifold;
             }
             return null;
         };
+        Helper.prototype.getPosterCanvas = function () {
+            return this.manifest.getPosterCanvas();
+        };
         Helper.prototype.getPosterImage = function () {
-            var posterCanvas = this.manifest.getPosterCanvas();
+            var posterCanvas = this.getPosterCanvas();
             if (posterCanvas) {
                 var content = posterCanvas.getContent();
                 if (content && content.length) {

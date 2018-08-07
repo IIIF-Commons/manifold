@@ -1,4 +1,4 @@
-// @iiif/manifold v1.2.27 https://github.com/iiif-commons/manifold#readme
+// @iiif/manifold v1.2.28 https://github.com/iiif-commons/manifold#readme
 interface Window {
     manifestCallback: any;
 }
@@ -131,6 +131,7 @@ declare namespace Manifold {
         private _getRangeMetadata(metadataGroups, range);
         getMultiSelectState(): Manifold.MultiSelectState;
         getCurrentRange(): Manifesto.IRange | null;
+        getPosterCanvas(): Manifesto.ICanvas | null;
         getPosterImage(): string | null;
         getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null;
         getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null;
@@ -237,6 +238,7 @@ declare namespace Manifold {
         getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;
         getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null;
+        getPosterCanvas(): Manifesto.ICanvas | null;
         getPosterImage(): string | null;
         getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null;
         getRangeById(id: string): Manifesto.IRange | null;

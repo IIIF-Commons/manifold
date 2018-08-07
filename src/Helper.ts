@@ -324,8 +324,12 @@ namespace Manifold {
             return null;            
         }
 
+        public getPosterCanvas(): Manifesto.ICanvas | null {
+            return this.manifest.getPosterCanvas();
+        }
+
         public getPosterImage(): string | null {
-            const posterCanvas: Manifesto.ICanvas | null = this.manifest.getPosterCanvas();
+            const posterCanvas: Manifesto.ICanvas | null = this.getPosterCanvas();
 
             if (posterCanvas) {
                 const content: Manifesto.IAnnotation[] = posterCanvas.getContent();
