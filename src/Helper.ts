@@ -297,13 +297,11 @@ namespace Manifold {
                 const rangeGroup: MetadataGroup = new MetadataGroup(range);
                 rangeGroup.addMetadata(rangeMetadata);
                 metadataGroups.push(rangeGroup);
-            }
-
-            if (range.parentRange) {
+            } else if (range.parentRange) {
                 return this._getRangeMetadata(metadataGroups, range.parentRange);
-            } else {
-                return metadataGroups;
             }
+            
+            return metadataGroups;
         }
 
         public getMultiSelectState(): Manifold.MultiSelectState {

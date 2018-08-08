@@ -649,12 +649,10 @@ var Manifold;
                 rangeGroup.addMetadata(rangeMetadata);
                 metadataGroups.push(rangeGroup);
             }
-            if (range.parentRange) {
+            else if (range.parentRange) {
                 return this._getRangeMetadata(metadataGroups, range.parentRange);
             }
-            else {
-                return metadataGroups;
-            }
+            return metadataGroups;
         };
         Helper.prototype.getMultiSelectState = function () {
             if (!this._multiSelectState) {
