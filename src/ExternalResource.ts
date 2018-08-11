@@ -30,45 +30,65 @@ namespace Manifold {
             this._parseDimensions(canvas);
         }
 
+        private _getImageServiceDescriptor(services: Manifesto.IService[]): string | null {
+            let infoUri: string | null = null;
+            
+            for (let i = 0; i < services.length; i++) {
+                const service: Manifesto.IService = services[i];
+                let id: string = service.id;
+
+                if (!id.endsWith('/')) {
+                    id += '/';
+                }
+
+                if (manifesto.Utils.isImageProfile(service.getProfile())) {
+                    infoUri = id + 'info.json';
+                }
+            }
+
+            return infoUri;
+        }
+
         private _getDataUri(canvas: Manifesto.ICanvas): string | null {
             
             const content: Manifesto.IAnnotation[] = canvas.getContent();
             const images: Manifesto.IAnnotation[] = canvas.getImages();
+            let infoUri: string | null = null;
 
+            // presentation 3
             if (content && content.length) {
 
                 const annotation: Manifesto.IAnnotation = content[0];
                 const annotationBody: Manifesto.IAnnotationBody[] = annotation.getBody();
 
                 if (annotationBody.length) {
+                    const body: Manifesto.IAnnotationBody = annotationBody[0];
+                    const services: Manifesto.IService[] = body.getServices();
+
+                    if (services.length) {
+                        infoUri = this._getImageServiceDescriptor(services);
+                        if (infoUri) {
+                            return infoUri;
+                        }
+                    }
+
+                    // no image services. return the image id
                     return annotationBody[0].id;
                 }
 
                 return null;
 
-            } else if (images && images.length) {
-
-                let infoUri: string | null = null;
+            } else if (images && images.length) { // presentation 2
 
                 const firstImage: Manifesto.IAnnotation = images[0];
                 const resource: Manifesto.IResource = firstImage.getResource();
                 const services: Manifesto.IService[] = resource.getServices();
 
                 if (services.length) {
-                    for (let i = 0; i < services.length; i++) {
-                        const service: Manifesto.IService = services[i];
-                        let id: string = service.id;
-    
-                        if (!id.endsWith('/')) {
-                            id += '/';
-                        }
-    
-                        if (manifesto.Utils.isImageProfile(service.getProfile())) {
-                            infoUri = id + 'info.json';
-                        }
+                    infoUri = this._getImageServiceDescriptor(services);
+                    if (infoUri) {
+                        return infoUri;
                     }
-
-                    return infoUri;
                 }
 
                 // no image services. return the image id

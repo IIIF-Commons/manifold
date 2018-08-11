@@ -80,6 +80,7 @@ declare namespace Manifold {
         tokenService: Manifesto.IService | null;
         width: number;
         constructor(canvas: Manifesto.ICanvas, options: Manifesto.IExternalResourceOptions);
+        private _getImageServiceDescriptor(services);
         private _getDataUri(canvas);
         private _parseAuthServices(resource);
         private _parseDimensions(canvas);
