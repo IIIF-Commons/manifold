@@ -1,6 +1,6 @@
 namespace Manifold {
 
-    export interface IMetadataItem extends Manifesto.MetadataItem {
+    export interface IMetadataItem extends Manifesto.LabelValuePair {
         isRootLevel: boolean;
     }
     

@@ -184,7 +184,7 @@ namespace Manifold {
         public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
             const metadataGroups: MetadataGroup[] = [];
-            const manifestMetadata: Manifesto.MetadataItem[] = this.manifest.getMetadata();
+            const manifestMetadata: Manifesto.LabelValuePair[] = this.manifest.getMetadata();
             const manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
 
             if (manifestMetadata && manifestMetadata.length) {
@@ -192,19 +192,19 @@ namespace Manifold {
             }
 
             if (this.manifest.getDescription().length) {
-                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
                 metadataItem.value = this.manifest.getDescription();
-                (<IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<IMetadataItem>metadataItem);
+                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
+                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
             }
 
             if (this.manifest.getAttribution().length) {
-                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
                 metadataItem.value = this.manifest.getAttribution();
-                (<IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<IMetadataItem>metadataItem);
+                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
+                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
             }
 
             const license: string | null = this.manifest.getLicense();
@@ -214,10 +214,10 @@ namespace Manifold {
                     label: "license",
                     value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
                 };
-                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.parse(item);
-                (<IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<IMetadataItem>metadataItem);
+                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
+                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
             }
 
             if (this.manifest.getLogo()) {
@@ -225,10 +225,10 @@ namespace Manifold {
                     label: "logo",
                     value: '<img src="' + this.manifest.getLogo() + '"/>'
                 };
-                const metadataItem: Manifesto.MetadataItem = new Manifesto.MetadataItem(this.options.locale);
+                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.parse(item);
-                (<IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<IMetadataItem>metadataItem);
+                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
+                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
             }
 
             metadataGroups.push(manifestGroup);
@@ -238,6 +238,19 @@ namespace Manifold {
             } else {
                 return metadataGroups;
             }
+        }
+
+        public getRequiredStatement(): ILabelValuePair | null {
+            const requiredStatement: Manifesto.LabelValuePair | null = this.manifest.getRequiredStatement();
+
+            if (requiredStatement) {
+                return {
+                    label: requiredStatement.getLabel(),
+                    value: requiredStatement.getValue()
+                }
+            }
+            
+            return null;
         }
     
         private _parseMetadataOptions(options: MetadataOptions, metadataGroups: MetadataGroup[]): MetadataGroup[] {

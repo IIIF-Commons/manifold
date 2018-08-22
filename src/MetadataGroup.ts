@@ -13,9 +13,9 @@ namespace Manifold {
             this.items.push(item);
         }
 
-        public addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel: boolean = false): void {
+        public addMetadata(metadata: Manifesto.LabelValuePair[], isRootLevel: boolean = false): void {
             for (let i = 0; i < metadata.length; i++) {
-                const item: Manifesto.MetadataItem = metadata[i];
+                const item: Manifesto.LabelValuePair = metadata[i];
                 (<Manifold.IMetadataItem>item).isRootLevel = isRootLevel;
                 this.addItem(<Manifold.IMetadataItem>item);
             }

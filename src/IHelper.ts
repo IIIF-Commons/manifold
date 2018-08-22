@@ -48,6 +48,7 @@ namespace Manifold {
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
         getRanges(): IRange[];
         getRelated(): any;
+        getRequiredStatement(): ILabelValuePair | null;
         getSearchService(): Manifesto.IService | null;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;

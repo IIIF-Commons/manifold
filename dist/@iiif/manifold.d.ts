@@ -127,6 +127,7 @@ declare namespace Manifold {
         getLogo(): string | null;
         getManifestType(): Manifesto.ManifestType;
         getMetadata(options?: MetadataOptions): MetadataGroup[];
+        getRequiredStatement(): ILabelValuePair | null;
         private _parseMetadataOptions(options, metadataGroups);
         private _getRangeMetadata(metadataGroups, range);
         getMultiSelectState(): Manifold.MultiSelectState;
@@ -246,6 +247,7 @@ declare namespace Manifold {
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
         getRanges(): IRange[];
         getRelated(): any;
+        getRequiredStatement(): ILabelValuePair | null;
         getSearchService(): Manifesto.IService | null;
         getSeeAlso(): any;
         getSequenceByIndex(index: number): Manifesto.ISequence;
@@ -283,6 +285,13 @@ declare namespace Manifold {
     }
 }
 
+declare namespace Manifold {
+    class ILabelValuePair {
+        label: string | null;
+        value: string | null;
+    }
+}
+
 interface IManifold {
     loadManifest: (options: Manifold.IManifoldOptions) => Promise<Manifold.IHelper>;
 }
@@ -304,7 +313,7 @@ declare namespace Manifold {
 
 /// <reference types="manifesto.js" />
 declare namespace Manifold {
-    interface IMetadataItem extends Manifesto.MetadataItem {
+    interface IMetadataItem extends Manifesto.LabelValuePair {
         isRootLevel: boolean;
     }
 }
@@ -345,7 +354,7 @@ declare namespace Manifold {
         items: Manifold.IMetadataItem[];
         constructor(resource: Manifesto.IManifestResource, label?: string);
         addItem(item: Manifold.IMetadataItem): void;
-        addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel?: boolean): void;
+        addMetadata(metadata: Manifesto.LabelValuePair[], isRootLevel?: boolean): void;
     }
 }
 
