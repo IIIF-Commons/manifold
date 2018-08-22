@@ -461,9 +461,10 @@ var Manifold;
             return null;
         };
         Helper.prototype.getAttribution = function () {
+            console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
             var attribution = this.manifest.getAttribution();
             if (attribution) {
-                return Manifesto.TranslationCollection.getValue(attribution, this.options.locale);
+                return Manifesto.LanguageMap.getValue(attribution, this.options.locale);
             }
             return null;
         };
@@ -535,7 +536,7 @@ var Manifold;
         Helper.prototype.getDescription = function () {
             var description = this.manifest.getDescription();
             if (description) {
-                return Manifesto.TranslationCollection.getValue(description, this.options.locale);
+                return Manifesto.LanguageMap.getValue(description, this.options.locale);
             }
             return null;
         };
@@ -545,7 +546,7 @@ var Manifold;
         Helper.prototype.getLabel = function () {
             var label = this.manifest.getLabel();
             if (label) {
-                return Manifesto.TranslationCollection.getValue(label, this.options.locale);
+                return Manifesto.LanguageMap.getValue(label, this.options.locale);
             }
             return null;
         };
@@ -578,14 +579,14 @@ var Manifold;
             }
             if (this.manifest.getDescription().length) {
                 var metadataItem = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
+                metadataItem.label = [new Manifesto.Language("description", this.options.locale)];
                 metadataItem.value = this.manifest.getDescription();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
             if (this.manifest.getAttribution().length) {
                 var metadataItem = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
+                metadataItem.label = [new Manifesto.Language("attribution", this.options.locale)];
                 metadataItem.value = this.manifest.getAttribution();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);

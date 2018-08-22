@@ -40,10 +40,13 @@ namespace Manifold {
         }
         
         public getAttribution(): string | null {
-            const attribution: Manifesto.TranslationCollection | null = this.manifest.getAttribution();
+
+            console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
+            
+            const attribution: Manifesto.LanguageMap | null = this.manifest.getAttribution();
 
             if (attribution) {
-                return Manifesto.TranslationCollection.getValue(attribution, this.options.locale);
+                return Manifesto.LanguageMap.getValue(attribution, this.options.locale);
             }
             
             return null;
@@ -131,10 +134,10 @@ namespace Manifold {
         }
 
         public getDescription(): string | null {
-            const description: Manifesto.TranslationCollection | null = this.manifest.getDescription();
+            const description: Manifesto.LanguageMap | null = this.manifest.getDescription();
 
             if (description) {
-                return Manifesto.TranslationCollection.getValue(description, this.options.locale);
+                return Manifesto.LanguageMap.getValue(description, this.options.locale);
             }
             
             return null;
@@ -145,10 +148,10 @@ namespace Manifold {
         }
 
         public getLabel(): string | null {
-            const label: Manifesto.TranslationCollection | null = this.manifest.getLabel();
+            const label: Manifesto.LanguageMap | null = this.manifest.getLabel();
 
             if (label) {
-                return Manifesto.TranslationCollection.getValue(label, this.options.locale);
+                return Manifesto.LanguageMap.getValue(label, this.options.locale);
             }
             
             return null;
@@ -193,7 +196,7 @@ namespace Manifold {
 
             if (this.manifest.getDescription().length) {
                 const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
+                metadataItem.label = [new Manifesto.Language("description", this.options.locale)];
                 metadataItem.value = this.manifest.getDescription();
                 (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
                 manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
@@ -201,7 +204,7 @@ namespace Manifold {
 
             if (this.manifest.getAttribution().length) {
                 const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
+                metadataItem.label = [new Manifesto.Language("attribution", this.options.locale)];
                 metadataItem.value = this.manifest.getAttribution();
                 (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
                 manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
