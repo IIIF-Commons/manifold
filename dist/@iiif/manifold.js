@@ -319,6 +319,17 @@ var Manifold;
                 }
             }
             else {
+                // if the resource is a canvas, look for auth services on its content.
+                if (resource.isCanvas()) {
+                    var content = resource.getContent();
+                    if (content && content.length) {
+                        var body = content[0].getBody();
+                        if (body && body.length) {
+                            var annotation = body[0];
+                            resource = annotation;
+                        }
+                    }
+                }
                 this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
                 this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
                 this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());

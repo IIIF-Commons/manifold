@@ -108,7 +108,7 @@ namespace Manifold {
             }
         }
 
-        private _parseAuthServices(resource: any): void {
+        private _parseAuthServices(resource: Manifesto.IManifestResource): void {
 
             if (this.authAPIVersion === 0.9) {
 
@@ -128,6 +128,21 @@ namespace Manifold {
                 }
 
             } else { // auth 1
+
+                // if the resource is a canvas, look for auth services on its content.
+                if (resource.isCanvas()) {
+                    const content: Manifesto.IAnnotation[] = (<Manifesto.ICanvas>resource).getContent();
+
+                    if (content && content.length) {
+                        const body: Manifesto.IAnnotationBody[] = content[0].getBody();
+
+                        if (body && body.length) {
+                            const annotation: Manifesto.IAnnotationBody = body[0];
+                            resource = annotation;
+                        }
+                    }
+                }
+
                 this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
                 this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
                 this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
