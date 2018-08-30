@@ -386,68 +386,94 @@ var Manifold;
                 if (!_this.dataUri) {
                     reject('There is no dataUri to fetch');
                 }
-                // check if dataUri ends with info.json
-                // if not issue a HEAD request.
-                var type = 'GET';
-                if (!that.hasServiceDescriptor()) {
-                    // If access control is unnecessary, short circuit the process.
-                    // Note that isAccessControlled check for short-circuiting only
-                    // works in the "binary resource" context, since in that case,
-                    // we know about access control from the manifest. For image
-                    // resources, we need to check info.json for details and can't
-                    // short-circuit like this.
-                    if (!that.isAccessControlled()) {
-                        that.status = HTTPStatusCode.OK;
-                        resolve(that);
-                        return;
-                    }
-                    type = 'HEAD';
-                }
-                $.ajax({
-                    url: that.dataUri,
-                    type: type,
-                    dataType: 'json',
-                    beforeSend: function (xhr) {
-                        if (accessToken) {
-                            xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-                        }
-                    }
-                }).done(function (data) {
-                    // if it's a resource without an info.json
-                    // todo: if resource doesn't have a @profile
-                    if (!data) {
-                        that.status = HTTPStatusCode.OK;
-                        resolve(that);
-                    }
-                    else {
-                        var uri = unescape(data['@id']);
-                        that.data = data;
-                        that._parseAuthServices(that.data);
-                        // remove trailing /info.json
-                        if (uri.endsWith('/info.json')) {
-                            uri = uri.substr(0, uri.lastIndexOf('/'));
-                        }
-                        var dataUri = that.dataUri;
-                        if (dataUri && dataUri.endsWith('/info.json')) {
-                            dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
-                        }
-                        // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                        if (uri !== dataUri && that.loginService) {
+                // if the resource has a probe service, use that to get http status code
+                if (that.probeService) {
+                    $.ajax({
+                        url: that.probeService.id,
+                        type: 'GET',
+                        dataType: 'json'
+                    }).done(function (data) {
+                        var contentLocation = unescape(data.contentLocation);
+                        if (contentLocation !== that.dataUri) {
                             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                         }
                         else {
                             that.status = HTTPStatusCode.OK;
                         }
                         resolve(that);
+                    }).fail(function (error) {
+                        that.status = error.status;
+                        that.error = error;
+                        if (error.responseJSON) {
+                            that._parseAuthServices(error.responseJSON);
+                        }
+                        resolve(that);
+                    });
+                }
+                else {
+                    // check if dataUri ends with info.json
+                    // if not issue a HEAD request.
+                    var type = 'GET';
+                    if (!that.hasServiceDescriptor()) {
+                        // If access control is unnecessary, short circuit the process.
+                        // Note that isAccessControlled check for short-circuiting only
+                        // works in the "binary resource" context, since in that case,
+                        // we know about access control from the manifest. For image
+                        // resources, we need to check info.json for details and can't
+                        // short-circuit like this.
+                        if (!that.isAccessControlled()) {
+                            that.status = HTTPStatusCode.OK;
+                            resolve(that);
+                            return;
+                        }
+                        type = 'HEAD';
                     }
-                }).fail(function (error) {
-                    that.status = error.status;
-                    that.error = error;
-                    if (error.responseJSON) {
-                        that._parseAuthServices(error.responseJSON);
-                    }
-                    resolve(that);
-                });
+                    $.ajax({
+                        url: that.dataUri,
+                        type: type,
+                        dataType: 'json',
+                        beforeSend: function (xhr) {
+                            if (accessToken) {
+                                xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                            }
+                        }
+                    }).done(function (data) {
+                        // if it's a resource without an info.json
+                        // todo: if resource doesn't have a @profile
+                        if (!data) {
+                            that.status = HTTPStatusCode.OK;
+                            resolve(that);
+                        }
+                        else {
+                            var uri = unescape(data['@id']);
+                            that.data = data;
+                            that._parseAuthServices(that.data);
+                            // remove trailing /info.json
+                            if (uri.endsWith('/info.json')) {
+                                uri = uri.substr(0, uri.lastIndexOf('/'));
+                            }
+                            var dataUri = that.dataUri;
+                            if (dataUri && dataUri.endsWith('/info.json')) {
+                                dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
+                            }
+                            // if the request was redirected to a degraded version and there's a login service to get the full quality version
+                            if (uri !== dataUri && that.loginService) {
+                                that.status = HTTPStatusCode.MOVED_TEMPORARILY;
+                            }
+                            else {
+                                that.status = HTTPStatusCode.OK;
+                            }
+                            resolve(that);
+                        }
+                    }).fail(function (error) {
+                        that.status = error.status;
+                        that.error = error;
+                        if (error.responseJSON) {
+                            that._parseAuthServices(error.responseJSON);
+                        }
+                        resolve(that);
+                    });
+                }
             });
         };
         return ExternalResource;
