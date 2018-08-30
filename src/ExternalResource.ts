@@ -229,9 +229,6 @@ namespace Manifold {
     
                         that.status = error.status;
                         that.error = error;
-                        if (error.responseJSON){
-                            that._parseAuthServices(error.responseJSON);
-                        }
                         resolve(that);
     
                     });
