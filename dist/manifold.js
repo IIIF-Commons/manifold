@@ -228,6 +228,7 @@ var Manifold;
             this.authHoldingPage = null;
             this.clickThroughService = null;
             this.externalService = null;
+            this.isProbed = false;
             this.isResponseHandled = false;
             this.kioskService = null;
             this.loginService = null;
@@ -388,7 +389,8 @@ var Manifold;
                     reject('There is no dataUri to fetch');
                 }
                 // if the resource has a probe service, use that to get http status code
-                if (that.probeService) {
+                if (that.probeService && !that.isProbed) {
+                    that.isProbed = true;
                     $.ajax({
                         url: that.probeService.id,
                         type: 'GET',

@@ -11,6 +11,7 @@ namespace Manifold {
         public externalService: Manifesto.IService | null = null;
         public height: number;
         public index: number;
+        public isProbed: boolean = false;
         public isResponseHandled: boolean = false;
         public kioskService: Manifesto.IService | null = null;
         public loginService: Manifesto.IService | null = null;
@@ -207,14 +208,16 @@ namespace Manifold {
                 }
 
                 // if the resource has a probe service, use that to get http status code
-                if (that.probeService) {
+                if (that.probeService && !that.isProbed) {
+
+                    that.isProbed = true;
 
                     $.ajax(<JQueryAjaxSettings>{
                         url: that.probeService.id,
                         type: 'GET',
                         dataType: 'json'
                     }).done((data: any) => {
-    
+
                         let contentLocation: string = unescape(data.contentLocation);
 
                         if (contentLocation !== that.dataUri) {

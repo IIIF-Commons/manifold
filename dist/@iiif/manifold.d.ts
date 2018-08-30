@@ -71,6 +71,7 @@ declare namespace Manifold {
         externalService: Manifesto.IService | null;
         height: number;
         index: number;
+        isProbed: boolean;
         isResponseHandled: boolean;
         kioskService: Manifesto.IService | null;
         loginService: Manifesto.IService | null;
