@@ -148,23 +148,23 @@ namespace Manifold {
                 this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
                 this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
                 this.kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
-                this.probeService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Probe().toString());
 
                 if (this.clickThroughService) {
                     this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Token().toString());
+                    this.probeService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Probe().toString());
                 } else if (this.loginService) {
                     this.logoutService = this.loginService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.loginService.getService(manifesto.ServiceProfile.auth1Token().toString());
+                    this.probeService = this.loginService.getService(manifesto.ServiceProfile.auth1Probe().toString());
                 } else if (this.externalService) {
                     this.logoutService = this.externalService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.externalService.getService(manifesto.ServiceProfile.auth1Token().toString());
+                    this.probeService = this.externalService.getService(manifesto.ServiceProfile.auth1Probe().toString());
                 } else if (this.kioskService) {
                     this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
-                } else if (this.probeService) {
-                    this.logoutService = this.probeService.getService(manifesto.ServiceProfile.auth1Logout().toString());
-                    this.tokenService = this.probeService.getService(manifesto.ServiceProfile.auth1Token().toString());
+                    this.probeService = this.kioskService.getService(manifesto.ServiceProfile.auth1Probe().toString());
                 }
             }
         }
