@@ -321,8 +321,8 @@ var Manifold;
                 }
             }
             else {
-                // if the resource is a canvas, look for auth services on its content.
-                if (resource.isCanvas()) {
+                // if the resource is a canvas, not an info.json, look for auth services on its content.
+                if (!resource.isCanvas === undefined && resource.isCanvas()) {
                     var content = resource.getContent();
                     if (content && content.length) {
                         var body = content[0].getBody();

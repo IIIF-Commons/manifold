@@ -109,7 +109,7 @@ namespace Manifold {
             }
         }
 
-        private _parseAuthServices(resource: Manifesto.IManifestResource): void {
+        private _parseAuthServices(resource: any): void {
 
             if (this.authAPIVersion === 0.9) {
 
@@ -130,8 +130,8 @@ namespace Manifold {
 
             } else { // auth 1
 
-                // if the resource is a canvas, look for auth services on its content.
-                if (resource.isCanvas()) {
+                // if the resource is a canvas, not an info.json, look for auth services on its content.
+                if (!resource.isCanvas === undefined && resource.isCanvas()) {
                     const content: Manifesto.IAnnotation[] = (<Manifesto.ICanvas>resource).getContent();
 
                     if (content && content.length) {
