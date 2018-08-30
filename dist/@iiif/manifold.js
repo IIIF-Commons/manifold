@@ -367,7 +367,7 @@ var Manifold;
             }
         };
         ExternalResource.prototype.isAccessControlled = function () {
-            if (this.clickThroughService || this.loginService || this.externalService || this.kioskService) {
+            if (this.clickThroughService || this.loginService || this.externalService || this.kioskService || this.probeService) {
                 return true;
             }
             return false;

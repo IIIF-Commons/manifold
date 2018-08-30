@@ -182,7 +182,7 @@ namespace Manifold {
         }
 
         public isAccessControlled(): boolean {
-            if (this.clickThroughService || this.loginService || this.externalService || this.kioskService) {
+            if (this.clickThroughService || this.loginService || this.externalService || this.kioskService || this.probeService) {
                 return true;
             }
             return false;
@@ -235,7 +235,7 @@ namespace Manifold {
                         resolve(that);
     
                     });
-                    
+
                 } else {
 
                     // check if dataUri ends with info.json
