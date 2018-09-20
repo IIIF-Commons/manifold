@@ -700,14 +700,7 @@ namespace Manifold {
         }
         
         public isPaged(): boolean {
-
-            const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
-
-            if (viewingHint) {
-                return viewingHint.toString() === manifesto.ViewingHint.paged().toString();
-            }
-            
-            return false;
+            return this.manifest.isPagingEnabled();
         }
         
         public isPagingAvailable(): boolean {

@@ -1014,11 +1014,7 @@ var Manifold;
             return this.manifest.isMultiSequence();
         };
         Helper.prototype.isPaged = function () {
-            var viewingHint = this.getViewingHint();
-            if (viewingHint) {
-                return viewingHint.toString() === manifesto.ViewingHint.paged().toString();
-            }
-            return false;
+            return this.manifest.isPagingEnabled();
         };
         Helper.prototype.isPagingAvailable = function () {
             // paged mode is useless unless you have at least 3 pages...
