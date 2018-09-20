@@ -1014,6 +1014,12 @@ var Manifold;
             return this.manifest.isMultiSequence();
         };
         Helper.prototype.isPaged = function () {
+            // check the sequence for a viewingHint (deprecated)
+            var viewingHint = this.getViewingHint();
+            if (viewingHint) {
+                return viewingHint.toString() === manifesto.ViewingHint.paged().toString();
+            }
+            // check the manifest for a viewingHint (deprecated) or paged behavior
             return this.manifest.isPagingEnabled();
         };
         Helper.prototype.isPagingAvailable = function () {

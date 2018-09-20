@@ -700,6 +700,15 @@ namespace Manifold {
         }
         
         public isPaged(): boolean {
+
+            // check the sequence for a viewingHint (deprecated)
+            const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
+
+            if (viewingHint) {
+                return viewingHint.toString() === manifesto.ViewingHint.paged().toString();
+            }
+
+            // check the manifest for a viewingHint (deprecated) or paged behavior
             return this.manifest.isPagingEnabled();
         }
         

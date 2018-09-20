@@ -1,6 +1,6 @@
 {
   "name": "@iiif/manifold",
-  "version": "1.2.34",
+  "version": "1.2.35",
   "description": "",
   "main": "./dist/manifold.js",
   "types": "./dist/manifold.d.ts",
