@@ -366,6 +366,18 @@ var Manifold;
                 this.width = resource.getWidth();
                 this.height = resource.getHeight();
             }
+            else {
+                // presentation 3
+                images = canvas.getContent();
+                if (images.length) {
+                    var annotation = images[0];
+                    var body = annotation.getBody();
+                    if (body.length) {
+                        this.width = body[0].getWidth();
+                        this.height = body[0].getHeight();
+                    }
+                }
+            }
         };
         ExternalResource.prototype.isAccessControlled = function () {
             if (this.clickThroughService || this.loginService || this.externalService || this.kioskService || this.probeService) {

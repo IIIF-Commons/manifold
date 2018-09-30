@@ -215,8 +215,12 @@ var Manifesto;
         Behavior.prototype.nonav = function () {
             return new Behavior(Behavior.NONAV.toString());
         };
+        Behavior.prototype.paged = function () {
+            return new Behavior(Behavior.PAGED.toString());
+        };
         Behavior.AUTOADVANCE = new Behavior("auto-advance");
         Behavior.NONAV = new Behavior("no-nav");
+        Behavior.PAGED = new Behavior("paged");
         return Behavior;
     }(Manifesto.StringValue));
     Manifesto.Behavior = Behavior;
@@ -765,7 +769,14 @@ var Manifesto;
             return new Manifesto.IIIFResourceType(Manifesto.Utils.normaliseType(this.getProperty('type')));
         };
         ManifestResource.prototype.getLabel = function () {
-            return Manifesto.LanguageMap.parse(this.getProperty('label'), this.options.locale);
+            var label = this.getProperty('label');
+            if (label) {
+                return Manifesto.LanguageMap.parse(label, this.options.locale);
+            }
+            return [];
+        };
+        ManifestResource.prototype.getDefaultLabel = function () {
+            return Manifesto.LanguageMap.getValue(this.getLabel());
         };
         ManifestResource.prototype.getMetadata = function () {
             var _metadata = this.getProperty('metadata');
@@ -1199,16 +1210,6 @@ var Manifesto;
         IIIFResource.prototype.getSeeAlso = function () {
             return this.getProperty('seeAlso');
         };
-        IIIFResource.prototype.getLabel = function () {
-            var label = this.getProperty('label');
-            if (label) {
-                return Manifesto.LanguageMap.parse(label, this.options.locale);
-            }
-            return [];
-        };
-        IIIFResource.prototype.getDefaultLabel = function () {
-            return Manifesto.LanguageMap.getValue(this.getLabel());
-        };
         IIIFResource.prototype.getDefaultTree = function () {
             this.defaultTree = new Manifesto.TreeNode('root');
             this.defaultTree.data = this;
@@ -1497,6 +1498,10 @@ var Manifesto;
             var viewingHint = this.getViewingHint();
             if (viewingHint) {
                 return viewingHint.toString() === Manifesto.ViewingHint.PAGED.toString();
+            }
+            var behavior = this.getBehavior();
+            if (behavior) {
+                return behavior.toString() === Manifesto.Behavior.PAGED.toString();
             }
             return false;
         };
@@ -3447,6 +3452,12 @@ var Manifesto;
                 return new Manifesto.ResourceType(Manifesto.Utils.normaliseType(this.getProperty('type')));
             }
             return null;
+        };
+        AnnotationBody.prototype.getWidth = function () {
+            return this.getProperty('width');
+        };
+        AnnotationBody.prototype.getHeight = function () {
+            return this.getProperty('height');
         };
         return AnnotationBody;
     }(Manifesto.ManifestResource));

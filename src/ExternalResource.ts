@@ -171,7 +171,7 @@ namespace Manifold {
         }
         
         private _parseDimensions(canvas: Manifesto.ICanvas): void {
-            const images: Manifesto.IAnnotation[] = canvas.getImages();
+            let images: Manifesto.IAnnotation[] = canvas.getImages();
             
             if (images && images.length) {
                 const firstImage = images[0];
@@ -179,6 +179,19 @@ namespace Manifold {
 
                 this.width = resource.getWidth();
                 this.height = resource.getHeight();
+            } else {
+                // presentation 3
+                images = canvas.getContent();
+                
+                if (images.length) {
+                    const annotation: Manifesto.IAnnotation = images[0];
+                    const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+
+                    if (body.length) {
+                        this.width = body[0].getWidth();
+                        this.height = body[0].getHeight();
+                    }
+                }
             }
         }
 
