@@ -1,959 +1,964 @@
-type NullableTreeNode = Manifold.ITreeNode | null;
+import { MultiSelectableTreeNode } from "./MultiSelectableTreeNode";
+import { MultiSelectState } from "./MultiSelectState";
+import { IManifoldOptions } from "./IManifoldOptions";
+import { Manifest, Service, ServiceProfile, LanguageMap, Canvas, ManifestType, LabelValuePair, Language, Sequence, Annotation, AnnotationBody, TreeNode, IIIFResource, Utils, Range, Thumb, ViewingDirection, ViewingHint, TreeNodeType } from "manifesto.js";
+import { MetadataOptions } from "./MetadataOptions";
+import { MetadataGroup } from "./MetadataGroup";
+import { IMetadataItem } from "./IMetadataItem";
+import { ILabelValuePair } from "./ILabelValuePair";
+import { MultiSelectableCanvas } from "./MultiSelectableCanvas";
+import { TreeSortType } from "./TreeSortType";
+import { MultiSelectableRange } from "./MultiSelectableRange";
 
-namespace Manifold {
+type NullableTreeNode = MultiSelectableTreeNode | null;
+
+export class Helper {
     
-    export class Helper implements IHelper {
-        
-        private _multiSelectState: Manifold.MultiSelectState;
+    private _multiSelectState: MultiSelectState;
 
-        public canvasIndex: number;
-        public collectionIndex: number;
-        public iiifResource: Manifesto.IIIIFResource;
-        public iiifResourceUri: string;
-        public manifest: Manifesto.IManifest;
-        public manifestIndex: number;
-        public options: IManifoldOptions;
-        public sequenceIndex: number;
-        public rangeId: string | null;
-        
-        constructor(options: IManifoldOptions) {
-            this.options = options;
-            this.iiifResource = this.options.iiifResource;
-            this.iiifResourceUri = this.options.iiifResourceUri;
-            this.manifest = this.options.manifest;
-            this.collectionIndex = this.options.collectionIndex || 0;
-            this.manifestIndex = this.options.manifestIndex || 0;
-            this.sequenceIndex = this.options.sequenceIndex || 0;
-            this.canvasIndex = this.options.canvasIndex || 0;
-        }
-        
-        // getters //
-        
-        public getAutoCompleteService(): Manifesto.IService | null {
-            const service: Manifesto.IService | null = this.getSearchService();
-           
-            if (service) {
-                return service.getService(manifesto.ServiceProfile.autoComplete());
-            }
-            
-            return null;
-        }
-        
-        public getAttribution(): string | null {
-
-            console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
-            
-            const attribution: Manifesto.LanguageMap | null = this.manifest.getAttribution();
-
-            if (attribution) {
-                return Manifesto.LanguageMap.getValue(attribution, this.options.locale);
-            }
-            
-            return null;
-        }
-        
-        public getCanvases(): Manifesto.ICanvas[] {
-            return this.getCurrentSequence().getCanvases();
-        }
-
-        public getCanvasById(id: string): Manifesto.ICanvas | null {
-            return this.getCurrentSequence().getCanvasById(id);
-        }
-
-        public getCanvasesById(ids: string[]): Manifesto.ICanvas[] {
-            const canvases: Manifesto.ICanvas[] = [];
-
-            for (let i = 0; i < ids.length; i++) {
-                const id: string = ids[i];
-                const canvas: Manifesto.ICanvas | null = this.getCanvasById(id);
-                if (canvas) {
-                    canvases.push(canvas);
-                }
-            }
-
-            return canvases;
-        }
-
-        public getCanvasByIndex(index: number): Manifesto.ICanvas {
-            return this.getCurrentSequence().getCanvasByIndex(index);
-        }
-        
-        public getCanvasIndexById(id: string): number | null {
-            return this.getCurrentSequence().getCanvasIndexById(id);
-        }
-        
-        public getCanvasIndexByLabel(label: string): number {
-            const foliated: boolean = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
-            return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
-        }
-        
-        public getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null {
-            const ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
-            
-            if (path) {
-                for (let i = 0; i < ranges.length; i++) {
-                    const range: Manifesto.IRange = ranges[i];
-
-                    if (range.path === path) {
-                        return range;
-                    }
-                }
-
-                return null;
-            } else {
-                return ranges[0]; // else return the first range
-            }
-        }
-
-        public getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[] {
-
-            if (canvas.ranges){
-                return canvas.ranges; // cache
-            } else {
-                canvas.ranges = <IRange[]>this.manifest.getAllRanges().en().where(range => (range.getCanvasIds().en().any(c => manifesto.Utils.normaliseUrl(c) === manifesto.Utils.normaliseUrl(canvas.id)))).toArray();
-            }
-
-            return canvas.ranges;
-        }
-
-        public getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null {
-            // todo: support nested collections. walk up parents adding to array and return csv string.
-            let index: number | null = null;
-            if (iiifResource.parentCollection) {
-                index = iiifResource.parentCollection.index;
-            }
-            return index;
-        }
-
-        public getCurrentCanvas(): Manifesto.ICanvas {
-            return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
-        }
-                
-        public getCurrentSequence(): Manifesto.ISequence {
-            return this.getSequenceByIndex(this.sequenceIndex);
-        }
-
-        public getDescription(): string | null {
-            const description: Manifesto.LanguageMap | null = this.manifest.getDescription();
-
-            if (description) {
-                return Manifesto.LanguageMap.getValue(description, this.options.locale);
-            }
-            
-            return null;
-        }
-        
-        public getFirstPageIndex(): number {
-            return 0;
-        }
-
-        public getLabel(): string | null {
-            const label: Manifesto.LanguageMap | null = this.manifest.getLabel();
-
-            if (label) {
-                return Manifesto.LanguageMap.getValue(label, this.options.locale);
-            }
-            
-            return null;
-        }
-        
-        public getLastCanvasLabel(alphanumeric?: boolean): string {
-            return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
-        }
-        
-        public getLastPageIndex(): number {
-            return this.getTotalCanvases() - 1;
-        }
-        
-        public getLicense(): string | null {
-            return this.manifest.getLicense();
-        }
-
-        public getLogo(): string | null {
-            return this.manifest.getLogo();
-        }
-
-        public getManifestType(): Manifesto.ManifestType {
-            let manifestType = this.manifest.getManifestType();
-
-            // default to monograph
-            if (manifestType.toString() === ""){
-                manifestType = manifesto.ManifestType.monograph();
-            }
-
-            return manifestType;
-        }
-        
-        public getMetadata(options?: MetadataOptions): MetadataGroup[] {
-
-            const metadataGroups: MetadataGroup[] = [];
-            const manifestMetadata: Manifesto.LabelValuePair[] = this.manifest.getMetadata();
-            const manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
-
-            if (manifestMetadata && manifestMetadata.length) {
-                manifestGroup.addMetadata(manifestMetadata, true);
-            }
-
-            if (this.manifest.getDescription().length) {
-                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.label = [new Manifesto.Language("description", this.options.locale)];
-                metadataItem.value = this.manifest.getDescription();
-                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
-            }
-
-            if (this.manifest.getAttribution().length) {
-                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.label = [new Manifesto.Language("attribution", this.options.locale)];
-                metadataItem.value = this.manifest.getAttribution();
-                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
-            }
-
-            const license: string | null = this.manifest.getLicense();
-
-            if (license) {
-                const item: any = {
-                    label: "license",
-                    value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
-                };
-                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.parse(item);
-                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
-            }
-
-            if (this.manifest.getLogo()) {
-                const item: any = {
-                    label: "logo",
-                    value: '<img src="' + this.manifest.getLogo() + '"/>'
-                };
-                const metadataItem: Manifesto.LabelValuePair = new Manifesto.LabelValuePair(this.options.locale);
-                metadataItem.parse(item);
-                (<Manifold.IMetadataItem>metadataItem).isRootLevel = true;
-                manifestGroup.addItem(<Manifold.IMetadataItem>metadataItem);
-            }
-
-            metadataGroups.push(manifestGroup);
-
-            if (options) {
-                return this._parseMetadataOptions(options, metadataGroups);
-            } else {
-                return metadataGroups;
-            }
-        }
-
-        public getRequiredStatement(): ILabelValuePair | null {
-            const requiredStatement: Manifesto.LabelValuePair | null = this.manifest.getRequiredStatement();
-
-            if (requiredStatement) {
-                return {
-                    label: requiredStatement.getLabel(),
-                    value: requiredStatement.getValue()
-                }
-            }
-            
-            return null;
-        }
+    public canvasIndex: number;
+    public collectionIndex: number;
+    public iiifResource: IIIFResource;
+    public iiifResourceUri: string;
+    public manifest: Manifest;
+    public manifestIndex: number;
+    public options: IManifoldOptions;
+    public sequenceIndex: number;
+    public rangeId: string | null;
     
-        private _parseMetadataOptions(options: MetadataOptions, metadataGroups: MetadataGroup[]): MetadataGroup[] {
-
-            // get sequence metadata
-            const sequence: Manifesto.ISequence = this.getCurrentSequence();
-            const sequenceMetadata: any[] = sequence.getMetadata();
-
-            if (sequenceMetadata && sequenceMetadata.length) {
-                const sequenceGroup: MetadataGroup = new MetadataGroup(sequence);
-                sequenceGroup.addMetadata(sequenceMetadata);
-                metadataGroups.push(sequenceGroup);
-            }
-
-            // get range metadata
-            if (options.range) {
-                let rangeGroups: MetadataGroup[] = this._getRangeMetadata([], options.range);
-                rangeGroups = rangeGroups.reverse();
-                metadataGroups = metadataGroups.concat(rangeGroups);
-            }
-
-            // get canvas metadata
-            if (options.canvases && options.canvases.length) {
-                for (let i = 0; i < options.canvases.length; i++) {
-                    const canvas: Manifesto.ICanvas = options.canvases[i];
-                    const canvasMetadata: any[] = canvas.getMetadata();
-
-                    if (canvasMetadata && canvasMetadata.length) {
-                        const canvasGroup: MetadataGroup = new MetadataGroup(canvas);
-                        canvasGroup.addMetadata(canvas.getMetadata());
-                        metadataGroups.push(canvasGroup);
-                    }
-
-                    // add image metadata
-                    const images: Manifesto.IAnnotation[] = canvas.getImages();
-
-                    for (let j = 0; j < images.length; j++) {
-                        const image: Manifesto.IAnnotation = images[j];
-                        const imageMetadata: any[] = image.getMetadata();
-
-                        if (imageMetadata && imageMetadata.length) {
-                            const imageGroup: MetadataGroup = new MetadataGroup(image);
-                            imageGroup.addMetadata(imageMetadata);
-                            metadataGroups.push(imageGroup);
-                        }
-                    }
-                }
-            }
-
-            return metadataGroups;
-        }
-
-        private _getRangeMetadata(metadataGroups: MetadataGroup[], range: Manifesto.IRange): MetadataGroup[] {
-            const rangeMetadata: any[] = range.getMetadata();
-
-            if (rangeMetadata && rangeMetadata.length) {
-                const rangeGroup: MetadataGroup = new MetadataGroup(range);
-                rangeGroup.addMetadata(rangeMetadata);
-                metadataGroups.push(rangeGroup);
-            } else if (range.parentRange) {
-                return this._getRangeMetadata(metadataGroups, range.parentRange);
-            }
-            
-            return metadataGroups;
-        }
-
-        public getMultiSelectState(): Manifold.MultiSelectState {
-            if (!this._multiSelectState) {
-                this._multiSelectState = new Manifold.MultiSelectState();
-                this._multiSelectState.ranges = this.getRanges().slice(0);
-                this._multiSelectState.canvases = <Manifold.ICanvas[]>this.getCurrentSequence().getCanvases().slice(0);
-            }
-
-            return this._multiSelectState;
-        }
-
-        public getCurrentRange(): Manifesto.IRange | null {
-            if (this.rangeId) {
-                return this.getRangeById(this.rangeId);
-            }
-
-            return null;            
-        }
-
-        public getPosterCanvas(): Manifesto.ICanvas | null {
-            return this.manifest.getPosterCanvas();
-        }
-
-        public getPosterImage(): string | null {
-            const posterCanvas: Manifesto.ICanvas | null = this.getPosterCanvas();
-
-            if (posterCanvas) {
-                const content: Manifesto.IAnnotation[] = posterCanvas.getContent();
-
-                if (content && content.length) {
-                    const anno: Manifesto.IAnnotation = content[0];
-                    const body: Manifesto.IAnnotationBody[] = anno.getBody();
-                    return body[0].id;
-                }
-            }
-
-            return null;
-        }
-
-        public getPreviousRange(range?: Manifesto.IRange): Manifesto.IRange | null {
-
-            let currentRange: Manifesto.IRange | null = null;
-
-            if (range) {
-                currentRange = range;
-            } else {
-                currentRange = this.getCurrentRange();
-            }
-
-            if (currentRange) {
-                const flatTree: NullableTreeNode[] = this.getFlattenedTree();
-                
-                for (let i = 0; i < flatTree.length; i++) {
-                    const node: NullableTreeNode = flatTree[i];
-                    
-                    // find current range in flattened tree
-                    if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
-                        // find the first node before it that has canvases
-                        while (i > 0) {
-                            i--;
-                            const prevNode: Manifesto.ITreeNode = flatTree[i] as ITreeNode;
-                            return prevNode.data;
-                        }
-                        
-                        break;
-                    }
-                }
-
-            }
-
-            return null;
-        }
-
-        public getNextRange(range?: Manifesto.IRange): Manifesto.IRange | null {
-
-            // if a range is passed, use that. otherwise get the current range.
-            let currentRange: Manifesto.IRange | null = null;
-
-            if (range) {
-                currentRange = range;
-            } else {
-                currentRange = this.getCurrentRange();
-            }
-
-            if (currentRange) {
-                const flatTree: NullableTreeNode[] = this.getFlattenedTree();
-                
-                for (let i = 0; i < flatTree.length; i++) {
-                    const node: NullableTreeNode = flatTree[i];
-                    
-                    // find current range in flattened tree
-                    if ((<ITreeNode>node).data.id === (<Manifesto.IRange>currentRange).id) {
-
-                        // find the first node after it that has canvases
-                        while (i < flatTree.length - 1) {
-                            i++;
-                            const nextNode: Manifesto.ITreeNode = flatTree[i] as ITreeNode;
-                            if (nextNode.data.canvases && nextNode.data.canvases.length) {
-                                return nextNode.data;
-                            }
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public getFlattenedTree(): ITreeNode[] {
-            return this._flattenTree(this.getTree() as ITreeNode, 'nodes') as ITreeNode[];
-        }
-
-        private _flattenTree(root: ITreeNode, key: string): NullableTreeNode[] {
-            let flatten: ITreeNode[] = [Object.assign({}, root)];
-            delete flatten[0][key];
-          
-            if (root[key] && root[key].length > 0) {
-                return flatten.concat(root[key]
-                    .map((child) => this._flattenTree(child, key))
-                    .reduce((a, b) => a.concat(b), [])
-                );
-            }
-          
-            return flatten;
-        }
-
-        public getRanges(): IRange[] {
-            return <IRange[]>(<Manifesto.IManifest>this.manifest).getAllRanges();
-        }
-        
-        public getRangeByPath(path: string): Manifesto.IRange | null {
-            return this.manifest.getRangeByPath(path);
-        }
-
-        public getRangeById(id: string): Manifesto.IRange | null {
-            return this.manifest.getRangeById(id);
-        }
-        
-        public getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
-            const ids: string[] = range.getCanvasIds();
-            return this.getCanvasesById(ids);
-        }
-
-        public getRelated(): any {
-            return this.manifest.getRelated();
-        }
-        
-        public getSearchService(): Manifesto.IService | null {
-            return this.manifest.getService(manifesto.ServiceProfile.search());
-        }
-        
-        public getSeeAlso(): any {
-            return this.manifest.getSeeAlso();
-        }
-
-        public getSequenceByIndex(index: number): Manifesto.ISequence {
-            return this.manifest.getSequenceByIndex(index);
-        }
-
-        public getShareServiceUrl(): string | null {
-            let url: string | null = null;
-            let shareService: Manifesto.IService | null = this.manifest.getService(manifesto.ServiceProfile.shareExtensions());
-
-            if (shareService) {
-                if ((<any>shareService).length) {
-                    shareService = (<any>shareService)[0];
-                }
-                url = (<any>shareService).__jsonld.shareUrl;
-            }
-
-            return url;
-        }
-
-        public getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
-
-            const all: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
-                .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString() ||
-                            n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
-
-            //var collections: ITreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
-            //    .where((n) => n.data.type === ITreeNodeType.collection().toString()).toArray();
-
-            const manifests: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
-                .where((n) => n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
-
-            this.createDecadeNodes(sortedTree, all);
-            this.sortDecadeNodes(sortedTree);
-            this.createYearNodes(sortedTree, all);
-            this.sortYearNodes(sortedTree);
-            this.createMonthNodes(sortedTree, manifests);
-            this.sortMonthNodes(sortedTree);
-            this.createDateNodes(sortedTree, manifests);
-
-            this.pruneDecadeNodes(sortedTree);
-        }
-        
-        public getStartCanvasIndex(): number {
-            return this.getCurrentSequence().getStartCanvasIndex();
-        }
-        
-        public getThumbs(width: number, height: number): Manifesto.IThumb[] {
-            return this.getCurrentSequence().getThumbs(width, height);
-        }
-        
-        public getTopRanges(): Manifesto.IRange[] {
-            return this.manifest.getTopRanges();
-        }
-
-        public getTotalCanvases(): number {
-            return this.getCurrentSequence().getTotalCanvases();
-        }
-
-        public getTrackingLabel(): string {
-            return this.manifest.getTrackingLabel();
-        }
-
-        private _getTopRanges(): Manifesto.IRange[] {
-            return (<Manifesto.IManifest>this.iiifResource).getTopRanges();
-        }
-
-        public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): NullableTreeNode {
-
-            // if it's a collection, use IIIFResource.getDefaultTree()
-            // otherwise, get the top range by index and use Range.getTree()
-
-            if (!this.iiifResource) {
-                return null;
-            }
-
-            let tree: ITreeNode;
-
-            if (this.iiifResource.isCollection()) {
-                tree = <ITreeNode>this.iiifResource.getDefaultTree();
-            } else {
-                const topRanges: Manifesto.IRange[] = this._getTopRanges();
-                
-                const root: ITreeNode = new manifesto.TreeNode();
-                root.label = 'root';
-                root.data = this.iiifResource;
-                
-                if (topRanges.length) {
-                    const range: Manifesto.IRange = topRanges[topRangeIndex];                    
-                    tree = <ITreeNode>range.getTree(root);
-                } else {
-                    return root;
-                }
-            }
-
-            let sortedTree: ITreeNode = new manifesto.TreeNode();
-            
-            switch (sortType.toString()) {
-                case TreeSortType.DATE.toString():
-                    // returns a list of treenodes for each decade.
-                    // expanding a decade generates a list of years
-                    // expanding a year gives a list of months containing issues
-                    // expanding a month gives a list of issues.
-                    if (this.treeHasNavDates(tree)){
-                        this.getSortedTreeNodesByDate(sortedTree, tree);
-                        break;
-                    }                    
-                default:
-                    sortedTree = tree;
-            }
-            
-            return sortedTree;
-        }
-        
-        public treeHasNavDates(tree: ITreeNode): boolean {
-            const node: Manifesto.ITreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
-            return (node)? true : false;
-        }
-        
-        public getViewingDirection(): Manifesto.ViewingDirection | null {
-            let viewingDirection: Manifesto.ViewingDirection | null = this.getCurrentSequence().getViewingDirection();
-
-            if (!viewingDirection) {
-                viewingDirection = this.manifest.getViewingDirection();
-            }
-
-            return viewingDirection;
-        }
-
-        public getViewingHint(): Manifesto.ViewingHint | null {
-            let viewingHint: Manifesto.ViewingHint | null = this.getCurrentSequence().getViewingHint();
-
-            if (!viewingHint) {
-                viewingHint = this.manifest.getViewingHint();
-            }
-
-            return viewingHint;
-        }
-
-        
-        // inquiries //
-        
-        public hasParentCollection(): boolean {
-            return !!this.manifest.parentCollection;
-        }
-
-        public hasRelatedPage(): boolean {
-            let related: any = this.getRelated();
-            if (!related) return false;
-            if (related.length){
-                related = related[0];
-            }
-            return related['format'] === 'text/html';
-        }
-
-        public hasResources(): boolean {
-            const canvas: Manifesto.ICanvas = this.getCurrentCanvas();
-            return canvas.getResources().length > 0;
-        }
-        
-        public isBottomToTop(): boolean {
-
-            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
-
-            if (viewingDirection) {
-                return viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString();
-            }
-            
-            return false;
-        }
-        
-        public isCanvasIndexOutOfRange(index: number): boolean {
-            return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
-        }
-        
-        public isContinuous(): boolean {
-
-            const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
-
-            if (viewingHint) {
-                return viewingHint.toString() === manifesto.ViewingHint.continuous().toString();
-            }
-
-            return false;
-        }
-        
-        public isFirstCanvas(index?: number): boolean {
-            if (typeof index !== 'undefined') {
-                return this.getCurrentSequence().isFirstCanvas(index);
-            }
-            
-            return this.getCurrentSequence().isFirstCanvas(this.canvasIndex);
-        }
-        
-        public isHorizontallyAligned(): boolean {
-            return this.isLeftToRight() || this.isRightToLeft()
-        }
-        
-        public isLastCanvas(index?: number): boolean {
-            if (typeof index !== 'undefined') {
-                return this.getCurrentSequence().isLastCanvas(index);
-            }
-            
-            return this.getCurrentSequence().isLastCanvas(this.canvasIndex);
-        }
-        
-        public isLeftToRight(): boolean {
-
-            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
-
-            if (viewingDirection) {
-                return viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString();
-            }
-
-            return false;
-        }
-        
-        public isMultiCanvas(): boolean{
-            return this.getCurrentSequence().isMultiCanvas();
-        }
-        
-        public isMultiSequence(): boolean{
-            return this.manifest.isMultiSequence();
-        }
-        
-        public isPaged(): boolean {
-
-            // check the sequence for a viewingHint (deprecated)
-            const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
-
-            if (viewingHint) {
-                return viewingHint.toString() === manifesto.ViewingHint.paged().toString();
-            }
-
-            // check the manifest for a viewingHint (deprecated) or paged behavior
-            return this.manifest.isPagingEnabled();
-        }
-        
-        public isPagingAvailable(): boolean {
-            // paged mode is useless unless you have at least 3 pages...
-            return this.isPagingEnabled() && this.getTotalCanvases() > 2;
-        }
-        
-        public isPagingEnabled(): boolean {
-            return (this.manifest.isPagingEnabled() || this.getCurrentSequence().isPagingEnabled());
-        }
-        
-        public isRightToLeft(): boolean {
-
-            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
-
-            if (viewingDirection) {
-                return viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString();
-            }
-            
-            return false;
-        }
-        
-        public isTopToBottom(): boolean {
-
-            const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
-
-            if (viewingDirection) {
-                return viewingDirection.toString() === manifesto.ViewingDirection.topToBottom().toString();
-            }
-
-            return false;
-        }
-        
-        public isTotalCanvasesEven(): boolean {
-            return this.getCurrentSequence().isTotalCanvasesEven();
-        }
-
-        public isUIEnabled(name: string): boolean {
-            const uiExtensions: Manifesto.IService | null = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
-
-            if (uiExtensions) {
-                const disableUI: string[] = uiExtensions.getProperty('disableUI');
-
-                if (disableUI) {
-                    if (disableUI.indexOf(name) !== -1 || disableUI.indexOf(name.toLowerCase()) !== -1) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-        
-        public isVerticallyAligned(): boolean {
-            return this.isTopToBottom() || this.isBottomToTop()
-        }
-        
-
-        // dates //     
-        
-        public createDateNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void {
-            for (let i = 0; i < nodes.length; i++) {
-                const node: ITreeNode = <ITreeNode>nodes[i];
-                const year: number = this.getNodeYear(node);
-                const month: number = this.getNodeMonth(node);
-
-                const dateNode: ITreeNode = new manifesto.TreeNode();
-                dateNode.id = node.id;
-                dateNode.label = this.getNodeDisplayDate(node);
-                dateNode.data = node.data;
-                dateNode.data.type = manifesto.TreeNodeType.manifest().toString();
-                dateNode.data.year = year;
-                dateNode.data.month = month;
-
-                const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
-
-                if (decadeNode) {
-                    const yearNode: NullableTreeNode = this.getYearNode(decadeNode, year);
-
-                    if (yearNode) {
-                        const monthNode: NullableTreeNode = this.getMonthNode(yearNode, month);
-
-                        if (monthNode){
-                            monthNode.addNode(dateNode);
-                        }
-                    }
-                }
-            }
-        }
-        
-        public createDecadeNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void {
-
-            for (let i = 0; i < nodes.length; i++) {
-                const node: ITreeNode = nodes[i];
-                const year: number = this.getNodeYear(node);
-                const endYear: number = Number(year.toString().substr(0, 3) + "9");
-
-                if (!this.getDecadeNode(rootNode, year)) {
-                    const decadeNode: Manifesto.ITreeNode = new manifesto.TreeNode();
-                    decadeNode.label = year + " - " + endYear;
-                    decadeNode.navDate = node.navDate;
-                    decadeNode.data.startYear = year;
-                    decadeNode.data.endYear = endYear;
-                    rootNode.addNode(decadeNode);
-                }
-            }
-        }
-        
-        public createMonthNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-
-            for (let i = 0; i < nodes.length; i++) {
-                const node: ITreeNode = nodes[i];
-                const year = this.getNodeYear(node);
-                const month = this.getNodeMonth(node);
-                const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
-                let yearNode: NullableTreeNode = null;
-                
-                if (decadeNode) {
-                    yearNode = this.getYearNode(decadeNode, year);
-                }
-
-                if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)) {
-                    const monthNode: ITreeNode = <ITreeNode>new manifesto.TreeNode();
-                    monthNode.label = this.getNodeDisplayMonth(node);
-                    monthNode.navDate = node.navDate;
-                    monthNode.data.year = year;
-                    monthNode.data.month = month;
-                    yearNode.addNode(monthNode);
-                }
-            }
-        }
-        
-        public createYearNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-
-            for (let i = 0; i < nodes.length; i++) {
-                const node: ITreeNode = nodes[i];
-                const year: number = this.getNodeYear(node);
-                const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
-
-                if (decadeNode && !this.getYearNode(decadeNode, year)) {
-                    const yearNode: ITreeNode = <ITreeNode>new manifesto.TreeNode();
-                    yearNode.label = year.toString();
-                    yearNode.navDate = node.navDate;
-                    yearNode.data.year = year;
-
-                    decadeNode.addNode(yearNode);
-                }
-            }
-        }
-        
-        public getDecadeNode(rootNode: ITreeNode, year: number): ITreeNode | null {
-            for (let i = 0; i < rootNode.nodes.length; i++) {
-                const n: ITreeNode = <ITreeNode>rootNode.nodes[i];
-                if (year >= n.data.startYear && year <= n.data.endYear) return n;
-            }
-
-            return null;
-        }
-        
-        public getMonthNode(yearNode: ITreeNode, month: Number): ITreeNode | null {
-            for (let i = 0; i < yearNode.nodes.length; i++) {
-                const n: ITreeNode = <ITreeNode>yearNode.nodes[i];
-                if (month === this.getNodeMonth(n)) return n;
-            }
-
-            return null;
-        }
-        
-        public getNodeDisplayDate(node: ITreeNode): string{
-            return node.navDate.toDateString();
-        }
-        
-        public getNodeDisplayMonth(node: ITreeNode): string{
-            const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            return months[node.navDate.getMonth()];
-        }        
-
-        public getNodeMonth(node: ITreeNode): number{
-            return node.navDate.getMonth();
-        }
-        
-        public getNodeYear(node: ITreeNode): number{
-            return node.navDate.getFullYear();
-        }
-
-        public getYearNode(decadeNode: ITreeNode, year: Number): ITreeNode | null {
-            for (let i = 0; i < decadeNode.nodes.length; i++){
-                const n: ITreeNode = <ITreeNode>decadeNode.nodes[i];
-                if (year === this.getNodeYear(n)) return n;
-            }
-
-            return null;
-        }
-        
-        // delete any empty decades
-        public pruneDecadeNodes(rootNode: ITreeNode): void {
-            const pruned: ITreeNode[] = [];
-
-            for (let i = 0; i < rootNode.nodes.length; i++) {
-                const n: ITreeNode = <ITreeNode>rootNode.nodes[i];
-                if (!n.nodes.length) {
-                    pruned.push(n);
-                }
-            }
-
-            for (let j = 0; j < pruned.length; j++) {
-                const p: ITreeNode = <ITreeNode>pruned[j];
-                const index: number = rootNode.nodes.indexOf(p);
-
-                if (index > -1) {
-                    rootNode.nodes.splice(index, 1);
-                }
-            }
-        }
-
-        public sortDecadeNodes(rootNode: ITreeNode): void {
-            rootNode.nodes = rootNode.nodes.sort(function(a, b) {
-                return a.data.startYear - b.data.startYear;
-            });
-        }
-        
-        public sortMonthNodes(rootNode: ITreeNode): void {
-            for (let i = 0; i < rootNode.nodes.length; i++) {
-                const decadeNode: Manifesto.ITreeNode = rootNode.nodes[i];
-
-                for (let j = 0; j < decadeNode.nodes.length; j++){
-                    const monthNode: Manifesto.ITreeNode = decadeNode.nodes[j];
-
-                    monthNode.nodes = monthNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
-                        return this.getNodeMonth(a) - this.getNodeMonth(b);
-                    });
-                }
-            }
-        }
-        
-        public sortYearNodes(rootNode: ITreeNode): void {
-            for (let i = 0; i < rootNode.nodes.length; i++) {
-                const decadeNode: Manifesto.ITreeNode = rootNode.nodes[i];
-
-                decadeNode.nodes = decadeNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
-                    return (this.getNodeYear(a) - this.getNodeYear(b));
-                });
-            }
-        }        
+    constructor(options: IManifoldOptions) {
+        this.options = options;
+        this.iiifResource = this.options.iiifResource;
+        this.iiifResourceUri = this.options.manifestUri;
+        this.manifest = this.options.manifest;
+        this.collectionIndex = this.options.collectionIndex || 0;
+        this.manifestIndex = this.options.manifestIndex || 0;
+        this.sequenceIndex = this.options.sequenceIndex || 0;
+        this.canvasIndex = this.options.canvasIndex || 0;
     }
     
+    // getters //
+    
+    public getAutoCompleteService(): Service | null {
+        const service: Service | null = this.getSearchService();
+        
+        if (service) {
+            return service.getService(ServiceProfile.SEARCH_0_AUTO_COMPLETE);
+        }
+        
+        return null;
+    }
+    
+    public getAttribution(): string | null {
+
+        console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
+        
+        const attribution: LanguageMap | null = this.manifest.getAttribution();
+
+        if (attribution) {
+            return LanguageMap.getValue(attribution, this.options.locale);
+        }
+        
+        return null;
+    }
+    
+    public getCanvases(): Canvas[] {
+        return this.getCurrentSequence().getCanvases();
+    }
+
+    public getCanvasById(id: string): Canvas | null {
+        return this.getCurrentSequence().getCanvasById(id);
+    }
+
+    public getCanvasesById(ids: string[]): Canvas[] {
+        const canvases: Canvas[] = [];
+
+        for (let i = 0; i < ids.length; i++) {
+            const id: string = ids[i];
+            const canvas: Canvas | null = this.getCanvasById(id);
+            if (canvas) {
+                canvases.push(canvas);
+            }
+        }
+
+        return canvases;
+    }
+
+    public getCanvasByIndex(index: number): Canvas {
+        return this.getCurrentSequence().getCanvasByIndex(index);
+    }
+    
+    public getCanvasIndexById(id: string): number | null {
+        return this.getCurrentSequence().getCanvasIndexById(id);
+    }
+    
+    public getCanvasIndexByLabel(label: string): number {
+        const foliated: boolean = this.getManifestType() === ManifestType.MANUSCRIPT;
+        return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
+    }
+    
+    public getCanvasRange(canvas: Canvas, path?: string): Range | null {
+        const ranges: Range[] = this.getCanvasRanges(canvas);
+        
+        if (path) {
+            for (let i = 0; i < ranges.length; i++) {
+                const range: Range = ranges[i];
+
+                if (range.path === path) {
+                    return range;
+                }
+            }
+
+            return null;
+        } else {
+            return ranges[0]; // else return the first range
+        }
+    }
+
+    public getCanvasRanges(canvas: Canvas): Range[] {
+
+        if (canvas.ranges) {
+            return canvas.ranges; // cache
+        } else {
+            canvas.ranges = <Range[]>this.manifest.getAllRanges().en().where(range => (range.getCanvasIds().en().any(c => Utils.normaliseUrl(c) === Utils.normaliseUrl(canvas.id)))).toArray();
+        }
+
+        return canvas.ranges;
+    }
+
+    public getCollectionIndex(iiifResource: IIIFResource): number | null {
+        // todo: support nested collections. walk up parents adding to array and return csv string.
+        let index: number | null = null;
+        if (iiifResource.parentCollection) {
+            index = iiifResource.parentCollection.index;
+        }
+        return index;
+    }
+
+    public getCurrentCanvas(): Canvas {
+        return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
+    }
+            
+    public getCurrentSequence(): Sequence {
+        return this.getSequenceByIndex(this.sequenceIndex);
+    }
+
+    public getDescription(): string | null {
+        const description: LanguageMap | null = this.manifest.getDescription();
+
+        if (description) {
+            return LanguageMap.getValue(description, this.options.locale);
+        }
+        
+        return null;
+    }
+    
+    public getFirstPageIndex(): number {
+        return 0;
+    }
+
+    public getLabel(): string | null {
+        const label: LanguageMap | null = this.manifest.getLabel();
+
+        if (label) {
+            return LanguageMap.getValue(label, this.options.locale);
+        }
+        
+        return null;
+    }
+    
+    public getLastCanvasLabel(alphanumeric?: boolean): string {
+        return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
+    }
+    
+    public getLastPageIndex(): number {
+        return this.getTotalCanvases() - 1;
+    }
+    
+    public getLicense(): string | null {
+        return this.manifest.getLicense();
+    }
+
+    public getLogo(): string | null {
+        return this.manifest.getLogo();
+    }
+
+    public getManifestType(): ManifestType {
+        let manifestType = this.manifest.getManifestType();
+
+        // default to monograph
+        if (manifestType === ManifestType.EMPTY) {
+            manifestType = ManifestType.MONOGRAPH;
+        }
+
+        return manifestType;
+    }
+    
+    public getMetadata(options?: MetadataOptions): MetadataGroup[] {
+
+        const metadataGroups: MetadataGroup[] = [];
+        const manifestMetadata: LabelValuePair[] = this.manifest.getMetadata();
+        const manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
+
+        if (manifestMetadata && manifestMetadata.length) {
+            manifestGroup.addMetadata(manifestMetadata, true);
+        }
+
+        if (this.manifest.getDescription().length) {
+            const metadataItem: LabelValuePair = new LabelValuePair(this.options.locale);
+            metadataItem.label = [new Language("description", this.options.locale)];
+            metadataItem.value = this.manifest.getDescription();
+            (<IMetadataItem>metadataItem).isRootLevel = true;
+            manifestGroup.addItem(<IMetadataItem>metadataItem);
+        }
+
+        if (this.manifest.getAttribution().length) {
+            const metadataItem: LabelValuePair = new LabelValuePair(this.options.locale);
+            metadataItem.label = [new Language("attribution", this.options.locale)];
+            metadataItem.value = this.manifest.getAttribution();
+            (<IMetadataItem>metadataItem).isRootLevel = true;
+            manifestGroup.addItem(<IMetadataItem>metadataItem);
+        }
+
+        const license: string | null = this.manifest.getLicense();
+
+        if (license) {
+            const item: any = {
+                label: "license",
+                value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
+            };
+            const metadataItem: LabelValuePair = new LabelValuePair(this.options.locale);
+            metadataItem.parse(item);
+            (<IMetadataItem>metadataItem).isRootLevel = true;
+            manifestGroup.addItem(<IMetadataItem>metadataItem);
+        }
+
+        if (this.manifest.getLogo()) {
+            const item: any = {
+                label: "logo",
+                value: '<img src="' + this.manifest.getLogo() + '"/>'
+            };
+            const metadataItem: LabelValuePair = new LabelValuePair(this.options.locale);
+            metadataItem.parse(item);
+            (<IMetadataItem>metadataItem).isRootLevel = true;
+            manifestGroup.addItem(<IMetadataItem>metadataItem);
+        }
+
+        metadataGroups.push(manifestGroup);
+
+        if (options) {
+            return this._parseMetadataOptions(options, metadataGroups);
+        } else {
+            return metadataGroups;
+        }
+    }
+
+    public getRequiredStatement(): ILabelValuePair | null {
+        const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
+
+        if (requiredStatement) {
+            return {
+                label: requiredStatement.getLabel(),
+                value: requiredStatement.getValue()
+            }
+        }
+        
+        return null;
+    }
+
+    private _parseMetadataOptions(options: MetadataOptions, metadataGroups: MetadataGroup[]): MetadataGroup[] {
+
+        // get sequence metadata
+        const sequence: Sequence = this.getCurrentSequence();
+        const sequenceMetadata: any[] = sequence.getMetadata();
+
+        if (sequenceMetadata && sequenceMetadata.length) {
+            const sequenceGroup: MetadataGroup = new MetadataGroup(sequence);
+            sequenceGroup.addMetadata(sequenceMetadata);
+            metadataGroups.push(sequenceGroup);
+        }
+
+        // get range metadata
+        if (options.range) {
+            let rangeGroups: MetadataGroup[] = this._getRangeMetadata([], options.range);
+            rangeGroups = rangeGroups.reverse();
+            metadataGroups = metadataGroups.concat(rangeGroups);
+        }
+
+        // get canvas metadata
+        if (options.canvases && options.canvases.length) {
+            for (let i = 0; i < options.canvases.length; i++) {
+                const canvas: Canvas = options.canvases[i];
+                const canvasMetadata: any[] = canvas.getMetadata();
+
+                if (canvasMetadata && canvasMetadata.length) {
+                    const canvasGroup: MetadataGroup = new MetadataGroup(canvas);
+                    canvasGroup.addMetadata(canvas.getMetadata());
+                    metadataGroups.push(canvasGroup);
+                }
+
+                // add image metadata
+                const images: Annotation[] = canvas.getImages();
+
+                for (let j = 0; j < images.length; j++) {
+                    const image: Annotation = images[j];
+                    const imageMetadata: any[] = image.getMetadata();
+
+                    if (imageMetadata && imageMetadata.length) {
+                        const imageGroup: MetadataGroup = new MetadataGroup(image);
+                        imageGroup.addMetadata(imageMetadata);
+                        metadataGroups.push(imageGroup);
+                    }
+                }
+            }
+        }
+
+        return metadataGroups;
+    }
+
+    private _getRangeMetadata(metadataGroups: MetadataGroup[], range: Range): MetadataGroup[] {
+        const rangeMetadata: any[] = range.getMetadata();
+
+        if (rangeMetadata && rangeMetadata.length) {
+            const rangeGroup: MetadataGroup = new MetadataGroup(range);
+            rangeGroup.addMetadata(rangeMetadata);
+            metadataGroups.push(rangeGroup);
+        } else if (range.parentRange) {
+            return this._getRangeMetadata(metadataGroups, range.parentRange);
+        }
+        
+        return metadataGroups;
+    }
+
+    public getMultiSelectState(): MultiSelectState {
+        if (!this._multiSelectState) {
+            this._multiSelectState = new MultiSelectState();
+            this._multiSelectState.ranges = this.getRanges().slice(0) as MultiSelectableRange[];
+            this._multiSelectState.canvases = <MultiSelectableCanvas[]>this.getCurrentSequence().getCanvases().slice(0);
+        }
+
+        return this._multiSelectState;
+    }
+
+    public getCurrentRange(): Range | null {
+        if (this.rangeId) {
+            return this.getRangeById(this.rangeId);
+        }
+
+        return null;            
+    }
+
+    public getPosterCanvas(): Canvas | null {
+        return this.manifest.getPosterCanvas();
+    }
+
+    public getPosterImage(): string | null {
+        const posterCanvas: Canvas | null = this.getPosterCanvas();
+
+        if (posterCanvas) {
+            const content: Annotation[] = posterCanvas.getContent();
+
+            if (content && content.length) {
+                const anno: Annotation = content[0];
+                const body: AnnotationBody[] = anno.getBody();
+                return body[0].id;
+            }
+        }
+
+        return null;
+    }
+
+    public getPreviousRange(range?: Range): Range | null {
+
+        let currentRange: Range | null = null;
+
+        if (range) {
+            currentRange = range;
+        } else {
+            currentRange = this.getCurrentRange();
+        }
+
+        if (currentRange) {
+            const flatTree: NullableTreeNode[] = this.getFlattenedTree();
+            
+            for (let i = 0; i < flatTree.length; i++) {
+                const node: NullableTreeNode = flatTree[i];
+                
+                // find current range in flattened tree
+                if ((<MultiSelectableTreeNode>node).data.id === (<Range>currentRange).id) {
+                    // find the first node before it that has canvases
+                    while (i > 0) {
+                        i--;
+                        const prevNode: TreeNode = flatTree[i] as MultiSelectableTreeNode;
+                        return prevNode.data;
+                    }
+                    
+                    break;
+                }
+            }
+
+        }
+
+        return null;
+    }
+
+    public getNextRange(range?: Range): Range | null {
+
+        // if a range is passed, use that. otherwise get the current range.
+        let currentRange: Range | null = null;
+
+        if (range) {
+            currentRange = range;
+        } else {
+            currentRange = this.getCurrentRange();
+        }
+
+        if (currentRange) {
+            const flatTree: NullableTreeNode[] = this.getFlattenedTree();
+            
+            for (let i = 0; i < flatTree.length; i++) {
+                const node: NullableTreeNode = flatTree[i];
+                
+                // find current range in flattened tree
+                if ((<MultiSelectableTreeNode>node).data.id === (<Range>currentRange).id) {
+
+                    // find the first node after it that has canvases
+                    while (i < flatTree.length - 1) {
+                        i++;
+                        const nextNode: TreeNode = flatTree[i] as MultiSelectableTreeNode;
+                        if (nextNode.data.canvases && nextNode.data.canvases.length) {
+                            return nextNode.data;
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public getFlattenedTree(): MultiSelectableTreeNode[] {
+        return this._flattenTree(this.getTree() as MultiSelectableTreeNode, 'nodes') as MultiSelectableTreeNode[];
+    }
+
+    private _flattenTree(root: MultiSelectableTreeNode, key: string): NullableTreeNode[] {
+        let flatten: MultiSelectableTreeNode[] = [Object.assign({}, root)];
+        delete flatten[0][key];
+        
+        if (root[key] && root[key].length > 0) {
+            return flatten.concat(root[key]
+                .map((child) => this._flattenTree(child, key))
+                .reduce((a, b) => a.concat(b), [])
+            );
+        }
+        
+        return flatten;
+    }
+
+    public getRanges(): Range[] {
+        return <Range[]>(<Manifest>this.manifest).getAllRanges();
+    }
+    
+    public getRangeByPath(path: string): Range | null {
+        return this.manifest.getRangeByPath(path);
+    }
+
+    public getRangeById(id: string): Range | null {
+        return this.manifest.getRangeById(id);
+    }
+    
+    public getRangeCanvases(range: Range): Canvas[] {
+        const ids: string[] = range.getCanvasIds();
+        return this.getCanvasesById(ids);
+    }
+
+    public getRelated(): any {
+        return this.manifest.getRelated();
+    }
+    
+    public getSearchService(): Service | null {
+        return this.manifest.getService(ServiceProfile.SEARCH_0);
+    }
+    
+    public getSeeAlso(): any {
+        return this.manifest.getSeeAlso();
+    }
+
+    public getSequenceByIndex(index: number): Sequence {
+        return this.manifest.getSequenceByIndex(index);
+    }
+
+    public getShareServiceUrl(): string | null {
+        let url: string | null = null;
+        let shareService: Service | null = this.manifest.getService(ServiceProfile.SHARE_EXTENSIONS);
+
+        if (shareService) {
+            if ((<any>shareService).length) {
+                shareService = (<any>shareService)[0];
+            }
+            url = (<any>shareService).__jsonld.shareUrl;
+        }
+
+        return url;
+    }
+
+    public getSortedTreeNodesByDate(sortedTree: MultiSelectableTreeNode, tree: MultiSelectableTreeNode): void{
+
+        const all: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
+            .where((n) => n.data.type === TreeNodeType.COLLECTION ||
+                        n.data.type === TreeNodeType.MANIFEST).toArray();
+
+        const manifests: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
+            .where((n) => n.data.type === TreeNodeType.MANIFEST).toArray();
+
+        this.createDecadeNodes(sortedTree, all);
+        this.sortDecadeNodes(sortedTree);
+        this.createYearNodes(sortedTree, all);
+        this.sortYearNodes(sortedTree);
+        this.createMonthNodes(sortedTree, manifests);
+        this.sortMonthNodes(sortedTree);
+        this.createDateNodes(sortedTree, manifests);
+
+        this.pruneDecadeNodes(sortedTree);
+    }
+    
+    public getStartCanvasIndex(): number {
+        return this.getCurrentSequence().getStartCanvasIndex();
+    }
+    
+    public getThumbs(width: number, height: number): Thumb[] {
+        return this.getCurrentSequence().getThumbs(width, height);
+    }
+    
+    public getTopRanges(): Range[] {
+        return this.manifest.getTopRanges();
+    }
+
+    public getTotalCanvases(): number {
+        return this.getCurrentSequence().getTotalCanvases();
+    }
+
+    public getTrackingLabel(): string {
+        return this.manifest.getTrackingLabel();
+    }
+
+    private _getTopRanges(): Range[] {
+        return (<Manifest>this.iiifResource).getTopRanges();
+    }
+
+    public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): MultiSelectableTreeNode | null {
+
+        // if it's a collection, use IIIFResource.getDefaultTree()
+        // otherwise, get the top range by index and use Range.getTree()
+
+        if (!this.iiifResource) {
+            return null;
+        }
+
+        let tree: MultiSelectableTreeNode;
+
+        if (this.iiifResource.isCollection()) {
+            tree = <MultiSelectableTreeNode>this.iiifResource.getDefaultTree();
+        } else {
+            const topRanges: Range[] = this._getTopRanges();
+            
+            const root: MultiSelectableTreeNode = new TreeNode() as MultiSelectableTreeNode;
+            root.label = 'root';
+            root.data = this.iiifResource;
+            
+            if (topRanges.length) {
+                const range: Range = topRanges[topRangeIndex];                    
+                tree = <MultiSelectableTreeNode>range.getTree(root);
+            } else {
+                return root;
+            }
+        }
+
+        let sortedTree: MultiSelectableTreeNode = new TreeNode() as MultiSelectableTreeNode;
+        
+        switch (sortType) {
+            case TreeSortType.DATE:
+                // returns a list of treenodes for each decade.
+                // expanding a decade generates a list of years
+                // expanding a year gives a list of months containing issues
+                // expanding a month gives a list of issues.
+                if (this.treeHasNavDates(tree)){
+                    this.getSortedTreeNodesByDate(sortedTree, tree);
+                    break;
+                }                    
+            default:
+                sortedTree = tree;
+        }
+        
+        return sortedTree;
+    }
+    
+    public treeHasNavDates(tree: MultiSelectableTreeNode): boolean {
+        const node: TreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
+        return (node)? true : false;
+    }
+    
+    public getViewingDirection(): ViewingDirection | null {
+        let viewingDirection: ViewingDirection | null = this.getCurrentSequence().getViewingDirection();
+
+        if (!viewingDirection) {
+            viewingDirection = this.manifest.getViewingDirection();
+        }
+
+        return viewingDirection;
+    }
+
+    public getViewingHint(): ViewingHint | null {
+        let viewingHint: ViewingHint | null = this.getCurrentSequence().getViewingHint();
+
+        if (!viewingHint) {
+            viewingHint = this.manifest.getViewingHint();
+        }
+
+        return viewingHint;
+    }
+
+    
+    // inquiries //
+    
+    public hasParentCollection(): boolean {
+        return !!this.manifest.parentCollection;
+    }
+
+    public hasRelatedPage(): boolean {
+        let related: any = this.getRelated();
+        if (!related) return false;
+        if (related.length){
+            related = related[0];
+        }
+        return related['format'] === 'text/html';
+    }
+
+    public hasResources(): boolean {
+        const canvas: Canvas = this.getCurrentCanvas();
+        return canvas.getResources().length > 0;
+    }
+    
+    public isBottomToTop(): boolean {
+
+        const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+
+        if (viewingDirection) {
+            return viewingDirection === ViewingDirection.BOTTOM_TO_TOP;
+        }
+        
+        return false;
+    }
+    
+    public isCanvasIndexOutOfRange(index: number): boolean {
+        return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
+    }
+    
+    public isContinuous(): boolean {
+
+        const viewingHint: ViewingHint | null = this.getViewingHint();
+
+        if (viewingHint) {
+            return viewingHint === ViewingHint.CONTINUOUS;
+        }
+
+        return false;
+    }
+    
+    public isFirstCanvas(index?: number): boolean {
+        if (typeof index !== 'undefined') {
+            return this.getCurrentSequence().isFirstCanvas(index);
+        }
+        
+        return this.getCurrentSequence().isFirstCanvas(this.canvasIndex);
+    }
+    
+    public isHorizontallyAligned(): boolean {
+        return this.isLeftToRight() || this.isRightToLeft()
+    }
+    
+    public isLastCanvas(index?: number): boolean {
+        if (typeof index !== 'undefined') {
+            return this.getCurrentSequence().isLastCanvas(index);
+        }
+        
+        return this.getCurrentSequence().isLastCanvas(this.canvasIndex);
+    }
+    
+    public isLeftToRight(): boolean {
+
+        const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+
+        if (viewingDirection) {
+            return viewingDirection === ViewingDirection.LEFT_TO_RIGHT;
+        }
+
+        return false;
+    }
+    
+    public isMultiCanvas(): boolean{
+        return this.getCurrentSequence().isMultiCanvas();
+    }
+    
+    public isMultiSequence(): boolean{
+        return this.manifest.isMultiSequence();
+    }
+    
+    public isPaged(): boolean {
+
+        // check the sequence for a viewingHint (deprecated)
+        const viewingHint: ViewingHint | null = this.getViewingHint();
+
+        if (viewingHint) {
+            return viewingHint === ViewingHint.PAGED;
+        }
+
+        // check the manifest for a viewingHint (deprecated) or paged behavior
+        return this.manifest.isPagingEnabled();
+    }
+    
+    public isPagingAvailable(): boolean {
+        // paged mode is useless unless you have at least 3 pages...
+        return this.isPagingEnabled() && this.getTotalCanvases() > 2;
+    }
+    
+    public isPagingEnabled(): boolean {
+        return (this.manifest.isPagingEnabled() || this.getCurrentSequence().isPagingEnabled());
+    }
+    
+    public isRightToLeft(): boolean {
+
+        const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+
+        if (viewingDirection) {
+            return viewingDirection === ViewingDirection.RIGHT_TO_LEFT;
+        }
+        
+        return false;
+    }
+    
+    public isTopToBottom(): boolean {
+
+        const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+
+        if (viewingDirection) {
+            return viewingDirection === ViewingDirection.TOP_TO_BOTTOM;
+        }
+
+        return false;
+    }
+    
+    public isTotalCanvasesEven(): boolean {
+        return this.getCurrentSequence().isTotalCanvasesEven();
+    }
+
+    public isUIEnabled(name: string): boolean {
+        const uiExtensions: Service | null = this.manifest.getService(ServiceProfile.UI_EXTENSIONS);
+
+        if (uiExtensions) {
+            const disableUI: string[] = uiExtensions.getProperty('disableUI');
+
+            if (disableUI) {
+                if (disableUI.indexOf(name) !== -1 || disableUI.indexOf(name.toLowerCase()) !== -1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    public isVerticallyAligned(): boolean {
+        return this.isTopToBottom() || this.isBottomToTop()
+    }
+    
+
+    // dates //     
+    
+    public createDateNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void {
+        for (let i = 0; i < nodes.length; i++) {
+            const node: MultiSelectableTreeNode = <MultiSelectableTreeNode>nodes[i];
+            const year: number = this.getNodeYear(node);
+            const month: number = this.getNodeMonth(node);
+
+            const dateNode: MultiSelectableTreeNode = new TreeNode() as MultiSelectableTreeNode;
+            dateNode.id = node.id;
+            dateNode.label = this.getNodeDisplayDate(node);
+            dateNode.data = node.data;
+            dateNode.data.type = TreeNodeType.MANIFEST;
+            dateNode.data.year = year;
+            dateNode.data.month = month;
+
+            const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
+
+            if (decadeNode) {
+                const yearNode: NullableTreeNode = this.getYearNode(decadeNode, year);
+
+                if (yearNode) {
+                    const monthNode: NullableTreeNode = this.getMonthNode(yearNode, month);
+
+                    if (monthNode){
+                        monthNode.addNode(dateNode);
+                    }
+                }
+            }
+        }
+    }
+    
+    public createDecadeNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void {
+
+        for (let i = 0; i < nodes.length; i++) {
+            const node: MultiSelectableTreeNode = nodes[i];
+            const year: number = this.getNodeYear(node);
+            const endYear: number = Number(year.toString().substr(0, 3) + "9");
+
+            if (!this.getDecadeNode(rootNode, year)) {
+                const decadeNode: TreeNode = new TreeNode();
+                decadeNode.label = year + " - " + endYear;
+                decadeNode.navDate = node.navDate;
+                decadeNode.data.startYear = year;
+                decadeNode.data.endYear = endYear;
+                rootNode.addNode(decadeNode);
+            }
+        }
+    }
+    
+    public createMonthNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void{
+
+        for (let i = 0; i < nodes.length; i++) {
+            const node: MultiSelectableTreeNode = nodes[i];
+            const year = this.getNodeYear(node);
+            const month = this.getNodeMonth(node);
+            const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
+            let yearNode: NullableTreeNode = null;
+            
+            if (decadeNode) {
+                yearNode = this.getYearNode(decadeNode, year);
+            }
+
+            if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)) {
+                const monthNode: MultiSelectableTreeNode = <MultiSelectableTreeNode>new TreeNode();
+                monthNode.label = this.getNodeDisplayMonth(node);
+                monthNode.navDate = node.navDate;
+                monthNode.data.year = year;
+                monthNode.data.month = month;
+                yearNode.addNode(monthNode);
+            }
+        }
+    }
+    
+    public createYearNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void{
+
+        for (let i = 0; i < nodes.length; i++) {
+            const node: MultiSelectableTreeNode = nodes[i];
+            const year: number = this.getNodeYear(node);
+            const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
+
+            if (decadeNode && !this.getYearNode(decadeNode, year)) {
+                const yearNode: MultiSelectableTreeNode = <MultiSelectableTreeNode>new TreeNode();
+                yearNode.label = year.toString();
+                yearNode.navDate = node.navDate;
+                yearNode.data.year = year;
+
+                decadeNode.addNode(yearNode);
+            }
+        }
+    }
+    
+    public getDecadeNode(rootNode: MultiSelectableTreeNode, year: number): MultiSelectableTreeNode | null {
+        for (let i = 0; i < rootNode.nodes.length; i++) {
+            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>rootNode.nodes[i];
+            if (year >= n.data.startYear && year <= n.data.endYear) return n;
+        }
+
+        return null;
+    }
+    
+    public getMonthNode(yearNode: MultiSelectableTreeNode, month: Number): MultiSelectableTreeNode | null {
+        for (let i = 0; i < yearNode.nodes.length; i++) {
+            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>yearNode.nodes[i];
+            if (month === this.getNodeMonth(n)) return n;
+        }
+
+        return null;
+    }
+    
+    public getNodeDisplayDate(node: MultiSelectableTreeNode): string{
+        return node.navDate.toDateString();
+    }
+    
+    public getNodeDisplayMonth(node: MultiSelectableTreeNode): string{
+        const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[node.navDate.getMonth()];
+    }        
+
+    public getNodeMonth(node: MultiSelectableTreeNode): number{
+        return node.navDate.getMonth();
+    }
+    
+    public getNodeYear(node: MultiSelectableTreeNode): number{
+        return node.navDate.getFullYear();
+    }
+
+    public getYearNode(decadeNode: MultiSelectableTreeNode, year: Number): MultiSelectableTreeNode | null {
+        for (let i = 0; i < decadeNode.nodes.length; i++){
+            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>decadeNode.nodes[i];
+            if (year === this.getNodeYear(n)) return n;
+        }
+
+        return null;
+    }
+    
+    // delete any empty decades
+    public pruneDecadeNodes(rootNode: MultiSelectableTreeNode): void {
+        const pruned: MultiSelectableTreeNode[] = [];
+
+        for (let i = 0; i < rootNode.nodes.length; i++) {
+            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>rootNode.nodes[i];
+            if (!n.nodes.length) {
+                pruned.push(n);
+            }
+        }
+
+        for (let j = 0; j < pruned.length; j++) {
+            const p: MultiSelectableTreeNode = <MultiSelectableTreeNode>pruned[j];
+            const index: number = rootNode.nodes.indexOf(p);
+
+            if (index > -1) {
+                rootNode.nodes.splice(index, 1);
+            }
+        }
+    }
+
+    public sortDecadeNodes(rootNode: MultiSelectableTreeNode): void {
+        rootNode.nodes = rootNode.nodes.sort(function(a, b) {
+            return a.data.startYear - b.data.startYear;
+        });
+    }
+    
+    public sortMonthNodes(rootNode: MultiSelectableTreeNode): void {
+        for (let i = 0; i < rootNode.nodes.length; i++) {
+            const decadeNode: TreeNode = rootNode.nodes[i];
+
+            for (let j = 0; j < decadeNode.nodes.length; j++){
+                const monthNode: TreeNode = decadeNode.nodes[j];
+
+                monthNode.nodes = monthNode.nodes.sort((a: MultiSelectableTreeNode, b: MultiSelectableTreeNode) => {
+                    return this.getNodeMonth(a) - this.getNodeMonth(b);
+                });
+            }
+        }
+    }
+    
+    public sortYearNodes(rootNode: MultiSelectableTreeNode): void {
+        for (let i = 0; i < rootNode.nodes.length; i++) {
+            const decadeNode: TreeNode = rootNode.nodes[i];
+
+            decadeNode.nodes = decadeNode.nodes.sort((a: MultiSelectableTreeNode, b: MultiSelectableTreeNode) => {
+                return (this.getNodeYear(a) - this.getNodeYear(b));
+            });
+        }
+    }        
 }

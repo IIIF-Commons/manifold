@@ -1,24 +1,22 @@
-namespace Manifold {
-    
-    export class AnnotationGroup {
-        public canvasIndex: number;
-        public rects: AnnotationRect[] = [];
+import { AnnotationRect } from "./AnnotationRect";
 
-        constructor(resource: any, canvasIndex: number) {
-            this.canvasIndex = canvasIndex;
-            this.addRect(resource);
-        }
+export class AnnotationGroup {
+    public canvasIndex: number;
+    public rects: AnnotationRect[] = [];
 
-        addRect(resource: any): void {
-            const rect: AnnotationRect = new AnnotationRect(resource);
-            rect.canvasIndex = this.canvasIndex;
-            rect.index = this.rects.length;
-            this.rects.push(rect);
-            // sort ascending
-            this.rects.sort((a, b) => {
-                return a.index - b.index;
-            });
-        }
+    constructor(resource: any, canvasIndex: number) {
+        this.canvasIndex = canvasIndex;
+        this.addRect(resource);
     }
 
+    addRect(resource: any): void {
+        const rect: AnnotationRect = new AnnotationRect(resource);
+        rect.canvasIndex = this.canvasIndex;
+        rect.index = this.rects.length;
+        this.rects.push(rect);
+        // sort ascending
+        this.rects.sort((a, b) => {
+            return a.index - b.index;
+        });
+    }
 }

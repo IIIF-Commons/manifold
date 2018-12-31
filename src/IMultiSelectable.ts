@@ -1,8 +1,4 @@
-namespace Manifold {
-
-    export interface IMultiSelectable {
-        multiSelected: boolean;
-        multiSelectEnabled: boolean;
-    }
-    
+export interface IMultiSelectable {
+    multiSelected: boolean;
+    multiSelectEnabled: boolean;
 }

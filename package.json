@@ -2,9 +2,13 @@
   "name": "@iiif/manifold",
   "version": "1.2.36",
   "description": "",
-  "main": "./dist/manifold.js",
-  "types": "./dist/manifold.d.ts",
-  "scripts": {},
+  "main": "./dist-esmodule/index.js",
+  "types": "./dist-esmodule/index.d.ts",
+  "scripts": {
+    "clean": "npx rimraf dist-umd dist-commonjs dist-esmodule",
+    "build": "npm run clean && tsc && tsc -m es6 --outDir dist-esmodule && webpack",
+    "prepare": "npm run build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iiif-commons/manifold.git"
@@ -16,11 +20,14 @@
   },
   "homepage": "https://github.com/iiif-commons/manifold#readme",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-tasks": "iiif-commons/gulp-tasks#v1.0.7",
-    "manifesto.js": "3.0.9"
+    "awesome-typescript-loader": "^5.2.1",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "@types/jquery": "^2.0.40"
+    "@edsilv/http-status-codes": "0.0.12",
+    "@iiif/vocabulary": "^1.0.5",
+    "@types/jquery": "^2.0.40",
+    "manifesto.js": "3.0.9-webpack6"
   }
 }

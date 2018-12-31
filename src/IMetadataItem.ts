@@ -1,7 +1,5 @@
-namespace Manifold {
+import { LabelValuePair } from "manifesto.js";
 
-    export interface IMetadataItem extends Manifesto.LabelValuePair {
-        isRootLevel: boolean;
-    }
-    
+export interface IMetadataItem extends LabelValuePair {
+    isRootLevel: boolean;
 }

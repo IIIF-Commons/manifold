@@ -1,24 +1,32 @@
 {
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
         "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react",
+        "lib": [ "es2015", "dom" ],
+        "module": "commonjs",
+        "moduleResolution": "node",
         "noImplicitAny": false,
         "noImplicitReturns": true,
         "noImplicitThis": true,
-        "module": "es6",
-        "moduleResolution": "node",
         "noUnusedLocals": true,
         "noUnusedParameters": false,
+        "outDir": "dist-commonjs",
+        "skipLibCheck": true,
+        "sourceMap": true,
         "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
         "target": "es5",
-        "lib": ["es6", "dom"]
+        "types": [
+            "node", 
+            "manifesto.js",
+            "@edsilv/http-status-codes",
+            "@iiif/vocabulary",
+            "@types/jquery"
+        ]
     },
-    "files": [
-        "src/Definitions.ts",
-        "src/StringValue.ts",
-        "src/TreeSortType.ts"
-    ],
     "include": [
-        "src/**/*",
-        "typings/**/*"
+        "src/**/*"
     ]
 }

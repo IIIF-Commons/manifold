@@ -1,24 +1,25 @@
-namespace Manifold {
-    export class MetadataGroup {
-        public resource: Manifesto.IManifestResource;
-        public label: string | undefined;
-        public items: Manifold.IMetadataItem[] = [];
+import { IMetadataItem } from "./IMetadataItem";
+import { ManifestResource, LabelValuePair } from "manifesto.js";
 
-        constructor(resource: Manifesto.IManifestResource, label?: string) {
-            this.resource = resource;
-            this.label = label;
-        }
+export class MetadataGroup {
+    public resource: ManifestResource;
+    public label: string | undefined;
+    public items: IMetadataItem[] = [];
 
-        public addItem(item: Manifold.IMetadataItem): void {
-            this.items.push(item);
-        }
+    constructor(resource: ManifestResource, label?: string) {
+        this.resource = resource;
+        this.label = label;
+    }
 
-        public addMetadata(metadata: Manifesto.LabelValuePair[], isRootLevel: boolean = false): void {
-            for (let i = 0; i < metadata.length; i++) {
-                const item: Manifesto.LabelValuePair = metadata[i];
-                (<Manifold.IMetadataItem>item).isRootLevel = isRootLevel;
-                this.addItem(<Manifold.IMetadataItem>item);
-            }
+    public addItem(item: IMetadataItem): void {
+        this.items.push(item);
+    }
+
+    public addMetadata(metadata: LabelValuePair[], isRootLevel: boolean = false): void {
+        for (let i = 0; i < metadata.length; i++) {
+            const item: LabelValuePair = metadata[i];
+            (<IMetadataItem>item).isRootLevel = isRootLevel;
+            this.addItem(<IMetadataItem>item);
         }
     }
 }
