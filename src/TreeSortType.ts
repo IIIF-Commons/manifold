@@ -1,4 +1,4 @@
 export enum TreeSortType {
-    DATE =      "date",
-    NONE =      "none"
+    DATE = "date",
+    NONE = "none"
 }

@@ -24,15 +24,15 @@ export class MultiSelectState {
     }
     
     public getAllSelectedCanvases(): MultiSelectableCanvas[] {
-        return this.canvases.en().where(c => c.multiSelected).toArray();
+        return this.canvases.filter(c => c.multiSelected);
     }
 
     public getAllSelectedRanges(): MultiSelectableRange[] {
-        return this.ranges.en().where(r => r.multiSelected).toArray();
+        return this.ranges.filter(r => r.multiSelected);
     }
 
     public getCanvasById(id: string): MultiSelectableCanvas {
-        return this.canvases.en().where(c => c.id === id).first();
+        return this.canvases.filter(c => c.id === id)[0];
     }
     
     public getCanvasesByIds(ids: string[]): MultiSelectableCanvas[] {
@@ -57,7 +57,7 @@ export class MultiSelectState {
     }
 
     public selectCanvas(canvas: MultiSelectableCanvas, selected: boolean): void {
-        const c: MultiSelectableCanvas = this.canvases.en().where(c => c.id === canvas.id).first();
+        const c: MultiSelectableCanvas = this.canvases.filter(c => c.id === canvas.id)[0];
         c.multiSelected = selected;
     }
     
@@ -73,7 +73,7 @@ export class MultiSelectState {
     }
     
     public selectRange(range: MultiSelectableRange, selected: boolean): void {
-        const r: MultiSelectableRange = this.ranges.en().where(r => r.id === range.id).first();
+        const r: MultiSelectableRange = this.ranges.filter(r => r.id === range.id)[0];
         r.multiSelected = selected;
 
         const canvases: MultiSelectableCanvas[] = <MultiSelectableCanvas[]>this.getRangeCanvases(r);

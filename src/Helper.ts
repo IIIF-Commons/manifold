@@ -120,7 +120,8 @@ export class Helper {
         if (canvas.ranges) {
             return canvas.ranges; // cache
         } else {
-            canvas.ranges = <Range[]>this.manifest.getAllRanges().en().where(range => (range.getCanvasIds().en().any(c => Utils.normaliseUrl(c) === Utils.normaliseUrl(canvas.id)))).toArray();
+            // todo: write test
+            canvas.ranges = <Range[]>this.manifest.getAllRanges().filter(range => (range.getCanvasIds().some(cid => Utils.normaliseUrl(cid) === Utils.normaliseUrl(canvas.id))));
         }
 
         return canvas.ranges;
