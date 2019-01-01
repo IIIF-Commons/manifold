@@ -507,12 +507,17 @@ export class Helper {
 
     public getSortedTreeNodesByDate(sortedTree: MultiSelectableTreeNode, tree: MultiSelectableTreeNode): void{
 
-        const all: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
-            .where((n) => n.data.type === TreeNodeType.COLLECTION ||
-                        n.data.type === TreeNodeType.MANIFEST).toArray();
+        // const all: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
+        //     .where((n) => n.data.type === TreeNodeType.COLLECTION ||
+        //                 n.data.type === TreeNodeType.MANIFEST).toArray();
 
-        const manifests: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
-            .where((n) => n.data.type === TreeNodeType.MANIFEST).toArray();
+        // todo: write test
+        const all: MultiSelectableTreeNode[] = this.getFlattenedTree();
+
+        // const manifests: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
+        //     .where((n) => n.data.type === TreeNodeType.MANIFEST).toArray();
+
+        const manifests: MultiSelectableTreeNode[] = this.getFlattenedTree().filter((n) => n.data.type === TreeNodeType.MANIFEST);
 
         this.createDecadeNodes(sortedTree, all);
         this.sortDecadeNodes(sortedTree);
