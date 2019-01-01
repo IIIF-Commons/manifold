@@ -153,10 +153,6 @@ export class Helper {
         
         return null;
     }
-    
-    public getFirstPageIndex(): number {
-        return 0;
-    }
 
     public getLabel(): string | null {
         const label: LanguageMap | null = this.manifest.getLabel();
@@ -170,6 +166,10 @@ export class Helper {
     
     public getLastCanvasLabel(alphanumeric?: boolean): string {
         return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
+    }
+
+    public getFirstPageIndex(): number {
+        return 0; // why is this needed?
     }
     
     public getLastPageIndex(): number {
@@ -597,8 +597,9 @@ export class Helper {
     }
     
     public treeHasNavDates(tree: MultiSelectableTreeNode): boolean {
-        const node: TreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
-        return (node)? true : false;
+        //const node: TreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
+        // todo: write test
+        return this.getFlattenedTree().some(n => !isNaN(<any>n.navDate));
     }
     
     public getViewingDirection(): ViewingDirection | null {
