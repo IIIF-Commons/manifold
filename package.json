@@ -21,6 +21,7 @@
   "homepage": "https://github.com/iiif-commons/manifold#readme",
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
+    "typescript": "3.0.1",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2"
   },
@@ -28,6 +29,6 @@
     "@edsilv/http-status-codes": "0.0.12",
     "@iiif/vocabulary": "^1.0.5",
     "@types/jquery": "^2.0.40",
-    "manifesto.js": "3.0.9-webpack6"
+    "manifesto.js": "3.0.9-webpack7"
   }
 }
