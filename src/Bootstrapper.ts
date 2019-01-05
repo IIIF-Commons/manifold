@@ -23,41 +23,41 @@ export class Bootstrapper {
                 reject = rej;
             }
 
-            const msie = that._detectIE();
+            //const msie = that._detectIE();
 
-            if (msie === false) {
+            //if (msie === false) {
                 Utils.loadManifest(that._options.manifestUri).then(function(json) {                     
                     that._loaded(that, json, resolve, reject)
                 });
-            } else {
-                // if not a recent version of IE
-                if (msie > 0) {
+            // } else {
+            //     // if not a recent version of IE
+            //     if (msie > 0) {
                     
-                    if (msie === 9) {
-                        // CORS not available, use jsonp
+            //         if (msie === 9) {
+            //             // CORS not available, use jsonp
 
-                        const settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
-                            url: that._options.manifestUri,
-                            type: 'GET',
-                            dataType: 'jsonp',
-                            jsonp: 'callback',
-                            jsonpCallback: 'manifestCallback'
-                        };
+            //             const settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
+            //                 url: that._options.manifestUri,
+            //                 type: 'GET',
+            //                 dataType: 'jsonp',
+            //                 jsonp: 'callback',
+            //                 jsonpCallback: 'manifestCallback'
+            //             };
 
-                        $.ajax(settings);
+            //             $.ajax(settings);
 
-                        window.manifestCallback = (json: any) => {
-                            that._loaded(that, JSON.stringify(json), resolve, reject);
-                        };
+            //             window.manifestCallback = (json: any) => {
+            //                 that._loaded(that, JSON.stringify(json), resolve, reject);
+            //             };
 
-                    } else {
-                        $.getJSON(that._options.manifestUri, (json) => {
-                            that._loaded(that, JSON.stringify(json), resolve, reject);
-                        });
-                    }
+            //         } else {
+            //             $.getJSON(that._options.manifestUri, (json) => {
+            //                 that._loaded(that, JSON.stringify(json), resolve, reject);
+            //             });
+            //         }
 
-                }
-            }
+            //     }
+            // }
 
         });
     }
@@ -121,6 +121,7 @@ export class Bootstrapper {
 
     }
 
+    /*
     private _detectIE(): number | boolean {
         const ua = window.navigator.userAgent;
 
@@ -160,5 +161,5 @@ export class Bootstrapper {
         // other browser
         return false;
     }
-    
+    */
 }

@@ -1,4 +1,3 @@
-import { MultiSelectableTreeNode } from "./MultiSelectableTreeNode";
 import { MultiSelectState } from "./MultiSelectState";
 import { IManifoldOptions } from "./IManifoldOptions";
 import { Manifest, Service, ServiceProfile, LanguageMap, Canvas, ManifestType, LabelValuePair, Language, Sequence, Annotation, AnnotationBody, TreeNode, IIIFResource, Utils, Range, Thumb, ViewingDirection, ViewingHint, TreeNodeType } from "manifesto.js";
@@ -9,8 +8,6 @@ import { ILabelValuePair } from "./ILabelValuePair";
 import { MultiSelectableCanvas } from "./MultiSelectableCanvas";
 import { TreeSortType } from "./TreeSortType";
 import { MultiSelectableRange } from "./MultiSelectableRange";
-
-type NullableTreeNode = MultiSelectableTreeNode | null;
 
 export class Helper {
     
@@ -380,24 +377,25 @@ export class Helper {
         }
 
         if (currentRange) {
-            const flatTree: NullableTreeNode[] = this.getFlattenedTree();
+            const flatTree: TreeNode[] | null = this.getFlattenedTree();
             
-            for (let i = 0; i < flatTree.length; i++) {
-                const node: NullableTreeNode = flatTree[i];
-                
-                // find current range in flattened tree
-                if ((<MultiSelectableTreeNode>node).data.id === (<Range>currentRange).id) {
-                    // find the first node before it that has canvases
-                    while (i > 0) {
-                        i--;
-                        const prevNode: TreeNode = flatTree[i] as MultiSelectableTreeNode;
-                        return prevNode.data;
-                    }
+            if (flatTree) {
+                for (let i = 0; i < flatTree.length; i++) {
+                    const node: TreeNode | null = flatTree[i];
                     
-                    break;
+                    // find current range in flattened tree
+                    if (node && node.data.id === (<Range>currentRange).id) {
+                        // find the first node before it that has canvases
+                        while (i > 0) {
+                            i--;
+                            const prevNode: TreeNode = flatTree[i];
+                            return prevNode.data;
+                        }
+                        
+                        break;
+                    }
                 }
             }
-
         }
 
         return null;
@@ -415,24 +413,26 @@ export class Helper {
         }
 
         if (currentRange) {
-            const flatTree: NullableTreeNode[] = this.getFlattenedTree();
+            const flatTree: TreeNode[] | null = this.getFlattenedTree();
             
-            for (let i = 0; i < flatTree.length; i++) {
-                const node: NullableTreeNode = flatTree[i];
-                
-                // find current range in flattened tree
-                if ((<MultiSelectableTreeNode>node).data.id === (<Range>currentRange).id) {
+            if (flatTree) {
+                for (let i = 0; i < flatTree.length; i++) {
+                    const node: TreeNode = flatTree[i];
+                    
+                    // find current range in flattened tree
+                    if (node && node.data.id === (<Range>currentRange).id) {
 
-                    // find the first node after it that has canvases
-                    while (i < flatTree.length - 1) {
-                        i++;
-                        const nextNode: TreeNode = flatTree[i] as MultiSelectableTreeNode;
-                        if (nextNode.data.canvases && nextNode.data.canvases.length) {
-                            return nextNode.data;
+                        // find the first node after it that has canvases
+                        while (i < flatTree.length - 1) {
+                            i++;
+                            const nextNode: TreeNode = flatTree[i];
+                            if (nextNode.data.canvases && nextNode.data.canvases.length) {
+                                return nextNode.data;
+                            }
                         }
-                    }
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
@@ -440,12 +440,25 @@ export class Helper {
         return null;
     }
 
-    public getFlattenedTree(): MultiSelectableTreeNode[] {
-        return this._flattenTree(this.getTree() as MultiSelectableTreeNode, 'nodes') as MultiSelectableTreeNode[];
+    public getFlattenedTree(treeNode?: TreeNode): TreeNode[] | null {
+
+        let t: TreeNode | null = null;
+
+        if (!treeNode) {
+            t = this.getTree();
+        } else {
+            t = treeNode;
+        }
+
+        if (t) {
+            return this._flattenTree(t, 'nodes');
+        }
+
+        return null;
     }
 
-    private _flattenTree(root: MultiSelectableTreeNode, key: string): NullableTreeNode[] {
-        let flatten: MultiSelectableTreeNode[] = [Object.assign({}, root)];
+    private _flattenTree(root: TreeNode, key: string): TreeNode[] {
+        let flatten: TreeNode[] = [Object.assign({}, root)];
         delete flatten[0][key];
         
         if (root[key] && root[key].length > 0) {
@@ -505,29 +518,30 @@ export class Helper {
         return url;
     }
 
-    public getSortedTreeNodesByDate(sortedTree: MultiSelectableTreeNode, tree: MultiSelectableTreeNode): void{
+    public getSortedTreeNodesByDate(sortedTree: TreeNode, tree: TreeNode): void{
 
-        // const all: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
+        // const all: TreeNode[] = <TreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
         //     .where((n) => n.data.type === TreeNodeType.COLLECTION ||
         //                 n.data.type === TreeNodeType.MANIFEST).toArray();
 
-        // todo: write test
-        const all: MultiSelectableTreeNode[] = this.getFlattenedTree();
+        const flattenedTree: TreeNode[] | null = this.getFlattenedTree(tree);
 
-        // const manifests: MultiSelectableTreeNode[] = <MultiSelectableTreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
+        // const manifests: TreeNode[] = <TreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
         //     .where((n) => n.data.type === TreeNodeType.MANIFEST).toArray();
 
-        const manifests: MultiSelectableTreeNode[] = this.getFlattenedTree().filter((n) => n.data.type === TreeNodeType.MANIFEST);
+        if (flattenedTree) {
+            const manifests: TreeNode[] = flattenedTree.filter((n) => n.data.type === TreeNodeType.MANIFEST);
 
-        this.createDecadeNodes(sortedTree, all);
-        this.sortDecadeNodes(sortedTree);
-        this.createYearNodes(sortedTree, all);
-        this.sortYearNodes(sortedTree);
-        this.createMonthNodes(sortedTree, manifests);
-        this.sortMonthNodes(sortedTree);
-        this.createDateNodes(sortedTree, manifests);
-
-        this.pruneDecadeNodes(sortedTree);
+            this.createDecadeNodes(sortedTree, flattenedTree);
+            this.sortDecadeNodes(sortedTree);
+            this.createYearNodes(sortedTree, flattenedTree);
+            this.sortYearNodes(sortedTree);
+            this.createMonthNodes(sortedTree, manifests);
+            this.sortMonthNodes(sortedTree);
+            this.createDateNodes(sortedTree, manifests);
+    
+            this.pruneDecadeNodes(sortedTree);
+        }
     }
     
     public getStartCanvasIndex(): number {
@@ -554,7 +568,7 @@ export class Helper {
         return (<Manifest>this.iiifResource).getTopRanges();
     }
 
-    public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): MultiSelectableTreeNode | null {
+    public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): TreeNode | null {
 
         // if it's a collection, use IIIFResource.getDefaultTree()
         // otherwise, get the top range by index and use Range.getTree()
@@ -563,26 +577,26 @@ export class Helper {
             return null;
         }
 
-        let tree: MultiSelectableTreeNode;
+        let tree: TreeNode;
 
         if (this.iiifResource.isCollection()) {
-            tree = <MultiSelectableTreeNode>this.iiifResource.getDefaultTree();
+            tree = this.iiifResource.getDefaultTree();
         } else {
             const topRanges: Range[] = this._getTopRanges();
             
-            const root: MultiSelectableTreeNode = new TreeNode() as MultiSelectableTreeNode;
+            const root: TreeNode = new TreeNode();
             root.label = 'root';
             root.data = this.iiifResource;
             
             if (topRanges.length) {
                 const range: Range = topRanges[topRangeIndex];                    
-                tree = <MultiSelectableTreeNode>range.getTree(root);
+                tree = range.getTree(root);
             } else {
                 return root;
             }
         }
 
-        let sortedTree: MultiSelectableTreeNode = new TreeNode() as MultiSelectableTreeNode;
+        let sortedTree: TreeNode = new TreeNode();
         
         switch (sortType) {
             case TreeSortType.DATE:
@@ -601,10 +615,13 @@ export class Helper {
         return sortedTree;
     }
     
-    public treeHasNavDates(tree: MultiSelectableTreeNode): boolean {
+    public treeHasNavDates(tree: TreeNode): boolean {
         //const node: TreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
         // todo: write test
-        return this.getFlattenedTree().some(n => !isNaN(<any>n.navDate));
+
+        const flattenedTree: TreeNode[] | null = this.getFlattenedTree();
+
+        return (flattenedTree) ? flattenedTree.some(n => !isNaN(<any>n.navDate)) : false;
     }
     
     public getViewingDirection(): ViewingDirection | null {
@@ -784,13 +801,13 @@ export class Helper {
 
     // dates //     
     
-    public createDateNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void {
+    public createDateNodes(rootNode: TreeNode, nodes: TreeNode[]): void {
         for (let i = 0; i < nodes.length; i++) {
-            const node: MultiSelectableTreeNode = <MultiSelectableTreeNode>nodes[i];
+            const node: TreeNode = <TreeNode>nodes[i];
             const year: number = this.getNodeYear(node);
             const month: number = this.getNodeMonth(node);
 
-            const dateNode: MultiSelectableTreeNode = new TreeNode() as MultiSelectableTreeNode;
+            const dateNode: TreeNode = new TreeNode();
             dateNode.id = node.id;
             dateNode.label = this.getNodeDisplayDate(node);
             dateNode.data = node.data;
@@ -798,13 +815,13 @@ export class Helper {
             dateNode.data.year = year;
             dateNode.data.month = month;
 
-            const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
+            const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
 
             if (decadeNode) {
-                const yearNode: NullableTreeNode = this.getYearNode(decadeNode, year);
+                const yearNode: TreeNode | null = this.getYearNode(decadeNode, year);
 
                 if (yearNode) {
-                    const monthNode: NullableTreeNode = this.getMonthNode(yearNode, month);
+                    const monthNode: TreeNode | null = this.getMonthNode(yearNode, month);
 
                     if (monthNode){
                         monthNode.addNode(dateNode);
@@ -814,10 +831,10 @@ export class Helper {
         }
     }
     
-    public createDecadeNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void {
+    public createDecadeNodes(rootNode: TreeNode, nodes: TreeNode[]): void {
 
         for (let i = 0; i < nodes.length; i++) {
-            const node: MultiSelectableTreeNode = nodes[i];
+            const node: TreeNode = nodes[i];
             const year: number = this.getNodeYear(node);
             const endYear: number = Number(year.toString().substr(0, 3) + "9");
 
@@ -832,21 +849,21 @@ export class Helper {
         }
     }
     
-    public createMonthNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void{
+    public createMonthNodes(rootNode: TreeNode, nodes: TreeNode[]): void{
 
         for (let i = 0; i < nodes.length; i++) {
-            const node: MultiSelectableTreeNode = nodes[i];
+            const node: TreeNode = nodes[i];
             const year = this.getNodeYear(node);
             const month = this.getNodeMonth(node);
-            const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
-            let yearNode: NullableTreeNode = null;
+            const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
+            let yearNode: TreeNode | null = null;
             
             if (decadeNode) {
                 yearNode = this.getYearNode(decadeNode, year);
             }
 
             if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)) {
-                const monthNode: MultiSelectableTreeNode = <MultiSelectableTreeNode>new TreeNode();
+                const monthNode: TreeNode = new TreeNode();
                 monthNode.label = this.getNodeDisplayMonth(node);
                 monthNode.navDate = node.navDate;
                 monthNode.data.year = year;
@@ -856,15 +873,15 @@ export class Helper {
         }
     }
     
-    public createYearNodes(rootNode: MultiSelectableTreeNode, nodes: MultiSelectableTreeNode[]): void{
+    public createYearNodes(rootNode: TreeNode, nodes: TreeNode[]): void{
 
         for (let i = 0; i < nodes.length; i++) {
-            const node: MultiSelectableTreeNode = nodes[i];
+            const node: TreeNode = nodes[i];
             const year: number = this.getNodeYear(node);
-            const decadeNode: NullableTreeNode = this.getDecadeNode(rootNode, year);
+            const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
 
             if (decadeNode && !this.getYearNode(decadeNode, year)) {
-                const yearNode: MultiSelectableTreeNode = <MultiSelectableTreeNode>new TreeNode();
+                const yearNode: TreeNode = new TreeNode();
                 yearNode.label = year.toString();
                 yearNode.navDate = node.navDate;
                 yearNode.data.year = year;
@@ -874,44 +891,44 @@ export class Helper {
         }
     }
     
-    public getDecadeNode(rootNode: MultiSelectableTreeNode, year: number): MultiSelectableTreeNode | null {
+    public getDecadeNode(rootNode: TreeNode, year: number): TreeNode | null {
         for (let i = 0; i < rootNode.nodes.length; i++) {
-            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>rootNode.nodes[i];
+            const n: TreeNode = <TreeNode>rootNode.nodes[i];
             if (year >= n.data.startYear && year <= n.data.endYear) return n;
         }
 
         return null;
     }
     
-    public getMonthNode(yearNode: MultiSelectableTreeNode, month: Number): MultiSelectableTreeNode | null {
+    public getMonthNode(yearNode: TreeNode, month: Number): TreeNode | null {
         for (let i = 0; i < yearNode.nodes.length; i++) {
-            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>yearNode.nodes[i];
+            const n: TreeNode = <TreeNode>yearNode.nodes[i];
             if (month === this.getNodeMonth(n)) return n;
         }
 
         return null;
     }
     
-    public getNodeDisplayDate(node: MultiSelectableTreeNode): string{
+    public getNodeDisplayDate(node: TreeNode): string{
         return node.navDate.toDateString();
     }
     
-    public getNodeDisplayMonth(node: MultiSelectableTreeNode): string{
+    public getNodeDisplayMonth(node: TreeNode): string{
         const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[node.navDate.getMonth()];
     }        
 
-    public getNodeMonth(node: MultiSelectableTreeNode): number{
+    public getNodeMonth(node: TreeNode): number{
         return node.navDate.getMonth();
     }
     
-    public getNodeYear(node: MultiSelectableTreeNode): number{
+    public getNodeYear(node: TreeNode): number{
         return node.navDate.getFullYear();
     }
 
-    public getYearNode(decadeNode: MultiSelectableTreeNode, year: Number): MultiSelectableTreeNode | null {
+    public getYearNode(decadeNode: TreeNode, year: Number): TreeNode | null {
         for (let i = 0; i < decadeNode.nodes.length; i++){
-            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>decadeNode.nodes[i];
+            const n: TreeNode = <TreeNode>decadeNode.nodes[i];
             if (year === this.getNodeYear(n)) return n;
         }
 
@@ -919,18 +936,18 @@ export class Helper {
     }
     
     // delete any empty decades
-    public pruneDecadeNodes(rootNode: MultiSelectableTreeNode): void {
-        const pruned: MultiSelectableTreeNode[] = [];
+    public pruneDecadeNodes(rootNode: TreeNode): void {
+        const pruned: TreeNode[] = [];
 
         for (let i = 0; i < rootNode.nodes.length; i++) {
-            const n: MultiSelectableTreeNode = <MultiSelectableTreeNode>rootNode.nodes[i];
+            const n: TreeNode = <TreeNode>rootNode.nodes[i];
             if (!n.nodes.length) {
                 pruned.push(n);
             }
         }
 
         for (let j = 0; j < pruned.length; j++) {
-            const p: MultiSelectableTreeNode = <MultiSelectableTreeNode>pruned[j];
+            const p: TreeNode = <TreeNode>pruned[j];
             const index: number = rootNode.nodes.indexOf(p);
 
             if (index > -1) {
@@ -939,31 +956,31 @@ export class Helper {
         }
     }
 
-    public sortDecadeNodes(rootNode: MultiSelectableTreeNode): void {
+    public sortDecadeNodes(rootNode: TreeNode): void {
         rootNode.nodes = rootNode.nodes.sort(function(a, b) {
             return a.data.startYear - b.data.startYear;
         });
     }
     
-    public sortMonthNodes(rootNode: MultiSelectableTreeNode): void {
+    public sortMonthNodes(rootNode: TreeNode): void {
         for (let i = 0; i < rootNode.nodes.length; i++) {
             const decadeNode: TreeNode = rootNode.nodes[i];
 
             for (let j = 0; j < decadeNode.nodes.length; j++){
                 const monthNode: TreeNode = decadeNode.nodes[j];
 
-                monthNode.nodes = monthNode.nodes.sort((a: MultiSelectableTreeNode, b: MultiSelectableTreeNode) => {
+                monthNode.nodes = monthNode.nodes.sort((a: TreeNode, b: TreeNode) => {
                     return this.getNodeMonth(a) - this.getNodeMonth(b);
                 });
             }
         }
     }
     
-    public sortYearNodes(rootNode: MultiSelectableTreeNode): void {
+    public sortYearNodes(rootNode: TreeNode): void {
         for (let i = 0; i < rootNode.nodes.length; i++) {
             const decadeNode: TreeNode = rootNode.nodes[i];
 
-            decadeNode.nodes = decadeNode.nodes.sort((a: MultiSelectableTreeNode, b: MultiSelectableTreeNode) => {
+            decadeNode.nodes = decadeNode.nodes.sort((a: TreeNode, b: TreeNode) => {
                 return (this.getNodeYear(a) - this.getNodeYear(b));
             });
         }
