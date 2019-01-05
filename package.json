@@ -5,8 +5,9 @@
   "main": "./dist-esmodule/index.js",
   "types": "./dist-esmodule/index.d.ts",
   "scripts": {
-    "clean": "npx rimraf dist-umd dist-commonjs dist-esmodule",
+    "clean": "rimraf -rf dist-umd dist-commonjs dist-esmodule dist-var",
     "build": "npm run clean && tsc && tsc -m es6 --outDir dist-esmodule && webpack",
+    "build-docs": "rimraf -rf docs && typedoc --out docs --name manifesto --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --module commonjs src/ && touch docs/.nojekyll",
     "prepare": "npm run build"
   },
   "repository": {
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/iiif-commons/manifold#readme",
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
+    "typedoc": "0.14.0",
     "typescript": "3.0.1",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2"
@@ -29,6 +31,6 @@
     "@edsilv/http-status-codes": "0.0.12",
     "@iiif/vocabulary": "^1.0.5",
     "@types/jquery": "^2.0.40",
-    "manifesto.js": "3.0.9-webpack7"
+    "manifesto.js": "3.0.9-pre.1"
   }
 }
