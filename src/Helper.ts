@@ -518,7 +518,7 @@ export class Helper {
         return url;
     }
 
-    public getSortedTreeNodesByDate(sortedTree: TreeNode, tree: TreeNode): void{
+    private _getSortedTreeNodesByDate(sortedTree: TreeNode, tree: TreeNode): void{
 
         // const all: TreeNode[] = <TreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
         //     .where((n) => n.data.type === TreeNodeType.COLLECTION ||
@@ -605,7 +605,7 @@ export class Helper {
                 // expanding a year gives a list of months containing issues
                 // expanding a month gives a list of issues.
                 if (this.treeHasNavDates(tree)){
-                    this.getSortedTreeNodesByDate(sortedTree, tree);
+                    this._getSortedTreeNodesByDate(sortedTree, tree);
                     break;
                 }                    
             default:
@@ -619,7 +619,7 @@ export class Helper {
         //const node: TreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
         // todo: write test
 
-        const flattenedTree: TreeNode[] | null = this.getFlattenedTree();
+        const flattenedTree: TreeNode[] | null = this.getFlattenedTree(tree);
 
         return (flattenedTree) ? flattenedTree.some(n => !isNaN(<any>n.navDate)) : false;
     }

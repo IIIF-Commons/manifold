@@ -2,9 +2,17 @@
 
 [![Build Status](https://travis-ci.org/IIIF-Commons/manifold.svg?branch=master)](https://travis-ci.org/IIIF-Commons/manifold)
 
+    npm install @iiif/manifold --save
+
 Stateful utils on top of manifesto. Returns a `helper` object that can be used to navigate a IIIF manifest.
 
-    npm install @iiif/manifold --save
+e.g. 
+
+- `getMetadata`: returns all metadata for current image, range, canvas, sequence, manifest)
+- `getCurrentRange`, `getPreviousRange`, `getNextRange`: Used to navigate a flattened range tree (useful for IIIF AV scenarios)
+- `getTree`: Returns a default tree (sortable by `navDate`) of collections, manifests, ranges, or a tree based on a given top range.
+
+Has an ajax implementation of manifesto's IEnternalResource (used in the IIIF auth flow).
 
 Getting Started
 --
