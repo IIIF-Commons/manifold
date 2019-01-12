@@ -22,7 +22,8 @@
             "node", 
             "manifesto.js",
             "@edsilv/http-status-codes",
-            "@iiif/vocabulary"
+            "@iiif/vocabulary",
+            "jquery"
         ]
     },
     "include": [

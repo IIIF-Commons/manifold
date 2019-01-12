@@ -604,7 +604,7 @@ export class Helper {
                 // expanding a decade generates a list of years
                 // expanding a year gives a list of months containing issues
                 // expanding a month gives a list of issues.
-                if (this.treeHasNavDates(tree)){
+                if (this.treeHasNavDates(tree)) {
                     this._getSortedTreeNodesByDate(sortedTree, tree);
                     break;
                 }                    

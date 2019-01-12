@@ -229,12 +229,12 @@ export class ExternalResource implements IExternalResource {
 
                 that.isProbed = true;
 
-                const xhr: XMLHttpRequest = new XMLHttpRequest();
-                xhr.open('GET', that.probeService.id, true);
-                xhr.withCredentials = true;
+                $.ajax(<JQueryAjaxSettings>{
+                    url: that.probeService.id,
+                    type: 'GET',
+                    dataType: 'json'
+                }).done((data: any) => {
 
-                xhr.onload = () => {
-                    const data = JSON.parse(xhr.responseText);
                     let contentLocation: string = unescape(data.contentLocation);
 
                     if (contentLocation !== that.dataUri) {
@@ -244,21 +244,22 @@ export class ExternalResource implements IExternalResource {
                     }
 
                     resolve(that);
-                }
 
-                xhr.onerror = () => {
-                    that.status = xhr.status;
+                }).fail((error) => {
+
+                    that.status = error.status;
+                    that.error = error;
                     resolve(that);
-                };
 
-                xhr.send();
+                });
 
-                // $.ajax(<JQueryAjaxSettings>{
-                //     url: that.probeService.id,
-                //     type: 'GET',
-                //     dataType: 'json'
-                // }).done((data: any) => {
+                // xhr implementation
+                // const xhr: XMLHttpRequest = new XMLHttpRequest();
+                // xhr.open('GET', that.probeService.id, true);
+                // xhr.withCredentials = true;
 
+                // xhr.onload = () => {
+                //     const data = JSON.parse(xhr.responseText);
                 //     let contentLocation: string = unescape(data.contentLocation);
 
                 //     if (contentLocation !== that.dataUri) {
@@ -268,14 +269,14 @@ export class ExternalResource implements IExternalResource {
                 //     }
 
                 //     resolve(that);
+                // }
 
-                // }).fail((error) => {
-
-                //     that.status = error.status;
-                //     that.error = error;
+                // xhr.onerror = () => {
+                //     that.status = xhr.status;
                 //     resolve(that);
+                // };
 
-                // });
+                // xhr.send();
 
             } else {
 
@@ -299,16 +300,17 @@ export class ExternalResource implements IExternalResource {
                     type = 'HEAD';
                 }
 
-                const xhr: XMLHttpRequest = new XMLHttpRequest();
-                xhr.open(type, that.dataUri, true);
-                xhr.withCredentials = true;
-                if (accessToken) {
-                    xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-                }
+                $.ajax(<JQueryAjaxSettings>{
+                    url: that.dataUri,
+                    type: type,
+                    dataType: 'json',
+                    beforeSend: (xhr) => {
+                        if (accessToken) {
+                            xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                        }
+                    }
+                }).done((data: any) => {
 
-                xhr.onload = () => {
-                    const data = JSON.parse(xhr.responseText);
-                    
                     // if it's a resource without an info.json
                     // todo: if resource doesn't have a @profile
                     if (!data) {
@@ -327,7 +329,7 @@ export class ExternalResource implements IExternalResource {
 
                         let dataUri: string | null = that.dataUri;
 
-                        if (dataUri && dataUri.endsWith('/info.json')) {
+                        if (dataUri && dataUri.endsWith('/info.json')){
                             dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
                         }
 
@@ -340,29 +342,29 @@ export class ExternalResource implements IExternalResource {
 
                         resolve(that);
                     }
-                }
 
-                xhr.onerror = () => {
-                    that.status = xhr.status;
-                    if (xhr.responseText) {
-                        that._parseAuthServices(JSON.parse(xhr.responseText));
+                }).fail((error) => {
+
+                    that.status = error.status;
+                    that.error = error;
+                    if (error.responseJSON){
+                        that._parseAuthServices(error.responseJSON);
                     }
                     resolve(that);
-                };
 
-                xhr.send();
+                });
 
-                // $.ajax(<JQueryAjaxSettings>{
-                //     url: that.dataUri,
-                //     type: type,
-                //     dataType: 'json',
-                //     beforeSend: (xhr) => {
-                //         if (accessToken) {
-                //             xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-                //         }
-                //     }
-                // }).done((data: any) => {
+                // xhr implementation
+                // const xhr: XMLHttpRequest = new XMLHttpRequest();
+                // xhr.open(type, that.dataUri, true);
+                // xhr.withCredentials = true;
+                // if (accessToken) {
+                //     xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                // }
 
+                // xhr.onload = () => {
+                //     const data = JSON.parse(xhr.responseText);
+                    
                 //     // if it's a resource without an info.json
                 //     // todo: if resource doesn't have a @profile
                 //     if (!data) {
@@ -381,7 +383,7 @@ export class ExternalResource implements IExternalResource {
 
                 //         let dataUri: string | null = that.dataUri;
 
-                //         if (dataUri && dataUri.endsWith('/info.json')){
+                //         if (dataUri && dataUri.endsWith('/info.json')) {
                 //             dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
                 //         }
 
@@ -394,17 +396,17 @@ export class ExternalResource implements IExternalResource {
 
                 //         resolve(that);
                 //     }
+                // }
 
-                // }).fail((error) => {
-
-                //     that.status = error.status;
-                //     that.error = error;
-                //     if (error.responseJSON){
-                //         that._parseAuthServices(error.responseJSON);
+                // xhr.onerror = () => {
+                //     that.status = xhr.status;
+                //     if (xhr.responseText) {
+                //         that._parseAuthServices(JSON.parse(xhr.responseText));
                 //     }
                 //     resolve(that);
+                // };
 
-                // });
+                // xhr.send();
 
             }
 
