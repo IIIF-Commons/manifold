@@ -1,12 +1,11 @@
 import { IMetadataItem } from "./IMetadataItem";
-import { ManifestResource, LabelValuePair } from "manifesto.js";
 
 export class MetadataGroup {
-    public resource: ManifestResource;
+    public resource: manifesto.ManifestResource;
     public label: string | undefined;
     public items: IMetadataItem[] = [];
 
-    constructor(resource: ManifestResource, label?: string) {
+    constructor(resource: manifesto.ManifestResource, label?: string) {
         this.resource = resource;
         this.label = label;
     }
@@ -15,9 +14,9 @@ export class MetadataGroup {
         this.items.push(item);
     }
 
-    public addMetadata(metadata: LabelValuePair[], isRootLevel: boolean = false): void {
+    public addMetadata(metadata: manifesto.LabelValuePair[], isRootLevel: boolean = false): void {
         for (let i = 0; i < metadata.length; i++) {
-            const item: LabelValuePair = metadata[i];
+            const item: manifesto.LabelValuePair = metadata[i];
             (<IMetadataItem>item).isRootLevel = isRootLevel;
             this.addItem(<IMetadataItem>item);
         }

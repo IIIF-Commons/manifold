@@ -1,7 +1,6 @@
 import { IMultiSelectable } from "./IMultiSelectable";
-import { Thumb } from "manifesto.js";
 
-export interface MultiSelectableThumb extends IMultiSelectable, Thumb {
+export interface MultiSelectableThumb extends IMultiSelectable, manifesto.Thumb {
     initialWidth: number;
     initialHeight: number;
 }

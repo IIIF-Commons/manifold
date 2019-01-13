@@ -1,5 +1,3 @@
-import { LabelValuePair } from "manifesto.js";
-
-export interface IMetadataItem extends LabelValuePair {
+export interface IMetadataItem extends manifesto.LabelValuePair {
     isRootLevel: boolean;
 }

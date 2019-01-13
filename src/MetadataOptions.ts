@@ -1,8 +1,7 @@
-import { Canvas, Range } from "manifesto.js";
 import { UriLabeller } from "./UriLabeller";
 
 export class MetadataOptions {
-    canvases: Canvas[];
+    canvases: manifesto.Canvas[];
     licenseFormatter: UriLabeller;
-    range: Range;
+    range: manifesto.Range;
 } 

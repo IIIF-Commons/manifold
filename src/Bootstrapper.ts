@@ -1,6 +1,5 @@
 import { IManifoldOptions } from "./IManifoldOptions";
 import { Helper } from "./Helper";
-import { IIIFResourceType, Collection, Manifest, IIIFResource, IManifestoOptions, Utils } from "manifesto.js";
 
 export class Bootstrapper {
     
@@ -26,7 +25,7 @@ export class Bootstrapper {
             const msie = that._detectIE();
 
             if (msie === false) {
-                Utils.loadManifest(that._options.manifestUri).then(function(json) {                     
+                manifesto.Utils.loadManifest(that._options.manifestUri).then(function(json) {                     
                     that._loaded(that, json, resolve, reject)
                 });
             } else {
@@ -64,7 +63,7 @@ export class Bootstrapper {
 
     private _loaded(bootstrapper: Bootstrapper, json: string, resolve: (helper: Helper) => void, reject: (error:any) => void): void {
         
-        const iiifResource: IIIFResource | null = Utils.parseManifest(json, <IManifestoOptions>{
+        const iiifResource: manifesto.IIIFResource | null = manifesto.Utils.parseManifest(json, <manifesto.IManifestoOptions>{
             locale: bootstrapper._options.locale
         });
 
@@ -75,13 +74,13 @@ export class Bootstrapper {
                 bootstrapper._options.iiifResource = iiifResource;
             }
 
-            if (iiifResource.getIIIFResourceType() === IIIFResourceType.COLLECTION) { 
+            if (iiifResource.getIIIFResourceType() === manifesto.IIIFResourceType.COLLECTION) { 
                 // if it's a collection and has child collections, get the collection by index
-                const collections: Collection[] = (<Collection>iiifResource).getCollections();
+                const collections: manifesto.Collection[] = (<manifesto.Collection>iiifResource).getCollections();
 
                 if (collections && collections.length) {
 
-                    (<Collection>iiifResource).getCollectionByIndex(bootstrapper._options.collectionIndex).then((collection: Collection) => {
+                    (<manifesto.Collection>iiifResource).getCollectionByIndex(bootstrapper._options.collectionIndex).then((collection: manifesto.Collection) => {
 
                         if (!collection) {
                             reject('Collection index not found');
@@ -96,7 +95,7 @@ export class Bootstrapper {
                             bootstrapper._options.manifestUri = collection.id;
                             bootstrapper.bootstrap(resolve, reject);
                         } else {
-                            collection.getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifest) => {
+                            collection.getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: manifesto.Manifest) => {
                                 bootstrapper._options.manifest = manifest;
                                 const helper: Helper = new Helper(bootstrapper._options);
                                 resolve(helper);
@@ -104,14 +103,14 @@ export class Bootstrapper {
                         }
                     });
                 } else {
-                    (<Collection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifest) => {
+                    (<manifesto.Collection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: manifesto.Manifest) => {
                         bootstrapper._options.manifest = manifest;
                         const helper: Helper = new Helper(bootstrapper._options);
                         resolve(helper);
                     });
                 }
             } else {
-                bootstrapper._options.manifest = <Manifest>iiifResource;
+                bootstrapper._options.manifest = <manifesto.Manifest>iiifResource;
                 const helper: Helper = new Helper(bootstrapper._options);
                 resolve(helper);
             }
