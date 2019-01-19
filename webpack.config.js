@@ -22,6 +22,7 @@ const umdConfig = {
     },
     // Activate source maps for the bundles in order to preserve the original
     // source when the user debugs the application
+    //devtool: 'source-map',
     optimization: {
         minimize: true
     },

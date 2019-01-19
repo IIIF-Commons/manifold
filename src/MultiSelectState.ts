@@ -32,7 +32,7 @@ export class MultiSelectState {
     }
 
     public getCanvasById(id: string): MultiSelectableCanvas {
-        return this.canvases.filter(c => c.id === id)[0];
+        return this.canvases.filter(c => manifesto.Utils.normaliseUrl(c.id) === manifesto.Utils.normaliseUrl(id))[0];
     }
     
     public getCanvasesByIds(ids: string[]): MultiSelectableCanvas[] {
