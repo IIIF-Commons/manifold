@@ -471,9 +471,14 @@ export class Helper {
         return null;
     }
 
+    // use object.assign to return a set of new nodes
+    // right now the UV needs the nodes to retain properties for databinding like expanded
+    // as we're not redrawing the tree every time as per react.
+    // maybe make this optional.
+    // not sure why deleting the nodes key from each node is necessary
     private _flattenTree(root: TreeNode, key: string): TreeNode[] {
-        let flatten: TreeNode[] = [Object.assign({}, root)];
-        delete flatten[0][key];
+        let flatten: TreeNode[] = [root];//[Object.assign({}, root)];
+        //delete flatten[0][key];
         
         if (root[key] && root[key].length > 0) {
             return flatten.concat(root[key]
@@ -532,7 +537,7 @@ export class Helper {
         return url;
     }
 
-    private _getSortedTreeNodesByDate(sortedTree: TreeNode, tree: TreeNode): void{
+    private _getSortedTreeNodesByDate(sortedTree: TreeNode, tree: TreeNode): void {
 
         // const all: TreeNode[] = <TreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
         //     .where((n) => n.data.type === TreeNodeType.COLLECTION ||
