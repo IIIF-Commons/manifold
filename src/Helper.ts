@@ -859,6 +859,11 @@ export class Helper {
 
         for (let i = 0; i < nodes.length; i++) {
             const node: TreeNode = nodes[i];
+
+            if (!node.navDate) {
+                continue;
+            }
+
             const year: number = this.getNodeYear(node);
             const endYear: number = Number(year.toString().substr(0, 3) + "9");
 
@@ -877,6 +882,11 @@ export class Helper {
 
         for (let i = 0; i < nodes.length; i++) {
             const node: TreeNode = nodes[i];
+
+            if (!node.navDate) {
+                continue;
+            }
+
             const year = this.getNodeYear(node);
             const month = this.getNodeMonth(node);
             const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
@@ -901,6 +911,11 @@ export class Helper {
 
         for (let i = 0; i < nodes.length; i++) {
             const node: TreeNode = nodes[i];
+
+            if (!node.navDate) {
+                continue;
+            }
+
             const year: number = this.getNodeYear(node);
             const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
 
@@ -933,20 +948,20 @@ export class Helper {
         return null;
     }
     
-    public getNodeDisplayDate(node: TreeNode): string{
+    public getNodeDisplayDate(node: TreeNode): string {
         return node.navDate.toDateString();
     }
     
-    public getNodeDisplayMonth(node: TreeNode): string{
+    public getNodeDisplayMonth(node: TreeNode): string {
         const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[node.navDate.getMonth()];
     }        
 
-    public getNodeMonth(node: TreeNode): number{
+    public getNodeMonth(node: TreeNode): number {
         return node.navDate.getMonth();
     }
     
-    public getNodeYear(node: TreeNode): number{
+    public getNodeYear(node: TreeNode): number {
         return node.navDate.getFullYear();
     }
 
