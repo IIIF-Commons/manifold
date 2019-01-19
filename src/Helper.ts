@@ -823,6 +823,11 @@ export class Helper {
     public createDateNodes(rootNode: TreeNode, nodes: TreeNode[]): void {
         for (let i = 0; i < nodes.length; i++) {
             const node: TreeNode = <TreeNode>nodes[i];
+
+            if (!node.navDate) {
+                continue;
+            }
+
             const year: number = this.getNodeYear(node);
             const month: number = this.getNodeMonth(node);
 
@@ -842,7 +847,7 @@ export class Helper {
                 if (yearNode) {
                     const monthNode: TreeNode | null = this.getMonthNode(yearNode, month);
 
-                    if (monthNode){
+                    if (monthNode) {
                         monthNode.addNode(dateNode);
                     }
                 }
