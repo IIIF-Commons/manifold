@@ -9,15 +9,29 @@ import { TreeSortType } from "./TreeSortType";
 import { MultiSelectableRange } from "./MultiSelectableRange";
 import { ServiceProfile, ViewingHint, ViewingDirection } from "@iiif/vocabulary";
 
+type Annotation = manifesto.Annotation;
+type AnnotationBody = manifesto.AnnotationBody;
+type Canvas = manifesto.Canvas;
+type IIIFResource = manifesto.IIIFResource;
+type LabelValuePair = manifesto.LabelValuePair;
+type LanguageMap = manifesto.LanguageMap;
+type Manifest = manifesto.Manifest;
+type ManifestType = manifesto.ManifestType;
+type Range = manifesto.Range;
+type Sequence = manifesto.Sequence;
+type Service = manifesto.Service;
+type Thumb = manifesto.Thumb;
+type TreeNode = manifesto.TreeNode;
+
 export class Helper {
     
     private _multiSelectState: MultiSelectState;
 
     public canvasIndex: number;
     public collectionIndex: number;
-    public iiifResource: manifesto.IIIFResource;
+    public iiifResource: IIIFResource;
     public iiifResourceUri: string;
-    public manifest: manifesto.Manifest;
+    public manifest: Manifest;
     public manifestIndex: number;
     public options: IManifoldOptions;
     public sequenceIndex: number;
@@ -36,8 +50,8 @@ export class Helper {
     
     // getters //
     
-    public getAutoCompleteService(): manifesto.Service | null {
-        const service: manifesto.Service | null = this.getSearchService();
+    public getAutoCompleteService(): Service | null {
+        const service: Service | null = this.getSearchService();
         
         if (service) {
             return service.getService(ServiceProfile.SEARCH_0_AUTO_COMPLETE);
@@ -50,7 +64,7 @@ export class Helper {
 
         console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
         
-        const attribution: manifesto.LanguageMap | null = this.manifest.getAttribution();
+        const attribution: LanguageMap | null = this.manifest.getAttribution();
 
         if (attribution) {
             return manifesto.LanguageMap.getValue(attribution, this.options.locale);
@@ -59,20 +73,20 @@ export class Helper {
         return null;
     }
     
-    public getCanvases(): manifesto.Canvas[] {
+    public getCanvases(): Canvas[] {
         return this.getCurrentSequence().getCanvases();
     }
 
-    public getCanvasById(id: string): manifesto.Canvas | null {
+    public getCanvasById(id: string): Canvas | null {
         return this.getCurrentSequence().getCanvasById(id);
     }
 
-    public getCanvasesById(ids: string[]): manifesto.Canvas[] {
-        const canvases: manifesto.Canvas[] = [];
+    public getCanvasesById(ids: string[]): Canvas[] {
+        const canvases: Canvas[] = [];
 
         for (let i = 0; i < ids.length; i++) {
             const id: string = ids[i];
-            const canvas: manifesto.Canvas | null = this.getCanvasById(id);
+            const canvas: Canvas | null = this.getCanvasById(id);
             if (canvas) {
                 canvases.push(canvas);
             }
@@ -81,7 +95,7 @@ export class Helper {
         return canvases;
     }
 
-    public getCanvasByIndex(index: number): manifesto.Canvas {
+    public getCanvasByIndex(index: number): Canvas {
         return this.getCurrentSequence().getCanvasByIndex(index);
     }
     
@@ -94,12 +108,12 @@ export class Helper {
         return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
     }
     
-    public getCanvasRange(canvas: manifesto.Canvas, path?: string): manifesto.Range | null {
-        const ranges: manifesto.Range[] = this.getCanvasRanges(canvas);
+    public getCanvasRange(canvas: Canvas, path?: string): Range | null {
+        const ranges: Range[] = this.getCanvasRanges(canvas);
         
         if (path) {
             for (let i = 0; i < ranges.length; i++) {
-                const range: manifesto.Range = ranges[i];
+                const range: Range = ranges[i];
 
                 if (range.path === path) {
                     return range;
@@ -112,19 +126,19 @@ export class Helper {
         }
     }
 
-    public getCanvasRanges(canvas: manifesto.Canvas): manifesto.Range[] {
+    public getCanvasRanges(canvas: Canvas): Range[] {
 
         if (canvas.ranges) {
             return canvas.ranges; // cache
         } else {
             // todo: write test
-            canvas.ranges = <manifesto.Range[]>this.manifest.getAllRanges().filter(range => (range.getCanvasIds().some(cid => manifesto.Utils.normaliseUrl(cid) === manifesto.Utils.normaliseUrl(canvas.id))));
+            canvas.ranges = <Range[]>this.manifest.getAllRanges().filter(range => (range.getCanvasIds().some(cid => manifesto.Utils.normaliseUrl(cid) === manifesto.Utils.normaliseUrl(canvas.id))));
         }
 
         return canvas.ranges;
     }
 
-    public getCollectionIndex(iiifResource: manifesto.IIIFResource): number | null {
+    public getCollectionIndex(iiifResource: IIIFResource): number | null {
         // todo: support nested collections. walk up parents adding to array and return csv string.
         let index: number | null = null;
         if (iiifResource.parentCollection) {
@@ -133,16 +147,16 @@ export class Helper {
         return index;
     }
 
-    public getCurrentCanvas(): manifesto.Canvas {
+    public getCurrentCanvas(): Canvas {
         return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
     }
 
-    public getCurrentSequence(): manifesto.Sequence {
+    public getCurrentSequence(): Sequence {
         return this.getSequenceByIndex(this.sequenceIndex);
     }
 
     public getDescription(): string | null {
-        const description: manifesto.LanguageMap | null = this.manifest.getDescription();
+        const description: LanguageMap | null = this.manifest.getDescription();
 
         if (description) {
             return manifesto.LanguageMap.getValue(description, this.options.locale);
@@ -152,7 +166,7 @@ export class Helper {
     }
 
     public getLabel(): string | null {
-        const label: manifesto.LanguageMap | null = this.manifest.getLabel();
+        const label: LanguageMap | null = this.manifest.getLabel();
 
         if (label) {
             return manifesto.LanguageMap.getValue(label, this.options.locale);
@@ -181,7 +195,7 @@ export class Helper {
         return this.manifest.getLogo();
     }
 
-    public getManifestType(): manifesto.ManifestType {
+    public getManifestType(): ManifestType {
         let manifestType = this.manifest.getManifestType();
 
         // default to monograph
@@ -195,7 +209,7 @@ export class Helper {
     public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
         const metadataGroups: MetadataGroup[] = [];
-        const manifestMetadata: manifesto.LabelValuePair[] = this.manifest.getMetadata();
+        const manifestMetadata: LabelValuePair[] = this.manifest.getMetadata();
         const manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
 
         if (manifestMetadata && manifestMetadata.length) {
@@ -203,7 +217,7 @@ export class Helper {
         }
 
         if (this.manifest.getDescription().length) {
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
+            const metadataItem: LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
             metadataItem.label = [new manifesto.Language("description", this.options.locale)];
             metadataItem.value = this.manifest.getDescription();
             (<IMetadataItem>metadataItem).isRootLevel = true;
@@ -211,7 +225,7 @@ export class Helper {
         }
 
         if (this.manifest.getAttribution().length) {
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
+            const metadataItem: LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
             metadataItem.label = [new manifesto.Language("attribution", this.options.locale)];
             metadataItem.value = this.manifest.getAttribution();
             (<IMetadataItem>metadataItem).isRootLevel = true;
@@ -225,7 +239,7 @@ export class Helper {
                 label: "license",
                 value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
             };
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
+            const metadataItem: LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
             metadataItem.parse(item);
             (<IMetadataItem>metadataItem).isRootLevel = true;
             manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -236,7 +250,7 @@ export class Helper {
                 label: "logo",
                 value: '<img src="' + this.manifest.getLogo() + '"/>'
             };
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
+            const metadataItem: LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
             metadataItem.parse(item);
             (<IMetadataItem>metadataItem).isRootLevel = true;
             manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -252,7 +266,7 @@ export class Helper {
     }
 
     public getRequiredStatement(): ILabelValuePair | null {
-        const requiredStatement: manifesto.LabelValuePair | null = this.manifest.getRequiredStatement();
+        const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
 
         if (requiredStatement) {
             return {
@@ -267,7 +281,7 @@ export class Helper {
     private _parseMetadataOptions(options: MetadataOptions, metadataGroups: MetadataGroup[]): MetadataGroup[] {
 
         // get sequence metadata
-        const sequence: manifesto.Sequence = this.getCurrentSequence();
+        const sequence: Sequence = this.getCurrentSequence();
         const sequenceMetadata: any[] = sequence.getMetadata();
 
         if (sequenceMetadata && sequenceMetadata.length) {
@@ -286,7 +300,7 @@ export class Helper {
         // get canvas metadata
         if (options.canvases && options.canvases.length) {
             for (let i = 0; i < options.canvases.length; i++) {
-                const canvas: manifesto.Canvas = options.canvases[i];
+                const canvas: Canvas = options.canvases[i];
                 const canvasMetadata: any[] = canvas.getMetadata();
 
                 if (canvasMetadata && canvasMetadata.length) {
@@ -296,10 +310,10 @@ export class Helper {
                 }
 
                 // add image metadata
-                const images: manifesto.Annotation[] = canvas.getImages();
+                const images: Annotation[] = canvas.getImages();
 
                 for (let j = 0; j < images.length; j++) {
-                    const image: manifesto.Annotation = images[j];
+                    const image: Annotation = images[j];
                     const imageMetadata: any[] = image.getMetadata();
 
                     if (imageMetadata && imageMetadata.length) {
@@ -314,7 +328,7 @@ export class Helper {
         return metadataGroups;
     }
 
-    private _getRangeMetadata(metadataGroups: MetadataGroup[], range: manifesto.Range): MetadataGroup[] {
+    private _getRangeMetadata(metadataGroups: MetadataGroup[], range: Range): MetadataGroup[] {
         const rangeMetadata: any[] = range.getMetadata();
 
         if (rangeMetadata && rangeMetadata.length) {
@@ -338,7 +352,7 @@ export class Helper {
         return this._multiSelectState;
     }
 
-    public getCurrentRange(): manifesto.Range | null {
+    public getCurrentRange(): Range | null {
         if (this.rangeId) {
             return this.getRangeById(this.rangeId);
         }
@@ -346,19 +360,19 @@ export class Helper {
         return null;            
     }
 
-    public getPosterCanvas(): manifesto.Canvas | null {
+    public getPosterCanvas(): Canvas | null {
         return this.manifest.getPosterCanvas();
     }
 
     public getPosterImage(): string | null {
-        const posterCanvas: manifesto.Canvas | null = this.getPosterCanvas();
+        const posterCanvas: Canvas | null = this.getPosterCanvas();
 
         if (posterCanvas) {
-            const content: manifesto.Annotation[] = posterCanvas.getContent();
+            const content: Annotation[] = posterCanvas.getContent();
 
             if (content && content.length) {
-                const anno: manifesto.Annotation = content[0];
-                const body: manifesto.AnnotationBody[] = anno.getBody();
+                const anno: Annotation = content[0];
+                const body: AnnotationBody[] = anno.getBody();
                 return body[0].id;
             }
         }
@@ -366,9 +380,9 @@ export class Helper {
         return null;
     }
 
-    public getPreviousRange(range?: manifesto.Range): manifesto.Range | null {
+    public getPreviousRange(range?: Range): Range | null {
 
-        let currentRange: manifesto.Range | null = null;
+        let currentRange: Range | null = null;
 
         if (range) {
             currentRange = range;
@@ -377,18 +391,18 @@ export class Helper {
         }
 
         if (currentRange) {
-            const flatTree: manifesto.TreeNode[] | null = this.getFlattenedTree();
+            const flatTree: TreeNode[] | null = this.getFlattenedTree();
             
             if (flatTree) {
                 for (let i = 0; i < flatTree.length; i++) {
-                    const node: manifesto.TreeNode | null = flatTree[i];
+                    const node: TreeNode | null = flatTree[i];
                     
                     // find current range in flattened tree
-                    if (node && node.data.id === (<manifesto.Range>currentRange).id) {
+                    if (node && node.data.id === (<Range>currentRange).id) {
                         // find the first node before it that has canvases
                         while (i > 0) {
                             i--;
-                            const prevNode: manifesto.TreeNode = flatTree[i];
+                            const prevNode: TreeNode = flatTree[i];
                             return prevNode.data;
                         }
                         
@@ -401,10 +415,10 @@ export class Helper {
         return null;
     }
 
-    public getNextRange(range?: manifesto.Range): manifesto.Range | null {
+    public getNextRange(range?: Range): Range | null {
 
         // if a range is passed, use that. otherwise get the current range.
-        let currentRange: manifesto.Range | null = null;
+        let currentRange: Range | null = null;
 
         if (range) {
             currentRange = range;
@@ -413,19 +427,19 @@ export class Helper {
         }
 
         if (currentRange) {
-            const flatTree: manifesto.TreeNode[] | null = this.getFlattenedTree();
+            const flatTree: TreeNode[] | null = this.getFlattenedTree();
             
             if (flatTree) {
                 for (let i = 0; i < flatTree.length; i++) {
-                    const node: manifesto.TreeNode = flatTree[i];
+                    const node: TreeNode = flatTree[i];
                     
                     // find current range in flattened tree
-                    if (node && node.data.id === (<manifesto.Range>currentRange).id) {
+                    if (node && node.data.id === (<Range>currentRange).id) {
 
                         // find the first node after it that has canvases
                         while (i < flatTree.length - 1) {
                             i++;
-                            const nextNode: manifesto.TreeNode = flatTree[i];
+                            const nextNode: TreeNode = flatTree[i];
                             if (nextNode.data.canvases && nextNode.data.canvases.length) {
                                 return nextNode.data;
                             }
@@ -440,9 +454,9 @@ export class Helper {
         return null;
     }
 
-    public getFlattenedTree(treeNode?: manifesto.TreeNode): manifesto.TreeNode[] | null {
+    public getFlattenedTree(treeNode?: TreeNode): TreeNode[] | null {
 
-        let t: manifesto.TreeNode | null = null;
+        let t: TreeNode | null = null;
 
         if (!treeNode) {
             t = this.getTree();
@@ -457,8 +471,8 @@ export class Helper {
         return null;
     }
 
-    private _flattenTree(root: manifesto.TreeNode, key: string): manifesto.TreeNode[] {
-        let flatten: manifesto.TreeNode[] = [Object.assign({}, root)];
+    private _flattenTree(root: TreeNode, key: string): TreeNode[] {
+        let flatten: TreeNode[] = [Object.assign({}, root)];
         delete flatten[0][key];
         
         if (root[key] && root[key].length > 0) {
@@ -471,19 +485,19 @@ export class Helper {
         return flatten;
     }
 
-    public getRanges(): manifesto.Range[] {
-        return <manifesto.Range[]>(<manifesto.Manifest>this.manifest).getAllRanges();
+    public getRanges(): Range[] {
+        return <Range[]>(<Manifest>this.manifest).getAllRanges();
     }
     
-    public getRangeByPath(path: string): manifesto.Range | null {
+    public getRangeByPath(path: string): Range | null {
         return this.manifest.getRangeByPath(path);
     }
 
-    public getRangeById(id: string): manifesto.Range | null {
+    public getRangeById(id: string): Range | null {
         return this.manifest.getRangeById(id);
     }
     
-    public getRangeCanvases(range: manifesto.Range): manifesto.Canvas[] {
+    public getRangeCanvases(range: Range): Canvas[] {
         const ids: string[] = range.getCanvasIds();
         return this.getCanvasesById(ids);
     }
@@ -492,7 +506,7 @@ export class Helper {
         return this.manifest.getRelated();
     }
     
-    public getSearchService(): manifesto.Service | null {
+    public getSearchService(): Service | null {
         return this.manifest.getService(ServiceProfile.SEARCH_0);
     }
     
@@ -500,13 +514,13 @@ export class Helper {
         return this.manifest.getSeeAlso();
     }
 
-    public getSequenceByIndex(index: number): manifesto.Sequence {
+    public getSequenceByIndex(index: number): Sequence {
         return this.manifest.getSequenceByIndex(index);
     }
 
     public getShareServiceUrl(): string | null {
         let url: string | null = null;
-        let shareService: manifesto.Service | null = this.manifest.getService(ServiceProfile.SHARE_EXTENSIONS);
+        let shareService: Service | null = this.manifest.getService(ServiceProfile.SHARE_EXTENSIONS);
 
         if (shareService) {
             if ((<any>shareService).length) {
@@ -518,19 +532,19 @@ export class Helper {
         return url;
     }
 
-    private _getSortedTreeNodesByDate(sortedTree: manifesto.TreeNode, tree: manifesto.TreeNode): void{
+    private _getSortedTreeNodesByDate(sortedTree: TreeNode, tree: TreeNode): void{
 
         // const all: TreeNode[] = <TreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
         //     .where((n) => n.data.type === TreeNodeType.COLLECTION ||
         //                 n.data.type === TreeNodeType.MANIFEST).toArray();
 
-        const flattenedTree: manifesto.TreeNode[] | null = this.getFlattenedTree(tree);
+        const flattenedTree: TreeNode[] | null = this.getFlattenedTree(tree);
 
         // const manifests: TreeNode[] = <TreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
         //     .where((n) => n.data.type === TreeNodeType.MANIFEST).toArray();
 
         if (flattenedTree) {
-            const manifests: manifesto.TreeNode[] = flattenedTree.filter((n) => n.data.type === manifesto.TreeNodeType.MANIFEST);
+            const manifests: TreeNode[] = flattenedTree.filter((n) => n.data.type === manifesto.TreeNodeType.MANIFEST);
 
             this.createDecadeNodes(sortedTree, flattenedTree);
             this.sortDecadeNodes(sortedTree);
@@ -548,11 +562,11 @@ export class Helper {
         return this.getCurrentSequence().getStartCanvasIndex();
     }
     
-    public getThumbs(width: number, height: number): manifesto.Thumb[] {
+    public getThumbs(width: number, height: number): Thumb[] {
         return this.getCurrentSequence().getThumbs(width, height);
     }
     
-    public getTopRanges(): manifesto.Range[] {
+    public getTopRanges(): Range[] {
         return this.manifest.getTopRanges();
     }
 
@@ -564,11 +578,11 @@ export class Helper {
         return this.manifest.getTrackingLabel();
     }
 
-    private _getTopRanges(): manifesto.Range[] {
-        return (<manifesto.Manifest>this.iiifResource).getTopRanges();
+    private _getTopRanges(): Range[] {
+        return (<Manifest>this.iiifResource).getTopRanges();
     }
 
-    public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): manifesto.TreeNode | null {
+    public getTree(topRangeIndex: number = 0, sortType: TreeSortType = TreeSortType.NONE): TreeNode | null {
 
         // if it's a collection, use IIIFResource.getDefaultTree()
         // otherwise, get the top range by index and use Range.getTree()
@@ -577,26 +591,26 @@ export class Helper {
             return null;
         }
 
-        let tree: manifesto.TreeNode;
+        let tree: TreeNode;
 
         if (this.iiifResource.isCollection()) {
             tree = this.iiifResource.getDefaultTree();
         } else {
-            const topRanges: manifesto.Range[] = this._getTopRanges();
+            const topRanges: Range[] = this._getTopRanges();
             
-            const root: manifesto.TreeNode = new manifesto.TreeNode();
+            const root: TreeNode = new manifesto.TreeNode();
             root.label = 'root';
             root.data = this.iiifResource;
             
             if (topRanges.length) {
-                const range: manifesto.Range = topRanges[topRangeIndex];                    
+                const range: Range = topRanges[topRangeIndex];                    
                 tree = range.getTree(root);
             } else {
                 return root;
             }
         }
 
-        let sortedTree: manifesto.TreeNode = new manifesto.TreeNode();
+        let sortedTree: TreeNode = new manifesto.TreeNode();
         
         switch (sortType) {
             case TreeSortType.DATE:
@@ -615,11 +629,11 @@ export class Helper {
         return sortedTree;
     }
     
-    public treeHasNavDates(tree: manifesto.TreeNode): boolean {
+    public treeHasNavDates(tree: TreeNode): boolean {
         //const node: TreeNode = tree.nodes.en().traverseUnique(node => node.nodes).where((n) => !isNaN(<any>n.navDate)).first();
         // todo: write test
 
-        const flattenedTree: manifesto.TreeNode[] | null = this.getFlattenedTree(tree);
+        const flattenedTree: TreeNode[] | null = this.getFlattenedTree(tree);
 
         return (flattenedTree) ? flattenedTree.some(n => !isNaN(<any>n.navDate)) : false;
     }
@@ -661,7 +675,7 @@ export class Helper {
     }
 
     public hasResources(): boolean {
-        const canvas: manifesto.Canvas = this.getCurrentCanvas();
+        const canvas: Canvas = this.getCurrentCanvas();
         return canvas.getResources().length > 0;
     }
     
@@ -779,7 +793,7 @@ export class Helper {
     }
 
     public isUIEnabled(name: string): boolean {
-        const uiExtensions: manifesto.Service | null = this.manifest.getService(ServiceProfile.UI_EXTENSIONS);
+        const uiExtensions: Service | null = this.manifest.getService(ServiceProfile.UI_EXTENSIONS);
 
         if (uiExtensions) {
             const disableUI: string[] = uiExtensions.getProperty('disableUI');
@@ -801,13 +815,13 @@ export class Helper {
 
     // dates //     
     
-    public createDateNodes(rootNode: manifesto.TreeNode, nodes: manifesto.TreeNode[]): void {
+    public createDateNodes(rootNode: TreeNode, nodes: TreeNode[]): void {
         for (let i = 0; i < nodes.length; i++) {
-            const node: manifesto.TreeNode = <manifesto.TreeNode>nodes[i];
+            const node: TreeNode = <TreeNode>nodes[i];
             const year: number = this.getNodeYear(node);
             const month: number = this.getNodeMonth(node);
 
-            const dateNode: manifesto.TreeNode = new manifesto.TreeNode();
+            const dateNode: TreeNode = new manifesto.TreeNode();
             dateNode.id = node.id;
             dateNode.label = this.getNodeDisplayDate(node);
             dateNode.data = node.data;
@@ -815,13 +829,13 @@ export class Helper {
             dateNode.data.year = year;
             dateNode.data.month = month;
 
-            const decadeNode: manifesto.TreeNode | null = this.getDecadeNode(rootNode, year);
+            const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
 
             if (decadeNode) {
-                const yearNode: manifesto.TreeNode | null = this.getYearNode(decadeNode, year);
+                const yearNode: TreeNode | null = this.getYearNode(decadeNode, year);
 
                 if (yearNode) {
-                    const monthNode: manifesto.TreeNode | null = this.getMonthNode(yearNode, month);
+                    const monthNode: TreeNode | null = this.getMonthNode(yearNode, month);
 
                     if (monthNode){
                         monthNode.addNode(dateNode);
@@ -831,15 +845,15 @@ export class Helper {
         }
     }
     
-    public createDecadeNodes(rootNode: manifesto.TreeNode, nodes: manifesto.TreeNode[]): void {
+    public createDecadeNodes(rootNode: TreeNode, nodes: TreeNode[]): void {
 
         for (let i = 0; i < nodes.length; i++) {
-            const node: manifesto.TreeNode = nodes[i];
+            const node: TreeNode = nodes[i];
             const year: number = this.getNodeYear(node);
             const endYear: number = Number(year.toString().substr(0, 3) + "9");
 
             if (!this.getDecadeNode(rootNode, year)) {
-                const decadeNode: manifesto.TreeNode = new manifesto.TreeNode();
+                const decadeNode: TreeNode = new manifesto.TreeNode();
                 decadeNode.label = year + " - " + endYear;
                 decadeNode.navDate = node.navDate;
                 decadeNode.data.startYear = year;
@@ -849,21 +863,21 @@ export class Helper {
         }
     }
     
-    public createMonthNodes(rootNode: manifesto.TreeNode, nodes: manifesto.TreeNode[]): void{
+    public createMonthNodes(rootNode: TreeNode, nodes: TreeNode[]): void{
 
         for (let i = 0; i < nodes.length; i++) {
-            const node: manifesto.TreeNode = nodes[i];
+            const node: TreeNode = nodes[i];
             const year = this.getNodeYear(node);
             const month = this.getNodeMonth(node);
-            const decadeNode: manifesto.TreeNode | null = this.getDecadeNode(rootNode, year);
-            let yearNode: manifesto.TreeNode | null = null;
+            const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
+            let yearNode: TreeNode | null = null;
             
             if (decadeNode) {
                 yearNode = this.getYearNode(decadeNode, year);
             }
 
             if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)) {
-                const monthNode: manifesto.TreeNode = new manifesto.TreeNode();
+                const monthNode: TreeNode = new manifesto.TreeNode();
                 monthNode.label = this.getNodeDisplayMonth(node);
                 monthNode.navDate = node.navDate;
                 monthNode.data.year = year;
@@ -873,15 +887,15 @@ export class Helper {
         }
     }
     
-    public createYearNodes(rootNode: manifesto.TreeNode, nodes: manifesto.TreeNode[]): void{
+    public createYearNodes(rootNode: TreeNode, nodes: TreeNode[]): void{
 
         for (let i = 0; i < nodes.length; i++) {
-            const node: manifesto.TreeNode = nodes[i];
+            const node: TreeNode = nodes[i];
             const year: number = this.getNodeYear(node);
-            const decadeNode: manifesto.TreeNode | null = this.getDecadeNode(rootNode, year);
+            const decadeNode: TreeNode | null = this.getDecadeNode(rootNode, year);
 
             if (decadeNode && !this.getYearNode(decadeNode, year)) {
-                const yearNode: manifesto.TreeNode = new manifesto.TreeNode();
+                const yearNode: TreeNode = new manifesto.TreeNode();
                 yearNode.label = year.toString();
                 yearNode.navDate = node.navDate;
                 yearNode.data.year = year;
@@ -891,44 +905,44 @@ export class Helper {
         }
     }
     
-    public getDecadeNode(rootNode: manifesto.TreeNode, year: number): manifesto.TreeNode | null {
+    public getDecadeNode(rootNode: TreeNode, year: number): TreeNode | null {
         for (let i = 0; i < rootNode.nodes.length; i++) {
-            const n: manifesto.TreeNode = <manifesto.TreeNode>rootNode.nodes[i];
+            const n: TreeNode = <TreeNode>rootNode.nodes[i];
             if (year >= n.data.startYear && year <= n.data.endYear) return n;
         }
 
         return null;
     }
     
-    public getMonthNode(yearNode: manifesto.TreeNode, month: Number): manifesto.TreeNode | null {
+    public getMonthNode(yearNode: TreeNode, month: Number): TreeNode | null {
         for (let i = 0; i < yearNode.nodes.length; i++) {
-            const n: manifesto.TreeNode = <manifesto.TreeNode>yearNode.nodes[i];
+            const n: TreeNode = <TreeNode>yearNode.nodes[i];
             if (month === this.getNodeMonth(n)) return n;
         }
 
         return null;
     }
     
-    public getNodeDisplayDate(node: manifesto.TreeNode): string{
+    public getNodeDisplayDate(node: TreeNode): string{
         return node.navDate.toDateString();
     }
     
-    public getNodeDisplayMonth(node: manifesto.TreeNode): string{
+    public getNodeDisplayMonth(node: TreeNode): string{
         const months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[node.navDate.getMonth()];
     }        
 
-    public getNodeMonth(node: manifesto.TreeNode): number{
+    public getNodeMonth(node: TreeNode): number{
         return node.navDate.getMonth();
     }
     
-    public getNodeYear(node: manifesto.TreeNode): number{
+    public getNodeYear(node: TreeNode): number{
         return node.navDate.getFullYear();
     }
 
-    public getYearNode(decadeNode: manifesto.TreeNode, year: Number): manifesto.TreeNode | null {
+    public getYearNode(decadeNode: TreeNode, year: Number): TreeNode | null {
         for (let i = 0; i < decadeNode.nodes.length; i++){
-            const n: manifesto.TreeNode = <manifesto.TreeNode>decadeNode.nodes[i];
+            const n: TreeNode = <TreeNode>decadeNode.nodes[i];
             if (year === this.getNodeYear(n)) return n;
         }
 
@@ -936,18 +950,18 @@ export class Helper {
     }
     
     // delete any empty decades
-    public pruneDecadeNodes(rootNode: manifesto.TreeNode): void {
-        const pruned: manifesto.TreeNode[] = [];
+    public pruneDecadeNodes(rootNode: TreeNode): void {
+        const pruned: TreeNode[] = [];
 
         for (let i = 0; i < rootNode.nodes.length; i++) {
-            const n: manifesto.TreeNode = <manifesto.TreeNode>rootNode.nodes[i];
+            const n: TreeNode = <TreeNode>rootNode.nodes[i];
             if (!n.nodes.length) {
                 pruned.push(n);
             }
         }
 
         for (let j = 0; j < pruned.length; j++) {
-            const p: manifesto.TreeNode = <manifesto.TreeNode>pruned[j];
+            const p: TreeNode = <TreeNode>pruned[j];
             const index: number = rootNode.nodes.indexOf(p);
 
             if (index > -1) {
@@ -956,31 +970,31 @@ export class Helper {
         }
     }
 
-    public sortDecadeNodes(rootNode: manifesto.TreeNode): void {
+    public sortDecadeNodes(rootNode: TreeNode): void {
         rootNode.nodes = rootNode.nodes.sort(function(a, b) {
             return a.data.startYear - b.data.startYear;
         });
     }
     
-    public sortMonthNodes(rootNode: manifesto.TreeNode): void {
+    public sortMonthNodes(rootNode: TreeNode): void {
         for (let i = 0; i < rootNode.nodes.length; i++) {
-            const decadeNode: manifesto.TreeNode = rootNode.nodes[i];
+            const decadeNode: TreeNode = rootNode.nodes[i];
 
             for (let j = 0; j < decadeNode.nodes.length; j++){
-                const monthNode: manifesto.TreeNode = decadeNode.nodes[j];
+                const monthNode: TreeNode = decadeNode.nodes[j];
 
-                monthNode.nodes = monthNode.nodes.sort((a: manifesto.TreeNode, b: manifesto.TreeNode) => {
+                monthNode.nodes = monthNode.nodes.sort((a: TreeNode, b: TreeNode) => {
                     return this.getNodeMonth(a) - this.getNodeMonth(b);
                 });
             }
         }
     }
     
-    public sortYearNodes(rootNode: manifesto.TreeNode): void {
+    public sortYearNodes(rootNode: TreeNode): void {
         for (let i = 0; i < rootNode.nodes.length; i++) {
-            const decadeNode: manifesto.TreeNode = rootNode.nodes[i];
+            const decadeNode: TreeNode = rootNode.nodes[i];
 
-            decadeNode.nodes = decadeNode.nodes.sort((a: manifesto.TreeNode, b: manifesto.TreeNode) => {
+            decadeNode.nodes = decadeNode.nodes.sort((a: TreeNode, b: TreeNode) => {
                 return (this.getNodeYear(a) - this.getNodeYear(b));
             });
         }
