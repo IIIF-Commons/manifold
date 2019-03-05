@@ -33,6 +33,6 @@
     "@types/jquery": "^2.0.40",
     "@edsilv/http-status-codes": "0.0.12",
     "@iiif/vocabulary": "^1.0.5",
-    "manifesto.js": "4.0.0-pre.6"
+    "manifesto.js": "4.0.0-pre.7"
   }
 }
