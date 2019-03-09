@@ -5,9 +5,14 @@
   "main": "./dist-esmodule/index.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "clean": "npx rimraf -rf dist-umd dist-commonjs dist-esmodule dist-var types",
-    "build": "npm run clean && tsc && tsc -m es6 --outDir dist-esmodule && webpack && npx dts-bundle-generator --umd-module-name manifold -o types/index.d.ts dist-esmodule/index.d.ts",
-    "build-docs": "npx rimraf -rf docs && typedoc --out docs --name manifold --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --module commonjs src/ && touch docs/.nojekyll",
+    "clean": "rimraf -rf dist-umd dist-commonjs dist-esmodule dist-var types",
+    "build:commonjs": "tsc",
+    "build:esmodule": "tsc -m es6 --outDir dist-esmodule",
+    "build:umd": "webpack",
+    "build:var": "cross-env NODE_WEBPACK_LIBRARY_PATH=dist-var NODE_WEBPACK_LIBRARY_TARGET=var webpack",
+    "build:types": "npx dts-bundle-generator --umd-module-name manifold -o types/index.d.ts dist-esmodule/index.d.ts",
+    "build:docs": "rimraf -rf docs && typedoc --out docs --name manifold --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --module commonjs src/ && touch docs/.nojekyll",
+    "build": "npm run clean && npm run build:commonjs && npm run build:esmodule && npm run build:umd && npm run build:var && npm run build:types",
     "prepare": "npm run build"
   },
   "repository": {
@@ -22,6 +27,7 @@
   "homepage": "https://github.com/iiif-commons/manifold#readme",
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
+    "cross-env": "^5.2.0",
     "dts-bundle-generator": "^2.0.0",
     "rimraf": "^2.6.3",
     "typedoc": "0.14.0",
