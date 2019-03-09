@@ -1,5 +1,6 @@
 import { IManifoldOptions } from "./IManifoldOptions";
 import { Helper } from "./Helper";
+import { IIIFResourceType } from '@iiif/vocabulary';
 
 export class Bootstrapper {
     
@@ -74,7 +75,7 @@ export class Bootstrapper {
                 bootstrapper._options.iiifResource = iiifResource;
             }
 
-            if (iiifResource.getIIIFResourceType() === manifesto.IIIFResourceType.COLLECTION) { 
+            if (iiifResource.getIIIFResourceType() === IIIFResourceType.COLLECTION) { 
                 // if it's a collection and has child collections, get the collection by index
                 const collections: manifesto.Collection[] = (<manifesto.Collection>iiifResource).getCollections();
 

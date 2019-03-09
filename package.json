@@ -1,13 +1,13 @@
 {
   "name": "@iiif/manifold",
-  "version": "2.0.0-pre.11",
+  "version": "2.0.0-pre.12",
   "description": "",
   "main": "./dist-esmodule/index.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "clean": "npx rimraf -rf dist-umd dist-commonjs dist-esmodule dist-var types",
     "build": "npm run clean && tsc && tsc -m es6 --outDir dist-esmodule && webpack && npx dts-bundle-generator --umd-module-name manifold -o types/index.d.ts dist-esmodule/index.d.ts",
-    "build-docs": "npx rimraf -rf docs && typedoc --out docs --name manifesto --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --module commonjs src/ && touch docs/.nojekyll",
+    "build-docs": "npx rimraf -rf docs && typedoc --out docs --name manifold --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --module commonjs src/ && touch docs/.nojekyll",
     "prepare": "npm run build"
   },
   "repository": {
@@ -32,7 +32,7 @@
   "dependencies": {
     "@types/jquery": "^2.0.40",
     "@edsilv/http-status-codes": "0.0.12",
-    "@iiif/vocabulary": "^1.0.5",
+    "@iiif/vocabulary": "^1.0.7",
     "manifesto.js": "4.0.0-pre.7"
   }
 }

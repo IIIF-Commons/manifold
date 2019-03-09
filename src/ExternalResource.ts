@@ -331,7 +331,7 @@ export class ExternalResource implements manifesto.IExternalResource {
                         }
 
                         // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                        if (uri !== dataUri && that.loginService){
+                        if (uri !== dataUri && that.loginService) {
                             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                         } else {
                             that.status = HTTPStatusCode.OK;
