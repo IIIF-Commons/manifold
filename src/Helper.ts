@@ -8,6 +8,7 @@ import { MultiSelectableCanvas } from "./MultiSelectableCanvas";
 import { TreeSortType } from "./TreeSortType";
 import { MultiSelectableRange } from "./MultiSelectableRange";
 import { ServiceProfile, ViewingHint, ViewingDirection } from "@iiif/vocabulary";
+import { Errors } from "./Errors";
 
 export class Helper {
     
@@ -15,13 +16,13 @@ export class Helper {
 
     public canvasIndex: number;
     public collectionIndex: number;
-    public iiifResource: manifesto.IIIFResource;
+    public iiifResource: manifesto.IIIFResource | undefined;
     public iiifResourceUri: string;
-    public manifest: manifesto.Manifest;
+    public manifest: manifesto.Manifest | undefined;
     public manifestIndex: number;
     public options: IManifoldOptions;
     public sequenceIndex: number;
-    public rangeId: string | null;
+    public rangeId: string | undefined;
     
     constructor(options: IManifoldOptions) {
         this.options = options;
@@ -47,6 +48,10 @@ export class Helper {
     }
     
     public getAttribution(): string | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
 
         console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
         
@@ -114,6 +119,10 @@ export class Helper {
 
     public getCanvasRanges(canvas: manifesto.Canvas): manifesto.Range[] {
 
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         if (canvas.ranges) {
             return canvas.ranges; // cache
         } else {
@@ -138,10 +147,15 @@ export class Helper {
     }
 
     public getCurrentSequence(): manifesto.Sequence {
-        return this.getSequenceByIndex(this.sequenceIndex);
+        return this.getSequenceByIndex(this.sequenceIndex as number);
     }
 
     public getDescription(): string | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         const description: manifesto.LanguageMap | null = this.manifest.getDescription();
 
         if (description) {
@@ -152,6 +166,11 @@ export class Helper {
     }
 
     public getLabel(): string | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         const label: manifesto.LanguageMap | null = this.manifest.getLabel();
 
         if (label) {
@@ -174,14 +193,29 @@ export class Helper {
     }
     
     public getLicense(): string | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getLicense();
     }
 
     public getLogo(): string | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getLogo();
     }
 
-    public getManifestType():manifesto.ManifestType {
+    public getManifestType(): manifesto.ManifestType | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         let manifestType = this.manifest.getManifestType();
 
         // default to monograph
@@ -194,25 +228,30 @@ export class Helper {
     
     public getMetadata(options?: MetadataOptions): MetadataGroup[] {
 
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         const metadataGroups: MetadataGroup[] = [];
         const manifestMetadata: manifesto.LabelValuePair[] = this.manifest.getMetadata();
         const manifestGroup: MetadataGroup = new MetadataGroup(this.manifest);
+        const locale: string = this.options.locale as string; // this will always default to en-GB
 
         if (manifestMetadata && manifestMetadata.length) {
             manifestGroup.addMetadata(manifestMetadata, true);
         }
 
         if (this.manifest.getDescription().length) {
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
-            metadataItem.label = [new manifesto.Language("description", this.options.locale)];
+            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(locale);
+            metadataItem.label = [new manifesto.Language("description", locale)];
             metadataItem.value = this.manifest.getDescription();
             (<IMetadataItem>metadataItem).isRootLevel = true;
             manifestGroup.addItem(<IMetadataItem>metadataItem);
         }
 
         if (this.manifest.getAttribution().length) {
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
-            metadataItem.label = [new manifesto.Language("attribution", this.options.locale)];
+            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(locale);
+            metadataItem.label = [new manifesto.Language("attribution", locale)];
             metadataItem.value = this.manifest.getAttribution();
             (<IMetadataItem>metadataItem).isRootLevel = true;
             manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -225,7 +264,7 @@ export class Helper {
                 label: "license",
                 value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
             };
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
+            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(locale);
             metadataItem.parse(item);
             (<IMetadataItem>metadataItem).isRootLevel = true;
             manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -236,7 +275,7 @@ export class Helper {
                 label: "logo",
                 value: '<img src="' + this.manifest.getLogo() + '"/>'
             };
-            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(this.options.locale);
+            const metadataItem: manifesto.LabelValuePair = new manifesto.LabelValuePair(locale);
             metadataItem.parse(item);
             (<IMetadataItem>metadataItem).isRootLevel = true;
             manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -252,6 +291,11 @@ export class Helper {
     }
 
     public getRequiredStatement(): ILabelValuePair | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         const requiredStatement: manifesto.LabelValuePair | null = this.manifest.getRequiredStatement();
 
         if (requiredStatement) {
@@ -347,6 +391,11 @@ export class Helper {
     }
 
     public getPosterCanvas(): manifesto.Canvas | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getPosterCanvas();
     }
 
@@ -481,10 +530,20 @@ export class Helper {
     }
     
     public getRangeByPath(path: string): manifesto.Range | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getRangeByPath(path);
     }
 
     public getRangeById(id: string): manifesto.Range | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getRangeById(id);
     }
     
@@ -494,22 +553,47 @@ export class Helper {
     }
 
     public getRelated(): any {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getRelated();
     }
     
     public getSearchService(): manifesto.Service | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getService(ServiceProfile.SEARCH_0);
     }
     
     public getSeeAlso(): any {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getSeeAlso();
     }
 
     public getSequenceByIndex(index: number): manifesto.Sequence {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getSequenceByIndex(index);
     }
 
     public getShareServiceUrl(): string | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         let url: string | null = null;
         let shareService: manifesto.Service | null = this.manifest.getService(ServiceProfile.SHARE_EXTENSIONS);
 
@@ -558,6 +642,11 @@ export class Helper {
     }
     
     public getTopRanges(): manifesto.Range[] {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getTopRanges();
     }
 
@@ -565,7 +654,12 @@ export class Helper {
         return this.getCurrentSequence().getTotalCanvases();
     }
 
-    public getTrackingLabel(): string {
+    public getTrackingLabel(): string | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.getTrackingLabel();
     }
 
@@ -630,6 +724,11 @@ export class Helper {
     }
     
     public getViewingDirection(): ViewingDirection | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         let viewingDirection: ViewingDirection | null = this.getCurrentSequence().getViewingDirection();
 
         if (!viewingDirection) {
@@ -640,6 +739,11 @@ export class Helper {
     }
 
     public getViewingHint(): ViewingHint | null {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         let viewingHint: ViewingHint | null = this.getCurrentSequence().getViewingHint();
 
         if (!viewingHint) {
@@ -653,6 +757,11 @@ export class Helper {
     // inquiries //
     
     public hasParentCollection(): boolean {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return !!this.manifest.parentCollection;
     }
 
@@ -732,10 +841,19 @@ export class Helper {
     }
     
     public isMultiSequence(): boolean{
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return this.manifest.isMultiSequence();
     }
     
     public isPaged(): boolean {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
 
         // check the sequence for a viewingHint (deprecated)
         const viewingHint: ViewingHint | null = this.getViewingHint();
@@ -754,6 +872,11 @@ export class Helper {
     }
     
     public isPagingEnabled(): boolean {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+
         return (this.manifest.isPagingEnabled() || this.getCurrentSequence().isPagingEnabled());
     }
     
@@ -784,6 +907,11 @@ export class Helper {
     }
 
     public isUIEnabled(name: string): boolean {
+
+        if (!this.manifest) {
+            throw new Error(Errors.manifestNotLoaded);
+        }
+        
         const uiExtensions: manifesto.Service | null = this.manifest.getService(ServiceProfile.UI_EXTENSIONS);
 
         if (uiExtensions) {
