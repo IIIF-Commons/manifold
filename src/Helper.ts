@@ -557,7 +557,7 @@ namespace Manifold {
             } else {
                 const topRanges: Manifesto.IRange[] = this._getTopRanges();
                 
-                const root: ITreeNode = new manifesto.TreeNode();
+                const root: ITreeNode = new manifesto.TreeNode() as ITreeNode;
                 root.label = 'root';
                 root.data = this.iiifResource;
                 
@@ -569,7 +569,7 @@ namespace Manifold {
                 }
             }
 
-            let sortedTree: ITreeNode = new manifesto.TreeNode();
+            let sortedTree: ITreeNode = new manifesto.TreeNode() as ITreeNode;
             
             switch (sortType.toString()) {
                 case TreeSortType.DATE.toString():
@@ -776,7 +776,7 @@ namespace Manifold {
                 const year: number = this.getNodeYear(node);
                 const month: number = this.getNodeMonth(node);
 
-                const dateNode: ITreeNode = new manifesto.TreeNode();
+                const dateNode: ITreeNode = new manifesto.TreeNode() as ITreeNode;
                 dateNode.id = node.id;
                 dateNode.label = this.getNodeDisplayDate(node);
                 dateNode.data = node.data;

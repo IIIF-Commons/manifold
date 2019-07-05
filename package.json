@@ -1,6 +1,6 @@
 {
   "name": "@iiif/manifold",
-  "version": "1.2.36",
+  "version": "1.2.37",
   "description": "",
   "main": "./dist/manifold.js",
   "types": "./dist/manifold.d.ts",
@@ -18,9 +18,10 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-tasks": "iiif-commons/gulp-tasks#v1.0.7",
-    "manifesto.js": "3.0.9"
+    "manifesto.js": "3.0.11"
   },
   "dependencies": {
-    "@types/jquery": "^2.0.40"
+    "@types/jquery": "^2.0.40",
+    "natives": "^1.1.6"
   }
 }

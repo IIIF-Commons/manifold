@@ -30,7 +30,7 @@ namespace Manifold {
         }
 
         public getCanvasById(id: string): ICanvas {
-            return this.canvases.en().where(c => c.id === id).first();
+            return this.canvases.en().where(c => manifesto.Utils.normaliseUrl(c.id) === manifesto.Utils.normaliseUrl(id)).first();
         }
         
         public getCanvasesByIds(ids: string[]): ICanvas[] {
