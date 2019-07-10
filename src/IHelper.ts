@@ -24,7 +24,7 @@ namespace Manifold {
         getCanvasIndexByLabel(label: string): number;
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange | null;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
-        getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null;
+        getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | undefined;
         getCurrentCanvas(): Manifesto.ICanvas;
         getCurrentRange(): Manifesto.IRange | null;
         getCurrentSequence(): Manifesto.ISequence;

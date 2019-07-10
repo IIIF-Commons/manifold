@@ -1,6 +1,7 @@
 .idea
 .vscode
 node_modules
+dist
 debug.log
 npm-debug.log
 examples

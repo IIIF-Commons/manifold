@@ -71,35 +71,44 @@ namespace Manifold {
                 bootstrapper._options.iiifResource = iiifResource;
             }
 
+            const collectionIndex: number | undefined = bootstrapper._options.collectionIndex; // this is either undefined, 0, or a positive number (defaults to undefined)
+            const manifestIndex: number = bootstrapper._options.manifestIndex; // this is either 0 or a positive number (defaults to 0)
+
             if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString() ||
                 iiifResource.getIIIFResourceType().toString().toLowerCase() === 'collection') { // todo: use constant
-                // if it's a collection and has child collections, get the collection by index
+                
+                // it's a collection
+
+                //const manifests: Manifesto.IManifest[] = (<Manifesto.ICollection>iiifResource).getManifests();
                 const collections: Manifesto.ICollection[] = (<Manifesto.ICollection>iiifResource).getCollections();
 
-                if (collections && collections.length) {
+                if (collectionIndex !== undefined && collections && collections.length) {
 
-                    (<Manifesto.ICollection>iiifResource).getCollectionByIndex(bootstrapper._options.collectionIndex).then((collection: Manifesto.ICollection) => {
+                    // a collectionIndex has been passed and we have sub collections
+
+                    (<Manifesto.ICollection>iiifResource).getCollectionByIndex(collectionIndex).then((collection: Manifesto.ICollection) => {
 
                         if (!collection){
                             reject('Collection index not found');
                         }
 
                         // Special case: we're trying to load the first manifest of the
-                        // collection, but the collection has no manifests but does have
+                        // specified collection, but the collection has no manifests but does have
                         // subcollections. Thus, we should dive in until we find something
                         // we can display!
-                        if (collection.getTotalManifests() === 0 && bootstrapper._options.manifestIndex === 0 && collection.getTotalCollections() > 0) {
+                        if (collection.getTotalManifests() === 0 && manifestIndex === 0 && collection.getTotalCollections() > 0) {
                             bootstrapper._options.collectionIndex = 0;
                             bootstrapper._options.iiifResourceUri = collection.id;
                             bootstrapper.bootstrap(resolve, reject);
                         } else {
-                            collection.getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifesto.IManifest) => {
+                            collection.getManifestByIndex(manifestIndex).then((manifest: Manifesto.IManifest) => {
                                 bootstrapper._options.manifest = manifest;
                                 const helper: Manifold.Helper = new Helper(bootstrapper._options);
                                 resolve(helper);
                             });
                         }
                     });
+
                 } else {
                     (<Manifesto.ICollection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex).then((manifest: Manifesto.IManifest) => {
                         bootstrapper._options.manifest = manifest;

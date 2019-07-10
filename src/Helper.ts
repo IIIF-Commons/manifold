@@ -21,7 +21,7 @@ namespace Manifold {
             this.iiifResource = this.options.iiifResource;
             this.iiifResourceUri = this.options.iiifResourceUri;
             this.manifest = this.options.manifest;
-            this.collectionIndex = this.options.collectionIndex || 0;
+            this.collectionIndex = this.options.collectionIndex;
             this.manifestIndex = this.options.manifestIndex || 0;
             this.sequenceIndex = this.options.sequenceIndex || 0;
             this.canvasIndex = this.options.canvasIndex || 0;
@@ -116,13 +116,16 @@ namespace Manifold {
             return canvas.ranges;
         }
 
-        public getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | null {
-            // todo: support nested collections. walk up parents adding to array and return csv string.
-            let index: number | null = null;
-            if (iiifResource.parentCollection) {
-                index = iiifResource.parentCollection.index;
+        public getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number | undefined {
+            // todo: this only works for collections nested one level deep
+            if (iiifResource.parentCollection && !iiifResource.parentCollection.parentCollection) {
+                // manifest must be in the root
+                return undefined;
+                
+            } else if (iiifResource.parentCollection) {
+                return iiifResource.parentCollection.index;
             }
-            return index;
+            return undefined;
         }
 
         public getCurrentCanvas(): Manifesto.ICanvas {
