@@ -71,7 +71,7 @@ namespace Manifold {
                 bootstrapper._options.iiifResource = iiifResource;
             }
 
-            const collectionIndex: number | undefined = bootstrapper._options.collectionIndex; // this is either undefined, 0, or a positive number (defaults to undefined)
+            let collectionIndex: number | undefined = bootstrapper._options.collectionIndex; // this is either undefined, 0, or a positive number (defaults to undefined)
             const manifestIndex: number = bootstrapper._options.manifestIndex; // this is either 0 or a positive number (defaults to 0)
 
             if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString() ||
@@ -79,8 +79,13 @@ namespace Manifold {
                 
                 // it's a collection
 
-                //const manifests: Manifesto.IManifest[] = (<Manifesto.ICollection>iiifResource).getManifests();
+                const manifests: Manifesto.IManifest[] = (<Manifesto.ICollection>iiifResource).getManifests();
                 const collections: Manifesto.ICollection[] = (<Manifesto.ICollection>iiifResource).getCollections();
+
+                // if there are only collections available, set the collectionIndex to 0 if undefined.
+                if (!manifests.length && collectionIndex === undefined) {
+                    collectionIndex = 0;
+                }
 
                 if (collectionIndex !== undefined && collections && collections.length) {
 
