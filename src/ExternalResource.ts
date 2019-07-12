@@ -221,7 +221,7 @@ namespace Manifold {
                 }
 
                 // if the resource has a probe service, use that to get http status code
-                if (that.probeService && !that.isProbed) {
+                if (that.probeService) {
 
                     that.isProbed = true;
 
