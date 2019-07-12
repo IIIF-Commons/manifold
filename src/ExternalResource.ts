@@ -228,7 +228,12 @@ namespace Manifold {
                     $.ajax(<JQueryAjaxSettings>{
                         url: that.probeService.id,
                         type: 'GET',
-                        dataType: 'json'
+                        dataType: 'json',
+                        beforeSend: (xhr) => {
+                            if (accessToken) {
+                                xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                            }
+                        }
                     }).done((data: any) => {
 
                         let contentLocation: string = unescape(data.contentLocation);
