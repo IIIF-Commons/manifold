@@ -13,7 +13,7 @@
     "build:types": "npx dts-bundle-generator --umd-module-name manifold -o types/index.d.ts dist-esmodule/index.d.ts",
     "build:docs": "rimraf -rf docs && typedoc --out docs --name manifold --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --module commonjs src/ && touch docs/.nojekyll",
     "build": "npm run clean && npm run build:commonjs && npm run build:esmodule && npm run build:umd && npm run build:var && npm run build:types",
-    "prepare": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -31,14 +31,15 @@
     "dts-bundle-generator": "^2.0.0",
     "rimraf": "^2.6.3",
     "typedoc": "0.14.0",
-    "typescript": "3.1.6",
-    "webpack": "^4.28.3",
-    "webpack-cli": "^3.1.2"
+    "typescript": "3.6.3",
+    "webpack-cli": "^3.1.2",
+    "webpack": "^4.28.3"
   },
   "dependencies": {
-    "@types/jquery": "^2.0.40",
     "@edsilv/http-status-codes": "0.0.12",
-    "@iiif/vocabulary": "^1.0.7",
-    "manifesto.js": "4.0.0-pre.8"
+    "@iiif/vocabulary": "1.0.8",
+    "@types/jquery": "^2.0.40",
+    "manifesto.js": "4.0.0-pre.9",
+    "natives": "^1.1.6"
   }
 }

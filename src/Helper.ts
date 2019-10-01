@@ -133,13 +133,16 @@ export class Helper {
         return canvas.ranges;
     }
 
-    public getCollectionIndex(iiifResource: manifesto.IIIFResource): number | null {
-        // todo: support nested collections. walk up parents adding to array and return csv string.
-        let index: number | null = null;
-        if (iiifResource.parentCollection) {
-            index = iiifResource.parentCollection.index;
+    public getCollectionIndex(iiifResource: manifesto.IIIFResource): number | undefined {
+        // todo: this only works for collections nested one level deep
+        if (iiifResource.parentCollection && !iiifResource.parentCollection.parentCollection) {
+            // manifest must be in the root
+            return undefined;
+            
+        } else if (iiifResource.parentCollection) {
+            return iiifResource.parentCollection.index;
         }
-        return index;
+        return undefined;
     }
 
     public getCurrentCanvas(): manifesto.Canvas {
@@ -679,7 +682,7 @@ export class Helper {
         let tree: manifesto.TreeNode;
 
         if (this.iiifResource.isCollection()) {
-            tree = this.iiifResource.getDefaultTree();
+            tree = <manifesto.TreeNode>this.iiifResource.getDefaultTree();
         } else {
             const topRanges: manifesto.Range[] = this._getTopRanges();
             
@@ -689,7 +692,7 @@ export class Helper {
             
             if (topRanges.length) {
                 const range: manifesto.Range = topRanges[topRangeIndex];                    
-                tree = range.getTree(root);
+                tree = <manifesto.TreeNode>range.getTree(root);
             } else {
                 return root;
             }
@@ -697,13 +700,13 @@ export class Helper {
 
         let sortedTree: manifesto.TreeNode = new manifesto.TreeNode();
         
-        switch (sortType) {
-            case TreeSortType.DATE:
+        switch (sortType.toString()) {
+            case TreeSortType.DATE.toString():
                 // returns a list of treenodes for each decade.
                 // expanding a decade generates a list of years
                 // expanding a year gives a list of months containing issues
                 // expanding a month gives a list of issues.
-                if (this.treeHasNavDates(tree)) {
+                if (this.treeHasNavDates(tree)){
                     this._getSortedTreeNodesByDate(sortedTree, tree);
                     break;
                 }                    
@@ -937,19 +940,14 @@ export class Helper {
     public createDateNodes(rootNode: manifesto.TreeNode, nodes: manifesto.TreeNode[]): void {
         for (let i = 0; i < nodes.length; i++) {
             const node: manifesto.TreeNode = <manifesto.TreeNode>nodes[i];
-
-            if (!node.navDate) {
-                continue;
-            }
-
             const year: number = this.getNodeYear(node);
             const month: number = this.getNodeMonth(node);
 
-            const dateNode: manifesto.TreeNode = new manifesto.TreeNode();
+            const dateNode: manifesto.TreeNode = new manifesto.TreeNode() as manifesto.TreeNode;
             dateNode.id = node.id;
             dateNode.label = this.getNodeDisplayDate(node);
             dateNode.data = node.data;
-            dateNode.data.type = manifesto.TreeNodeType.MANIFEST;
+            dateNode.data.type = manifesto.TreeNodeType.manifest().toString();
             dateNode.data.year = year;
             dateNode.data.month = month;
 
@@ -961,7 +959,7 @@ export class Helper {
                 if (yearNode) {
                     const monthNode: manifesto.TreeNode | null = this.getMonthNode(yearNode, month);
 
-                    if (monthNode) {
+                    if (monthNode){
                         monthNode.addNode(dateNode);
                     }
                 }

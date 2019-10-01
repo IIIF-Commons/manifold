@@ -1,6 +1,5 @@
 import { IManifoldOptions } from "./IManifoldOptions";
 import { Helper } from "./Helper";
-import { IIIFResourceType } from '@iiif/vocabulary';
 
 export class Bootstrapper {
     
@@ -75,34 +74,49 @@ export class Bootstrapper {
                 bootstrapper._options.iiifResource = iiifResource;
             }
 
-            if (iiifResource.getIIIFResourceType() === IIIFResourceType.COLLECTION) { 
-                // if it's a collection and has child collections, get the collection by index
+            let collectionIndex: number | undefined = bootstrapper._options.collectionIndex; // this is either undefined, 0, or a positive number (defaults to undefined)
+            const manifestIndex: number | undefined = bootstrapper._options.manifestIndex; // this is either 0 or a positive number (defaults to 0)
+
+            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString() ||
+                iiifResource.getIIIFResourceType().toString().toLowerCase() === 'collection') { // todo: use constant
+                
+                // it's a collection
+
+                const manifests: manifesto.Manifest[] = (<manifesto.Collection>iiifResource).getManifests();
                 const collections: manifesto.Collection[] = (<manifesto.Collection>iiifResource).getCollections();
 
-                if (collections && collections.length) {
+                // if there are only collections available, set the collectionIndex to 0 if undefined.
+                if (!manifests.length && collectionIndex === undefined) {
+                    collectionIndex = 0;
+                }
 
-                    (<manifesto.Collection>iiifResource).getCollectionByIndex(bootstrapper._options.collectionIndex as number).then((collection: manifesto.Collection) => {
+                if (collectionIndex !== undefined && collections && collections.length) {
+
+                    // a collectionIndex has been passed and we have sub collections
+
+                    (<manifesto.Collection>iiifResource).getCollectionByIndex(collectionIndex).then((collection: manifesto.Collection) => {
 
                         if (!collection) {
                             reject('Collection index not found');
                         }
 
                         // Special case: we're trying to load the first manifest of the
-                        // collection, but the collection has no manifests but does have
+                        // specified collection, but the collection has no manifests but does have
                         // subcollections. Thus, we should dive in until we find something
                         // we can display!
-                        if (collection.getTotalManifests() === 0 && bootstrapper._options.manifestIndex === 0 && collection.getTotalCollections() > 0) {
+                        if (collection.getTotalManifests() === 0 && manifestIndex === 0 && collection.getTotalCollections() > 0) {
                             bootstrapper._options.collectionIndex = 0;
                             bootstrapper._options.manifestUri = collection.id;
                             bootstrapper.bootstrap(resolve, reject);
-                        } else {
-                            collection.getManifestByIndex(bootstrapper._options.manifestIndex as number).then((manifest: manifesto.Manifest) => {
+                        } else if (manifestIndex !== undefined) {
+                            collection.getManifestByIndex(manifestIndex).then((manifest: manifesto.Manifest) => {
                                 bootstrapper._options.manifest = manifest;
                                 const helper: Helper = new Helper(bootstrapper._options);
                                 resolve(helper);
                             });
                         }
                     });
+
                 } else {
                     (<manifesto.Collection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex as number).then((manifest: manifesto.Manifest) => {
                         bootstrapper._options.manifest = manifest;
