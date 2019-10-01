@@ -26,8 +26,7 @@ https://iiif-commons.github.io/manifold/
 
     git clone https://github.com/iiif-commons/manifold.git
     npm install
-    npm build
-    npm test
+    npm run build
 
 ### Publishing Package
 

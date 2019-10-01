@@ -947,7 +947,7 @@ export class Helper {
             dateNode.id = node.id;
             dateNode.label = this.getNodeDisplayDate(node);
             dateNode.data = node.data;
-            dateNode.data.type = manifesto.TreeNodeType.manifest().toString();
+            dateNode.data.type = manifesto.TreeNodeType.MANIFEST;
             dateNode.data.year = year;
             dateNode.data.month = month;
 

@@ -1,5 +1,6 @@
-import { IManifoldOptions } from "./IManifoldOptions";
 import { Helper } from "./Helper";
+import { IIIFResourceType } from "@iiif/vocabulary";
+import { IManifoldOptions } from "./IManifoldOptions";
 
 export class Bootstrapper {
     
@@ -77,8 +78,7 @@ export class Bootstrapper {
             let collectionIndex: number | undefined = bootstrapper._options.collectionIndex; // this is either undefined, 0, or a positive number (defaults to undefined)
             const manifestIndex: number | undefined = bootstrapper._options.manifestIndex; // this is either 0 or a positive number (defaults to 0)
 
-            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString() ||
-                iiifResource.getIIIFResourceType().toString().toLowerCase() === 'collection') { // todo: use constant
+            if (iiifResource.getIIIFResourceType() === IIIFResourceType.COLLECTION) {
                 
                 // it's a collection
 
