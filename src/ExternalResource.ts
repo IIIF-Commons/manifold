@@ -221,15 +221,20 @@ export class ExternalResource implements manifesto.IExternalResource {
                 return;
             }
 
-            // if the resource has a probe service, use that to get http status code
-            if (that.probeService && !that.isProbed) {
+                // if the resource has a probe service, use that to get http status code
+                if (that.probeService) {
 
                 that.isProbed = true;
 
                 $.ajax(<JQueryAjaxSettings>{
                     url: that.probeService.id,
                     type: 'GET',
-                    dataType: 'json'
+                    dataType: 'json',
+                    beforeSend: (xhr) => {
+                        if (accessToken) {
+                            xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                        }
+                    }
                 }).done((data: any) => {
 
                     let contentLocation: string = unescape(data.contentLocation);
