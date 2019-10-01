@@ -17,7 +17,7 @@ export class Helper {
     public canvasIndex: number;
     public collectionIndex: number;
     public iiifResource: manifesto.IIIFResource | undefined;
-    public iiifResourceUri: string;
+    public manifestUri: string;
     public manifest: manifesto.Manifest | undefined;
     public manifestIndex: number;
     public options: IManifoldOptions;
@@ -27,7 +27,7 @@ export class Helper {
     constructor(options: IManifoldOptions) {
         this.options = options;
         this.iiifResource = this.options.iiifResource;
-        this.iiifResourceUri = this.options.manifestUri;
+        this.manifestUri = this.options.manifestUri;
         this.manifest = this.options.manifest;
         this.collectionIndex = this.options.collectionIndex || 0;
         this.manifestIndex = this.options.manifestIndex || 0;
