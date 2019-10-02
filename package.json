@@ -1,9 +1,9 @@
 {
   "name": "@iiif/manifold",
-  "version": "2.0.0-pre.16",
+  "version": "2.0.0-pre.17",
   "description": "",
   "main": "./dist-esmodule/index.js",
-  "types": "./types/index.d.ts",
+  "types": "./dist-esmodule/index.d.ts",
   "scripts": {
     "clean": "rimraf -rf dist-umd dist-commonjs dist-esmodule dist-var types",
     "build:commonjs": "tsc",
@@ -37,9 +37,9 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "0.0.12",
-    "@iiif/vocabulary": "1.0.8",
+    "@iiif/vocabulary": "1.0.9",
     "@types/jquery": "^2.0.40",
-    "manifesto.js": "4.0.0-pre.9",
+    "manifesto.js": "4.0.0-pre.12",
     "natives": "^1.1.6"
   }
 }
