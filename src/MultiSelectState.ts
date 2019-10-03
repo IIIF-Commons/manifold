@@ -75,9 +75,7 @@ export class MultiSelectState {
     public selectRange(range: MultiSelectableRange, selected: boolean): void {
         const r: MultiSelectableRange = this.ranges.filter(r => r.id === range.id)[0];
         r.multiSelected = selected;
-
         const canvases: MultiSelectableCanvas[] = <MultiSelectableCanvas[]>this.getRangeCanvases(r);
-
         this.selectCanvases(canvases, selected);
     }
     
@@ -95,14 +93,13 @@ export class MultiSelectState {
     }
     
     public setEnabled(enabled: boolean): void {
-        this.isEnabled = enabled;
-        
+        this.isEnabled = enabled;        
         const items: IMultiSelectable[] = this.getAll();
 
         for (let i = 0; i < items.length; i++){
             const item: IMultiSelectable = items[i];
             item.multiSelectEnabled = this.isEnabled;
-            if (!enabled){
+            if (!enabled) {
                 item.multiSelected = false;
             }
         }

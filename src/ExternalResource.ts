@@ -1,4 +1,5 @@
 import { ServiceProfile } from "@iiif/vocabulary";
+import * as HTTPStatusCode from "@edsilv/http-status-codes";
 
 export class ExternalResource implements manifesto.IExternalResource {
 
@@ -221,47 +222,22 @@ export class ExternalResource implements manifesto.IExternalResource {
                 return;
             }
 
-                // if the resource has a probe service, use that to get http status code
-                if (that.probeService) {
+            // if the resource has a probe service, use that to get http status code
+            if (that.probeService) {
 
                 that.isProbed = true;
 
-                $.ajax(<JQueryAjaxSettings>{
-                    url: that.probeService.id,
-                    type: 'GET',
-                    dataType: 'json',
-                    beforeSend: (xhr) => {
-                        if (accessToken) {
-                            xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-                        }
-                    }
-                }).done((data: any) => {
+                // $.ajax(<JQueryAjaxSettings>{
+                //     url: that.probeService.id,
+                //     type: 'GET',
+                //     dataType: 'json',
+                //     beforeSend: (xhr) => {
+                //         if (accessToken) {
+                //             xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                //         }
+                //     }
+                // }).done((data: any) => {
 
-                    let contentLocation: string = unescape(data.contentLocation);
-
-                    if (contentLocation !== that.dataUri) {
-                        that.status = HTTPStatusCode.MOVED_TEMPORARILY;
-                    } else {
-                        that.status = HTTPStatusCode.OK;
-                    }
-
-                    resolve(that);
-
-                }).fail((error) => {
-
-                    that.status = error.status;
-                    that.error = error;
-                    resolve(that);
-
-                });
-
-                // xhr implementation
-                // const xhr: XMLHttpRequest = new XMLHttpRequest();
-                // xhr.open('GET', that.probeService.id, true);
-                // xhr.withCredentials = true;
-
-                // xhr.onload = () => {
-                //     const data = JSON.parse(xhr.responseText);
                 //     let contentLocation: string = unescape(data.contentLocation);
 
                 //     if (contentLocation !== that.dataUri) {
@@ -271,14 +247,39 @@ export class ExternalResource implements manifesto.IExternalResource {
                 //     }
 
                 //     resolve(that);
-                // }
 
-                // xhr.onerror = () => {
-                //     that.status = xhr.status;
+                // }).fail((error) => {
+
+                //     that.status = error.status;
+                //     that.error = error;
                 //     resolve(that);
-                // };
 
-                // xhr.send();
+                // });
+
+                // xhr implementation
+                const xhr: XMLHttpRequest = new XMLHttpRequest();
+                xhr.open('GET', that.probeService.id, true);
+                xhr.withCredentials = true;
+
+                xhr.onload = () => {
+                    const data = JSON.parse(xhr.responseText);
+                    let contentLocation: string = unescape(data.contentLocation);
+
+                    if (contentLocation !== that.dataUri) {
+                        that.status = HTTPStatusCode.MOVED_TEMPORARILY;
+                    } else {
+                        that.status = HTTPStatusCode.OK;
+                    }
+
+                    resolve(that);
+                }
+
+                xhr.onerror = () => {
+                    that.status = xhr.status;
+                    resolve(that);
+                };
+
+                xhr.send();
 
             } else {
 
@@ -302,71 +303,17 @@ export class ExternalResource implements manifesto.IExternalResource {
                     type = 'HEAD';
                 }
 
-                $.ajax(<JQueryAjaxSettings>{
-                    url: that.dataUri,
-                    type: type,
-                    dataType: 'json',
-                    beforeSend: (xhr) => {
-                        if (accessToken) {
-                            xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-                        }
-                    }
-                }).done((data: any) => {
+                // $.ajax(<JQueryAjaxSettings>{
+                //     url: that.dataUri,
+                //     type: type,
+                //     dataType: 'json',
+                //     beforeSend: (xhr) => {
+                //         if (accessToken) {
+                //             xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                //         }
+                //     }
+                // }).done((data: any) => {
 
-                    // if it's a resource without an info.json
-                    // todo: if resource doesn't have a @profile
-                    if (!data) {
-                        that.status = HTTPStatusCode.OK;
-                        resolve(that);
-                    } else {
-                        let uri: string = unescape(data['@id']);
-
-                        that.data = data;
-                        that._parseAuthServices(that.data);
-
-                        // remove trailing /info.json
-                        if (uri.endsWith('/info.json')){
-                            uri = uri.substr(0, uri.lastIndexOf('/'));
-                        }
-
-                        let dataUri: string | null = that.dataUri;
-
-                        if (dataUri && dataUri.endsWith('/info.json')){
-                            dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
-                        }
-
-                        // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                        if (uri !== dataUri && that.loginService) {
-                            that.status = HTTPStatusCode.MOVED_TEMPORARILY;
-                        } else {
-                            that.status = HTTPStatusCode.OK;
-                        }
-
-                        resolve(that);
-                    }
-
-                }).fail((error) => {
-
-                    that.status = error.status;
-                    that.error = error;
-                    if (error.responseJSON){
-                        that._parseAuthServices(error.responseJSON);
-                    }
-                    resolve(that);
-
-                });
-
-                // xhr implementation
-                // const xhr: XMLHttpRequest = new XMLHttpRequest();
-                // xhr.open(type, that.dataUri, true);
-                // xhr.withCredentials = true;
-                // if (accessToken) {
-                //     xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-                // }
-
-                // xhr.onload = () => {
-                //     const data = JSON.parse(xhr.responseText);
-                    
                 //     // if it's a resource without an info.json
                 //     // todo: if resource doesn't have a @profile
                 //     if (!data) {
@@ -385,12 +332,12 @@ export class ExternalResource implements manifesto.IExternalResource {
 
                 //         let dataUri: string | null = that.dataUri;
 
-                //         if (dataUri && dataUri.endsWith('/info.json')) {
+                //         if (dataUri && dataUri.endsWith('/info.json')){
                 //             dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
                 //         }
 
                 //         // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                //         if (uri !== dataUri && that.loginService){
+                //         if (uri !== dataUri && that.loginService) {
                 //             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                 //         } else {
                 //             that.status = HTTPStatusCode.OK;
@@ -398,17 +345,71 @@ export class ExternalResource implements manifesto.IExternalResource {
 
                 //         resolve(that);
                 //     }
-                // }
 
-                // xhr.onerror = () => {
-                //     that.status = xhr.status;
-                //     if (xhr.responseText) {
-                //         that._parseAuthServices(JSON.parse(xhr.responseText));
+                // }).fail((error) => {
+
+                //     that.status = error.status;
+                //     that.error = error;
+                //     if (error.responseJSON){
+                //         that._parseAuthServices(error.responseJSON);
                 //     }
                 //     resolve(that);
-                // };
 
-                // xhr.send();
+                // });
+
+                // xhr implementation
+                const xhr: XMLHttpRequest = new XMLHttpRequest();
+                xhr.open(type, that.dataUri, true);
+                xhr.withCredentials = true;
+                if (accessToken) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+                }
+
+                xhr.onload = () => {
+                    const data = JSON.parse(xhr.responseText);
+                    
+                    // if it's a resource without an info.json
+                    // todo: if resource doesn't have a @profile
+                    if (!data) {
+                        that.status = HTTPStatusCode.OK;
+                        resolve(that);
+                    } else {
+                        let uri: string = unescape(data['@id']);
+
+                        that.data = data;
+                        that._parseAuthServices(that.data);
+
+                        // remove trailing /info.json
+                        if (uri.endsWith('/info.json')){
+                            uri = uri.substr(0, uri.lastIndexOf('/'));
+                        }
+
+                        let dataUri: string | null = that.dataUri;
+
+                        if (dataUri && dataUri.endsWith('/info.json')) {
+                            dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
+                        }
+
+                        // if the request was redirected to a degraded version and there's a login service to get the full quality version
+                        if (uri !== dataUri && that.loginService){
+                            that.status = HTTPStatusCode.MOVED_TEMPORARILY;
+                        } else {
+                            that.status = HTTPStatusCode.OK;
+                        }
+
+                        resolve(that);
+                    }
+                }
+
+                xhr.onerror = () => {
+                    that.status = xhr.status;
+                    if (xhr.responseText) {
+                        that._parseAuthServices(JSON.parse(xhr.responseText));
+                    }
+                    resolve(that);
+                };
+
+                xhr.send();
 
             }
 
