@@ -1,5 +1,6 @@
 import { ServiceProfile } from "@iiif/vocabulary";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
+import manifesto from "manifesto.js";
 
 export class ExternalResource implements manifesto.IExternalResource {
 

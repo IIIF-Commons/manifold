@@ -9,6 +9,7 @@ import { TreeSortType } from "./TreeSortType";
 import { MultiSelectableRange } from "./MultiSelectableRange";
 import { ServiceProfile, ViewingHint, ViewingDirection } from "@iiif/vocabulary";
 import { Errors } from "./Errors";
+import manifesto from "manifesto.js";
 
 export class Helper {
     

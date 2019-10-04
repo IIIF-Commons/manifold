@@ -1,5 +1,3 @@
-import * as M from "manifesto.js";
-
 declare global {
     interface Window {
         manifestCallback: any;
@@ -11,7 +9,5 @@ declare global {
     
     declare function escape(s:string): string;
     declare function unescape(s:string): string;
-    
-    const manifesto: M
 }
 export {};

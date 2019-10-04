@@ -1,6 +1,7 @@
 import { MultiSelectableRange } from "./MultiSelectableRange";
 import { MultiSelectableCanvas } from "./MultiSelectableCanvas";
 import { IMultiSelectable } from "./IMultiSelectable";
+import manifesto from "manifesto.js";
 
 export class MultiSelectState {
     isEnabled: boolean = false;

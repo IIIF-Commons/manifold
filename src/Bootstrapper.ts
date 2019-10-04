@@ -1,6 +1,7 @@
 import { Helper } from "./Helper";
 import { IIIFResourceType } from "@iiif/vocabulary";
 import { IManifoldOptions } from "./IManifoldOptions";
+import manifesto from "manifesto.js";
 
 export class Bootstrapper {
     
