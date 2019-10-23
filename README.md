@@ -12,7 +12,7 @@ e.g.
 - `getCurrentRange`, `getPreviousRange`, `getNextRange`: Used to navigate a flattened range tree (useful for IIIF AV scenarios)
 - `getTree`: Returns a default tree (sortable by `navDate`) of collections, manifests, ranges, or a tree based on a given top range.
 
-Has an ajax implementation of manifesto's IExternalResource (used in the IIIF auth flow).
+Has an ajax implementation of manifesto's `IExternalResource` (used in the IIIF auth flow).
 
 Getting Started
 --
