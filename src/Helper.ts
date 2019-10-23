@@ -53,8 +53,6 @@ export class Helper {
         if (!this.manifest) {
             throw new Error(Errors.manifestNotLoaded);
         }
-
-        console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
         
         const attribution: LanguageMap | null = this.manifest.getAttribution();
 
