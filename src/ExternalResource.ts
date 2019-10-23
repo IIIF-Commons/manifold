@@ -1,30 +1,30 @@
 import { ServiceProfile } from "@iiif/vocabulary";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
-import manifesto from "manifesto.js";
+import { Annotation, AnnotationBody, Canvas, IAccessToken, IExternalResource, IExternalResourceOptions, Resource, Service, Utils } from "manifesto.js";
 
-export class ExternalResource implements manifesto.IExternalResource {
+export class ExternalResource implements IExternalResource {
 
     public authAPIVersion: number;
     public authHoldingPage: any = null;
-    public clickThroughService: manifesto.Service | null = null;
+    public clickThroughService: Service | null = null;
     public data: any;
     public dataUri: string | null;
     public error: any;
-    public externalService: manifesto.Service | null = null;
+    public externalService: Service | null = null;
     public height: number;
     public index: number;
     public isProbed: boolean = false;
     public isResponseHandled: boolean = false;
-    public kioskService: manifesto.Service | null = null;
-    public loginService: manifesto.Service | null = null;
-    public logoutService: manifesto.Service | null = null;
-    public probeService: manifesto.Service | null = null;
-    public restrictedService: manifesto.Service | null = null;
+    public kioskService: Service | null = null;
+    public loginService: Service | null = null;
+    public logoutService: Service | null = null;
+    public probeService: Service | null = null;
+    public restrictedService: Service | null = null;
     public status: number;
-    public tokenService: manifesto.Service | null = null;
+    public tokenService: Service | null = null;
     public width: number;
 
-    constructor(canvas: manifesto.Canvas, options: manifesto.IExternalResourceOptions) {
+    constructor(canvas: Canvas, options: IExternalResourceOptions) {
         canvas.externalResource = <ExternalResource>this;
         this.dataUri = this._getDataUri(canvas);
         this.index = canvas.index;
@@ -34,18 +34,18 @@ export class ExternalResource implements manifesto.IExternalResource {
         this._parseDimensions(canvas);
     }
 
-    private _getImageServiceDescriptor(services: manifesto.Service[]): string | null {
+    private _getImageServiceDescriptor(services: Service[]): string | null {
         let infoUri: string | null = null;
         
         for (let i = 0; i < services.length; i++) {
-            const service: manifesto.Service = services[i];
+            const service: Service = services[i];
             let id: string = service.id;
 
             if (!id.endsWith('/')) {
                 id += '/';
             }
 
-            if (manifesto.Utils.isImageProfile(service.getProfile())) {
+            if (Utils.isImageProfile(service.getProfile())) {
                 infoUri = id + 'info.json';
             }
         }
@@ -53,21 +53,21 @@ export class ExternalResource implements manifesto.IExternalResource {
         return infoUri;
     }
 
-    private _getDataUri(canvas: manifesto.Canvas): string | null {
+    private _getDataUri(canvas: Canvas): string | null {
         
-        const content: manifesto.Annotation[] = canvas.getContent();
-        const images: manifesto.Annotation[] = canvas.getImages();
+        const content: Annotation[] = canvas.getContent();
+        const images: Annotation[] = canvas.getImages();
         let infoUri: string | null = null;
 
         // presentation 3
         if (content && content.length) {
 
-            const annotation: manifesto.Annotation = content[0];
-            const annotationBody: manifesto.AnnotationBody[] = annotation.getBody();
+            const annotation: Annotation = content[0];
+            const annotationBody: AnnotationBody[] = annotation.getBody();
 
             if (annotationBody.length) {
-                const body: manifesto.AnnotationBody = annotationBody[0];
-                const services: manifesto.Service[] = body.getServices();
+                const body: AnnotationBody = annotationBody[0];
+                const services: Service[] = body.getServices();
 
                 if (services.length) {
                     infoUri = this._getImageServiceDescriptor(services);
@@ -84,9 +84,9 @@ export class ExternalResource implements manifesto.IExternalResource {
 
         } else if (images && images.length) { // presentation 2
 
-            const firstImage: manifesto.Annotation = images[0];
-            const resource: manifesto.Resource = firstImage.getResource();
-            const services: manifesto.Service[] = resource.getServices();
+            const firstImage: Annotation = images[0];
+            const resource: Resource = firstImage.getResource();
+            const services: Service[] = resource.getServices();
 
             if (services.length) {
                 infoUri = this._getImageServiceDescriptor(services);
@@ -101,7 +101,7 @@ export class ExternalResource implements manifesto.IExternalResource {
         } else {
 
             // Legacy IxIF
-            const service: manifesto.Service | null = canvas.getService(ServiceProfile.IXIF);
+            const service: Service | null = canvas.getService(ServiceProfile.IXIF);
 
             if (service) { // todo: deprecate
                 return service.getInfoUri();
@@ -116,9 +116,9 @@ export class ExternalResource implements manifesto.IExternalResource {
 
         if (this.authAPIVersion === 0.9) {
 
-            this.clickThroughService = manifesto.Utils.getService(resource, ServiceProfile.AUTH_0_CLICK_THROUGH);
-            this.loginService = manifesto.Utils.getService(resource, ServiceProfile.AUTH_0_LOGIN);
-            this.restrictedService = manifesto.Utils.getService(resource, ServiceProfile.AUTH_0_RESTRICTED);
+            this.clickThroughService = Utils.getService(resource, ServiceProfile.AUTH_0_CLICK_THROUGH);
+            this.loginService = Utils.getService(resource, ServiceProfile.AUTH_0_LOGIN);
+            this.restrictedService = Utils.getService(resource, ServiceProfile.AUTH_0_RESTRICTED);
 
             if (this.clickThroughService) {
                 this.logoutService = this.clickThroughService.getService(ServiceProfile.AUTH_0_LOGOUT);
@@ -135,22 +135,22 @@ export class ExternalResource implements manifesto.IExternalResource {
 
             // if the resource is a canvas, not an info.json, look for auth services on its content.
             if (resource.isCanvas !== undefined && resource.isCanvas()) {
-                const content: manifesto.Annotation[] = (<manifesto.Canvas>resource).getContent();
+                const content: Annotation[] = (<Canvas>resource).getContent();
 
                 if (content && content.length) {
-                    const body: manifesto.AnnotationBody[] = content[0].getBody();
+                    const body: AnnotationBody[] = content[0].getBody();
 
                     if (body && body.length) {
-                        const annotation: manifesto.AnnotationBody = body[0];
+                        const annotation: AnnotationBody = body[0];
                         resource = annotation;
                     }
                 }
             }
 
-            this.clickThroughService = manifesto.Utils.getService(resource, ServiceProfile.AUTH_1_CLICK_THROUGH);
-            this.loginService = manifesto.Utils.getService(resource, ServiceProfile.AUTH_1_LOGIN);
-            this.externalService = manifesto.Utils.getService(resource, ServiceProfile.AUTH_1_EXTERNAL);
-            this.kioskService = manifesto.Utils.getService(resource, ServiceProfile.AUTH_1_KIOSK);
+            this.clickThroughService = Utils.getService(resource, ServiceProfile.AUTH_1_CLICK_THROUGH);
+            this.loginService = Utils.getService(resource, ServiceProfile.AUTH_1_LOGIN);
+            this.externalService = Utils.getService(resource, ServiceProfile.AUTH_1_EXTERNAL);
+            this.kioskService = Utils.getService(resource, ServiceProfile.AUTH_1_KIOSK);
 
             if (this.clickThroughService) {
                 this.logoutService = this.clickThroughService.getService(ServiceProfile.AUTH_1_LOGOUT);
@@ -172,12 +172,12 @@ export class ExternalResource implements manifesto.IExternalResource {
         }
     }
     
-    private _parseDimensions(canvas: manifesto.Canvas): void {
-        let images: manifesto.Annotation[] = canvas.getImages();
+    private _parseDimensions(canvas: Canvas): void {
+        let images: Annotation[] = canvas.getImages();
         
         if (images && images.length) {
             const firstImage = images[0];
-            const resource: manifesto.Resource = firstImage.getResource();
+            const resource: Resource = firstImage.getResource();
 
             this.width = resource.getWidth();
             this.height = resource.getHeight();
@@ -186,8 +186,8 @@ export class ExternalResource implements manifesto.IExternalResource {
             images = canvas.getContent();
             
             if (images.length) {
-                const annotation: manifesto.Annotation = images[0];
-                const body: manifesto.AnnotationBody[] = annotation.getBody();
+                const annotation: Annotation = images[0];
+                const body: AnnotationBody[] = annotation.getBody();
 
                 if (body.length) {
                     this.width = body[0].getWidth();
@@ -212,7 +212,7 @@ export class ExternalResource implements manifesto.IExternalResource {
         return false;
     }
 
-    public getData(accessToken?: manifesto.IAccessToken): Promise<ExternalResource> {
+    public getData(accessToken?: IAccessToken): Promise<ExternalResource> {
         const that = this;
         that.data = {};
 

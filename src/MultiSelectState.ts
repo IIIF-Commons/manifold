@@ -1,7 +1,7 @@
 import { MultiSelectableRange } from "./MultiSelectableRange";
 import { MultiSelectableCanvas } from "./MultiSelectableCanvas";
 import { IMultiSelectable } from "./IMultiSelectable";
-import manifesto from "manifesto.js";
+import { Utils } from "manifesto.js";
 
 export class MultiSelectState {
     isEnabled: boolean = false;
@@ -33,7 +33,7 @@ export class MultiSelectState {
     }
 
     public getCanvasById(id: string): MultiSelectableCanvas {
-        return this.canvases.filter(c => manifesto.Utils.normaliseUrl(c.id) === manifesto.Utils.normaliseUrl(id))[0];
+        return this.canvases.filter(c => Utils.normaliseUrl(c.id) === Utils.normaliseUrl(id))[0];
     }
     
     public getCanvasesByIds(ids: string[]): MultiSelectableCanvas[] {

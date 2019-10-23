@@ -1,7 +1,7 @@
 import { Helper } from "./Helper";
 import { IIIFResourceType } from "@iiif/vocabulary";
 import { IManifoldOptions } from "./IManifoldOptions";
-import manifesto from "manifesto.js";
+import { Collection, IIIFResource, IManifestoOptions, Manifest, Utils } from "manifesto.js";
 
 export class Bootstrapper {
     
@@ -24,7 +24,7 @@ export class Bootstrapper {
                 reject = rej;
             }
 
-            manifesto.Utils.loadManifest(that._options.manifestUri).then((json) => {                     
+            Utils.loadManifest(that._options.manifestUri).then((json) => {                     
                 that._loaded(that, json, resolve, reject)
             });
         });
@@ -32,7 +32,7 @@ export class Bootstrapper {
 
     private _loaded(bootstrapper: Bootstrapper, json: string, resolve: (helper: Helper) => void, reject: (error:any) => void): void {
         
-        const iiifResource: manifesto.IIIFResource | null = manifesto.Utils.parseManifest(json, <manifesto.IManifestoOptions>{
+        const iiifResource: IIIFResource | null = Utils.parseManifest(json, <IManifestoOptions>{
             locale: bootstrapper._options.locale
         });
 
@@ -50,8 +50,8 @@ export class Bootstrapper {
                 
                 // it's a collection
 
-                const manifests: manifesto.Manifest[] = (<manifesto.Collection>iiifResource).getManifests();
-                const collections: manifesto.Collection[] = (<manifesto.Collection>iiifResource).getCollections();
+                const manifests: Manifest[] = (<Collection>iiifResource).getManifests();
+                const collections: Collection[] = (<Collection>iiifResource).getCollections();
 
                 // if there are only collections available, set the collectionIndex to 0 if undefined.
                 if (!manifests.length && collectionIndex === undefined) {
@@ -62,7 +62,7 @@ export class Bootstrapper {
 
                     // a collectionIndex has been passed and we have sub collections
 
-                    (<manifesto.Collection>iiifResource).getCollectionByIndex(collectionIndex).then((collection: manifesto.Collection) => {
+                    (<Collection>iiifResource).getCollectionByIndex(collectionIndex).then((collection: Collection) => {
 
                         if (!collection) {
                             reject('Collection index not found');
@@ -77,7 +77,7 @@ export class Bootstrapper {
                             bootstrapper._options.manifestUri = collection.id;
                             bootstrapper.bootstrap(resolve, reject);
                         } else if (manifestIndex !== undefined) {
-                            collection.getManifestByIndex(manifestIndex).then((manifest: manifesto.Manifest) => {
+                            collection.getManifestByIndex(manifestIndex).then((manifest: Manifest) => {
                                 bootstrapper._options.manifest = manifest;
                                 const helper: Helper = new Helper(bootstrapper._options);
                                 resolve(helper);
@@ -86,14 +86,14 @@ export class Bootstrapper {
                     });
 
                 } else {
-                    (<manifesto.Collection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex as number).then((manifest: manifesto.Manifest) => {
+                    (<Collection>iiifResource).getManifestByIndex(bootstrapper._options.manifestIndex as number).then((manifest: Manifest) => {
                         bootstrapper._options.manifest = manifest;
                         const helper: Helper = new Helper(bootstrapper._options);
                         resolve(helper);
                     });
                 }
             } else {
-                bootstrapper._options.manifest = <manifesto.Manifest>iiifResource;
+                bootstrapper._options.manifest = <Manifest>iiifResource;
                 const helper: Helper = new Helper(bootstrapper._options);
                 resolve(helper);
             }
