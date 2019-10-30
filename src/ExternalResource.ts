@@ -228,6 +228,7 @@ export class ExternalResource implements IExternalResource {
 
                 that.isProbed = true;
 
+                // leaving this in for reference until the XHR version is fully tested
                 // $.ajax(<JQueryAjaxSettings>{
                 //     url: that.probeService.id,
                 //     type: 'GET',
@@ -304,6 +305,7 @@ export class ExternalResource implements IExternalResource {
                     type = 'HEAD';
                 }
 
+                // leaving this in for reference until the XHR version is fully tested
                 // $.ajax(<JQueryAjaxSettings>{
                 //     url: that.dataUri,
                 //     type: type,
@@ -361,7 +363,7 @@ export class ExternalResource implements IExternalResource {
                 // xhr implementation
                 const xhr: XMLHttpRequest = new XMLHttpRequest();
                 xhr.open(type, that.dataUri, true);
-                xhr.withCredentials = true;
+                //xhr.withCredentials = true;
                 if (accessToken) {
                     xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
                 }
