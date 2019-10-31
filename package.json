@@ -1,6 +1,6 @@
 {
   "name": "@iiif/manifold",
-  "version": "2.0.0-pre.23",
+  "version": "2.0.0",
   "description": "",
   "main": "./dist-umd/manifold.js",
   "module": "./dist-esmodule/index.js",
@@ -41,7 +41,7 @@
     "@iiif/vocabulary": "^1.0.11",
     "fetch-cookie": "^0.7.3",
     "form-data": "^2.5.1",
-    "manifesto.js": "^4.0.0-pre.20",
+    "manifesto.js": "^4.0.0",
     "natives": "^1.1.6",
     "node-fetch": "^2.6.0",
     "tough-cookie": "^3.0.1"
