@@ -41,11 +41,17 @@ export class Helper {
     public getAutoCompleteService(): Service | null {
         const service: Service | null = this.getSearchService();
         
-        if (service) {
-            return service.getService(ServiceProfile.SEARCH_0_AUTO_COMPLETE);
+        let autoCompleteService: Service | null = null;
+
+        if (service) { 
+            autoCompleteService = service.getService(ServiceProfile.SEARCH_0_AUTO_COMPLETE);
+
+            if (!autoCompleteService) {
+                autoCompleteService = service.getService(ServiceProfile.SEARCH_1_AUTO_COMPLETE);
+            }
         }
         
-        return null;
+        return autoCompleteService;
     }
     
     public getAttribution(): string | null {
@@ -569,7 +575,13 @@ export class Helper {
             throw new Error(Errors.manifestNotLoaded);
         }
 
-        return this.manifest.getService(ServiceProfile.SEARCH_0);
+        let service: Service | null = this.manifest.getService(ServiceProfile.SEARCH_0);
+
+        if (!service) {
+            service = this.manifest.getService(ServiceProfile.SEARCH_1);
+        }
+
+        return service;
     }
     
     public getSeeAlso(): any {
