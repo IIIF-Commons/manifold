@@ -31,7 +31,7 @@ export class ExternalResource implements IExternalResource {
         this.authAPIVersion = options.authApiVersion;
         this._parseAuthServices(canvas);
         // get the height and width of the image resource if available
-        this._parseDimensions(canvas);
+        this._parseCanvasDimensions(canvas);
     }
 
     private _getImageServiceDescriptor(services: Service[]): string | null {
@@ -172,7 +172,7 @@ export class ExternalResource implements IExternalResource {
         }
     }
     
-    private _parseDimensions(canvas: Canvas): void {
+    private _parseCanvasDimensions(canvas: Canvas): void {
         let images: Annotation[] = canvas.getImages();
         
         if (images && images.length) {
@@ -194,6 +194,15 @@ export class ExternalResource implements IExternalResource {
                     this.height = body[0].getHeight();
                 }
             }
+        }
+    }
+
+    private _parseDescriptorDimensions(descriptor): void {
+        if (descriptor.width !== undefined) {
+            this.width = descriptor.width;
+        }
+        if (descriptor.height !== undefined) {
+            this.height = descriptor.height;
         }
     }
 
@@ -381,9 +390,10 @@ export class ExternalResource implements IExternalResource {
 
                         that.data = data;
                         that._parseAuthServices(that.data);
+                        that._parseDescriptorDimensions(that.data);
 
                         // remove trailing /info.json
-                        if (uri.endsWith('/info.json')){
+                        if (uri.endsWith('/info.json')) {
                             uri = uri.substr(0, uri.lastIndexOf('/'));
                         }
 
@@ -394,7 +404,7 @@ export class ExternalResource implements IExternalResource {
                         }
 
                         // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                        if (uri !== dataUri && that.loginService){
+                        if (uri !== dataUri && that.loginService) {
                             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                         } else {
                             that.status = HTTPStatusCode.OK;
