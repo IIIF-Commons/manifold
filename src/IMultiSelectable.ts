@@ -1,4 +1,4 @@
 export interface IMultiSelectable {
-    multiSelected: boolean;
-    multiSelectEnabled: boolean;
+  multiSelected: boolean;
+  multiSelectEnabled: boolean;
 }

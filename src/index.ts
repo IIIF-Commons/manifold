@@ -21,6 +21,8 @@ import { IManifoldOptions } from "./IManifoldOptions";
 import { Bootstrapper } from "./Bootstrapper";
 import { Helper } from "./Helper";
 
-export const loadManifest: (options: IManifoldOptions) => Promise<Helper> = (options: IManifoldOptions) => {
-    return new Bootstrapper(options).bootstrap();
-} 
+export const loadManifest: (options: IManifoldOptions) => Promise<Helper> = (
+  options: IManifoldOptions
+) => {
+  return new Bootstrapper(options).bootstrap();
+};
