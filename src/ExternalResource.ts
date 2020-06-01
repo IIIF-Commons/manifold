@@ -444,14 +444,13 @@ export class ExternalResource implements IExternalResource {
         }
 
         xhr.onload = () => {
-          const data = JSON.parse(xhr.responseText);
-
           // if it's a resource without an info.json
           // todo: if resource doesn't have a @profile
-          if (!data) {
+          if (!xhr.responseText) {
             that.status = HTTPStatusCode.OK;
             resolve(that);
           } else {
+            const data = JSON.parse(xhr.responseText);
             let uri: string = unescape(data["@id"]);
 
             that.data = data;
