@@ -1,4 +1,4 @@
-import { ServiceProfile } from "@iiif/vocabulary";
+import { ServiceProfile } from "@iiif/vocabulary/dist-commonjs";
 import * as HTTPStatusCode from "@edsilv/http-status-codes";
 import {
   Annotation,

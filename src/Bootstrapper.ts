@@ -1,5 +1,5 @@
 import { Helper } from "./Helper";
-import { IIIFResourceType } from "@iiif/vocabulary";
+import { IIIFResourceType } from "@iiif/vocabulary/dist-commonjs";
 import { IManifoldOptions } from "./IManifoldOptions";
 import {
   Collection,

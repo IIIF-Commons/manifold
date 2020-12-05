@@ -11,7 +11,7 @@ import {
   ServiceProfile,
   ViewingHint,
   ViewingDirection
-} from "@iiif/vocabulary";
+} from "@iiif/vocabulary/dist-commonjs";
 import { Errors } from "./Errors";
 import {
   Annotation,
@@ -19,8 +19,7 @@ import {
   Canvas,
   IIIFResource,
   LabelValuePair,
-  Language,
-  LanguageMap,
+  LocalizedValue,
   Manifest,
   ManifestType,
   Range,
@@ -29,7 +28,8 @@ import {
   Thumb,
   TreeNode,
   TreeNodeType,
-  Utils
+  Utils,
+  PropertyValue
 } from "manifesto.js";
 
 export class Helper {
@@ -83,10 +83,10 @@ export class Helper {
       throw new Error(Errors.manifestNotLoaded);
     }
 
-    const attribution: LanguageMap | null = this.manifest.getAttribution();
+    const attribution = this.manifest.getAttribution();
 
     if (attribution) {
-      return LanguageMap.getValue(attribution, this.options.locale);
+      return attribution.getValue(this.options.locale);
     }
 
     return null;
@@ -198,10 +198,10 @@ export class Helper {
       throw new Error(Errors.manifestNotLoaded);
     }
 
-    const description: LanguageMap | null = this.manifest.getDescription();
+    const description = this.manifest.getDescription();
 
     if (description) {
-      return LanguageMap.getValue(description, this.options.locale);
+      return description.getValue(this.options.locale);
     }
 
     return null;
@@ -212,10 +212,10 @@ export class Helper {
       throw new Error(Errors.manifestNotLoaded);
     }
 
-    const label: LanguageMap | null = this.manifest.getLabel();
+    const label = this.manifest.getLabel();
 
     if (label) {
-      return LanguageMap.getValue(label, this.options.locale);
+      return label.getValue(this.options.locale);
     }
 
     return null;
@@ -280,7 +280,9 @@ export class Helper {
 
     if (this.manifest.getDescription().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
-      metadataItem.label = [new Language("description", locale)];
+      metadataItem.label = new PropertyValue([
+        new LocalizedValue("description", locale)
+      ]);
       metadataItem.value = this.manifest.getDescription();
       (<IMetadataItem>metadataItem).isRootLevel = true;
       manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -288,7 +290,9 @@ export class Helper {
 
     if (this.manifest.getAttribution().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
-      metadataItem.label = [new Language("attribution", locale)];
+      metadataItem.label = new PropertyValue([
+        new LocalizedValue("attribution", locale)
+      ]);
       metadataItem.value = this.manifest.getAttribution();
       (<IMetadataItem>metadataItem).isRootLevel = true;
       manifestGroup.addItem(<IMetadataItem>metadataItem);
@@ -313,7 +317,7 @@ export class Helper {
     if (this.manifest.getLogo()) {
       const item: any = {
         label: "logo",
-        value: '<img src="' + this.manifest.getLogo() + '"/>'
+        value: '<img alt="logo" src="' + this.manifest.getLogo() + '"/>'
       };
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.parse(item);
@@ -339,8 +343,11 @@ export class Helper {
 
     if (requiredStatement) {
       return {
-        label: requiredStatement.getLabel(),
-        value: requiredStatement.getValue()
+        label: requiredStatement.label ? requiredStatement.getLabel() : "",
+        value:
+          requiredStatement.value && requiredStatement.value.length
+            ? requiredStatement.getValue()
+            : ""
       };
     }
 
@@ -458,8 +465,8 @@ export class Helper {
       const content: Annotation[] = posterCanvas.getContent();
 
       if (content && content.length) {
-        const anno: Annotation = content[0];
-        const body: AnnotationBody[] = anno.getBody();
+        const annotation: Annotation = content[0];
+        const body: AnnotationBody[] = annotation.getBody();
         return body[0].id;
       }
     }
@@ -761,13 +768,12 @@ export class Helper {
         // expanding a month gives a list of issues.
         if (this.treeHasNavDates(tree)) {
           this._getSortedTreeNodesByDate(sortedTree, tree);
-          break;
+          return sortedTree;
         }
-      default:
-        sortedTree = tree;
+        break;
     }
 
-    return sortedTree;
+    return tree;
   }
 
   public treeHasNavDates(tree: TreeNode): boolean {
