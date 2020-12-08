@@ -1,6 +1,6 @@
 {
   "name": "@iiif/manifold",
-  "version": "2.0.3",
+  "version": "2.0.4-pre-0",
   "description": "",
   "main": "./dist-umd/manifold.js",
   "module": "./dist-esmodule/index.js",
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
-    "@iiif/vocabulary": "^1.0.11",
-    "manifesto.js": "4.2.1"
+    "@iiif/vocabulary": "^1.0.20",
+    "manifesto.js": "4.3.0-pre-0"
   }
 }
