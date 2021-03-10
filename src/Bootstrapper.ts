@@ -36,6 +36,21 @@ export class Bootstrapper {
     });
   }
 
+  public bootstrapJson(
+    json: any,
+    res?: (helper: Helper) => void,
+    rej?: (error: any) => void
+  ) {
+    return new Promise<Helper>((resolve, reject) => {
+      if (res && rej) {
+        resolve = res;
+        reject = rej;
+      }
+
+      this._loaded(this, json, resolve, reject);
+    });
+  }
+
   private _loaded(
     bootstrapper: Bootstrapper,
     json: string,

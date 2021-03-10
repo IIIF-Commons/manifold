@@ -26,3 +26,10 @@ export const loadManifest: (options: IManifoldOptions) => Promise<Helper> = (
 ) => {
   return new Bootstrapper(options).bootstrap();
 };
+
+export const loadManifestJson: (json: any, options: IManifoldOptions) => Promise<Helper> = (
+  json,
+  options
+) => {
+  return new Bootstrapper(options).bootstrapJson(json);
+};
