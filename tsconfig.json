@@ -17,11 +17,13 @@
         "sourceMap": true,
         "strictNullChecks": true,
         "suppressImplicitAnyIndexErrors": true,
+        "resolveJsonModule": true,
         "target": "es5",
         "types": [
             "node",
             "manifesto.js",
-            "@iiif/vocabulary"
+            "@iiif/vocabulary",
+            "@types/jest"
         ]
     },
     "include": [
