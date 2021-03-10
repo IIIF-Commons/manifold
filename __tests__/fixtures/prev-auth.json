@@ -1,0 +1,298 @@
+{
+  "@context": [
+    "http://iiif.io/api/auth/1/context.json",
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "behavior": [
+    "auto-advance"
+  ],
+  "homepage": {
+    "format": "text/html",
+    "id": "http://access.bl.uk/item/viewer/ark:/81055/vdc_100060861119.0x000002",
+    "label": {
+      "en": [
+        "View at the British Library"
+      ]
+    },
+    "type": "Text"
+  },
+  "id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000002/manifest.json",
+  "items": [
+    {
+      "duration": 1686.44,
+      "id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000004",
+      "items": [
+        {
+          "id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000004/anno1",
+          "items": [
+            {
+              "body": {
+                "items": [
+                  {
+                    "format": "application/dash+xml",
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100060861119.0x000009/manifest.mpd",
+                    "service": [
+                      {
+                        "@id": "https://api.bl.uk/auth/iiif/login",
+                        "@type": "AuthCookieService1",
+                        "confirmLabel": "Login",
+                        "description": "Please log in to hear unredacted version",
+                        "failureDescription": "Not allowed",
+                        "failureHeader": "Authentication Failed",
+                        "header": "Please Log In",
+                        "label": "Login to British Library",
+                        "profile": "http://iiif.io/api/auth/1/login",
+                        "service": [
+                          {
+                            "@id": "https://api.bl.uk/auth/iiif/token",
+                            "@type": "AuthTokenService1",
+                            "profile": "http://iiif.io/api/auth/1/token"
+                          },
+                          {
+                            "@id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100060861119.0x000009/probe.json",
+                            "@type": "AuthProbeService1",
+                            "profile": "http://iiif.io/api/auth/1/probe"
+                          }
+                        ]
+                      }
+                    ],
+                    "type": "Audio"
+                  },
+                  {
+                    "format": "vnd.apple.mpegURL",
+                    "id": "https://api.bl.uk/media/iiif/ark:/81055/vdc_100060861119.0x000009/index.m3u8",
+                    "type": "Audio",
+                    "service": [
+                      {
+                        "@id": "https://api.bl.uk/auth/iiif/login",
+                        "@type": "AuthCookieService1",
+                        "confirmLabel": "Login",
+                        "description": "Please log in to hear unredacted version",
+                        "failureDescription": "Not allowed",
+                        "failureHeader": "Authentication Failed",
+                        "header": "Please Log In",
+                        "label": "Login to British Library",
+                        "profile": "http://iiif.io/api/auth/1/login",
+                        "service": [
+                          {
+                            "@id": "https://api.bl.uk/auth/iiif/token",
+                            "@type": "AuthTokenService1",
+                            "profile": "http://iiif.io/api/auth/1/token"
+                          },
+                          {
+                            "@id": "https://api.bl.uk/media/dash/ark:/81055/vdc_100060861119.0x000009/probe.json",
+                            "@type": "AuthProbeService1",
+                            "profile": "http://iiif.io/api/auth/1/probe"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "type": "Choice"
+              },
+              "id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000004/anno1/1",
+              "motivation": "painting",
+              "seeAlso": [
+                {
+                  "format": "application/octet-stream",
+                  "id": "https://iiif-waveforms.s3.amazonaws.com/vdc_100060861119.0x000008.dat",
+                  "profile": "http://waveform.prototyping.bbc.co.uk",
+                  "type": "Dataset"
+                }
+              ],
+              "target": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000004#t=0,1686.44",
+              "type": "Annotation"
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "label": {
+        "en": [
+          "Tape 1 Side 1"
+        ]
+      },
+      "type": "Canvas"
+    }
+  ],
+  "label": {
+    "en": [
+      "C538/2/28 Sidetrax - Hills, 6.10.90"
+    ]
+  },
+  "logo": [
+    {
+      "id": "https://www.bl.uk/images/bl_logo_100.gif",
+      "type": "Image"
+    }
+  ],
+  "metadata": [
+    {
+      "label": {
+        "en": [
+          "Full title"
+        ]
+      },
+      "value": {
+        "en": [
+          "Sidetrax - Hills, 6.10.90"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Collection"
+        ]
+      },
+      "value": {
+        "en": [
+          "Jazz FM Tapes"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Format"
+        ]
+      },
+      "value": {
+        "en": [
+          "1 tape reel 18 cm 19 cm/sec stereo"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Usage"
+        ]
+      },
+      "value": {
+        "en": [
+          "<span>Rights unassigned - staff access only</span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Held by"
+        ]
+      },
+      "value": {
+        "en": [
+          "The British Library"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Digitised by"
+        ]
+      },
+      "value": {
+        "en": [
+          "The British Library, 2018"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Digitisation funded by"
+        ]
+      },
+      "value": {
+        "en": [
+          "<span>Heritage Lottery Fund<br/><br/><img src=https://www.hlf.org.uk/sites/default/files/styles/col-9/public/media/logos/english_compact_cmyk.jpg/></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Identifier"
+        ]
+      },
+      "value": {
+        "en": [
+          "C538/2/28"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Shelfmark"
+        ]
+      },
+      "value": {
+        "en": [
+          "C538/2/28"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Link to catalogue"
+        ]
+      },
+      "value": {
+        "en": [
+          "<a href=http://explore.bl.uk/BLVU1:LSCOP-ALL:BLLSA>View the catalogue record</a>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Contents"
+        ]
+      },
+      "value": {
+        "en": [
+          "1) 10'48.- 2) e.o.s. 14'12 (to 17'10)"
+        ]
+      }
+    }
+  ],
+  "posterCanvas": {
+    "height": 962,
+    "id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000002/c/poster",
+    "items": [
+      {
+        "id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000002/c/poster/p1",
+        "items": [
+          {
+            "body": {
+              "format": "image/jpeg",
+              "height": 962,
+              "id": "https://iiif-commons.github.io/iiif-av-component/examples/data/bl/sounds-tests/posters/world.jpg",
+              "type": "Image",
+              "width": 962
+            },
+            "id": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000002/c/poster/p1/a1",
+            "motivation": "painting",
+            "target": "http://api.bl.uk/metadata/iiif/ark:/81055/vdc_100060861119.0x000002/c/poster",
+            "type": "Annotation"
+          }
+        ],
+        "type": "AnnotationPage"
+      }
+    ],
+    "label": {
+      "en": [
+        "world"
+      ]
+    },
+    "type": "Canvas",
+    "width": 962
+  },
+  "type": "Manifest"
+}
