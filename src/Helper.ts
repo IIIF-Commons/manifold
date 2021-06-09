@@ -450,12 +450,21 @@ export class Helper {
     return null;
   }
 
+  /** @deprecated Use getAccompanyingCanvas instead */
   public getPosterCanvas(): Canvas | null {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);
     }
 
     return this.manifest.getPosterCanvas();
+  }
+
+  public getAccompanyingCanvas(): Canvas | null {
+    if (!this.manifest) {
+      throw new Error(Errors.manifestNotLoaded);
+    }
+
+    return this.manifest.getAccompanyingCanvas();
   }
 
   public getPosterImage(): string | null {
