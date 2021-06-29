@@ -467,11 +467,28 @@ export class Helper {
     return this.manifest.getAccompanyingCanvas();
   }
 
+  /** @deprecated Use getAccompanyingCanvasImage instead */
   public getPosterImage(): string | null {
     const posterCanvas: Canvas | null = this.getPosterCanvas();
 
     if (posterCanvas) {
       const content: Annotation[] = posterCanvas.getContent();
+
+      if (content && content.length) {
+        const annotation: Annotation = content[0];
+        const body: AnnotationBody[] = annotation.getBody();
+        return body[0].id;
+      }
+    }
+
+    return null;
+  }
+
+  public getAccompanyingCanvasImage(): string | null {
+    const accompanyingCanvas: Canvas | null = this.getAccompanyingCanvas();
+
+    if (accompanyingCanvas) {
+      const content: Annotation[] = accompanyingCanvas.getContent();
 
       if (content && content.length) {
         const annotation: Annotation = content[0];
