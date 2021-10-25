@@ -5,6 +5,7 @@ export * from "./ExternalResource";
 export * from "./Helper";
 export * from "./ILabelValuePair";
 export * from "./IManifoldOptions";
+export * from "./IMetadataItem";
 export * from "./IMultiSelectable";
 export * from "./IThumb";
 export * from "./MetadataGroup";
