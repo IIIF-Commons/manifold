@@ -1,7 +1,7 @@
 export class AnnotationRect {
   public canvasId: string;
   /** @deprecated */
-  public canvasIndex?: number;
+  public canvasIndex: number;
   public chars: string;
   public height: number;
   public index: number;

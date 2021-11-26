@@ -3,7 +3,7 @@ import { AnnotationRect } from "./AnnotationRect";
 export class AnnotationGroup {
   public canvasId: string;
   /** @deprecated */
-  public canvasIndex?: number;
+  public canvasIndex: number;
   public rects: AnnotationRect[] = [];
 
   constructor(canvasId: string) {
