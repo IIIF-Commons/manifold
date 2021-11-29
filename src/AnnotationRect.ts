@@ -12,12 +12,20 @@ export class AnnotationRect {
   public x: number;
   public y: number;
 
-  constructor(result: any) {
-    const xywh: any = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
+  constructor(anno: any) {
+    let xywh: any;
+    if (anno.on) {
+      // open annotations
+      xywh = anno.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
+      this.chars = anno.resource.chars;
+    } else {
+      // web annotations
+      xywh = anno.target.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
+      this.chars = anno.bodyValue;
+    }
     this.x = Number(xywh[1]);
     this.y = Number(xywh[2]);
     this.width = Number(xywh[3]);
     this.height = Number(xywh[4]);
-    this.chars = result.resource.chars;
   }
 }
