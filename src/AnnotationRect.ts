@@ -13,7 +13,7 @@ export class AnnotationRect {
 
   constructor(anno: any) {
     let xywh: any;
-    // todo: use this? 
+    // todo: use this?
     // /[#&?](xywh=)?(pixel:|percent:)?([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?)/
     if (anno.on) {
       // open annotations

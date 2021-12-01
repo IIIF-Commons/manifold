@@ -23,7 +23,7 @@ export class AnnotationGroup {
     });
   }
 
-  addPoint(anno: any): void {
+  addPoint3D(anno: any): void {
     const point: AnnotationPoint3D = new AnnotationPoint3D(anno);
     point.canvasId = this.canvasId;
     point.canvasIndex = this.canvasIndex;
