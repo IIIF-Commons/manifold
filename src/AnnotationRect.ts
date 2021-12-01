@@ -1,6 +1,5 @@
 export class AnnotationRect {
   public canvasId: string;
-  /** @deprecated */
   public canvasIndex: number;
   public chars: string;
   public height: number;
@@ -14,6 +13,8 @@ export class AnnotationRect {
 
   constructor(anno: any) {
     let xywh: any;
+    // todo: use this? 
+    // /[#&?](xywh=)?(pixel:|percent:)?([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?),([0-9]+(?:\.[0-9]+)?)/
     if (anno.on) {
       // open annotations
       xywh = anno.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
