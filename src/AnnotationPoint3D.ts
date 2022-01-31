@@ -13,7 +13,7 @@ export class AnnotationPoint3D {
 
   constructor(anno: any) {
     const xyz = anno.target.match(
-      /.*(?<!n)xyz=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/
+      /.*[^n]xyz=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/
     );
     const nxyz = anno.target.match(
       /.*nxyz=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/
