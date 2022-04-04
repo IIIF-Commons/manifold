@@ -228,6 +228,8 @@ export class ExternalResource implements IExternalResource {
           resource,
           ServiceProfile.AUTH_1_PROBE
         );
+
+        // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
           this.probeService = this.externalService.getService(
             ServiceProfile.AUTH_1_PROBE
@@ -244,6 +246,8 @@ export class ExternalResource implements IExternalResource {
           resource,
           ServiceProfile.AUTH_1_PROBE
         );
+
+        // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
           this.probeService = this.kioskService.getService(
             ServiceProfile.AUTH_1_PROBE
