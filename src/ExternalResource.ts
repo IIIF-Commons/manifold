@@ -53,8 +53,7 @@ export class ExternalResource implements IExternalResource {
       if (!id.endsWith("/")) {
         id += "/";
       }
-
-      if (Utils.isImageProfile(service.getProfile())) {
+      if (service.getProfile() && Utils.isImageProfile(service.getProfile())) {
         infoUri = id + "info.json";
       }
     }
@@ -206,9 +205,18 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.loginService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
-        this.probeService = this.loginService.getService(
+
+        this.probeService = Utils.getService(
+          resource,
           ServiceProfile.AUTH_1_PROBE
         );
+
+        // @deprecated - the probe should be on the resource.
+        if (!this.probeService) {
+          this.probeService = this.loginService.getService(
+            ServiceProfile.AUTH_1_PROBE
+          );
+        }
       } else if (this.externalService) {
         this.logoutService = this.externalService.getService(
           ServiceProfile.AUTH_1_LOGOUT
@@ -216,9 +224,17 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.externalService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
-        this.probeService = this.externalService.getService(
+        this.probeService = Utils.getService(
+          resource,
           ServiceProfile.AUTH_1_PROBE
         );
+
+        // @deprecated - the probe should be on the resource.
+        if (!this.probeService) {
+          this.probeService = this.externalService.getService(
+            ServiceProfile.AUTH_1_PROBE
+          );
+        }
       } else if (this.kioskService) {
         this.logoutService = this.kioskService.getService(
           ServiceProfile.AUTH_1_LOGOUT
@@ -226,9 +242,17 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.kioskService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
-        this.probeService = this.kioskService.getService(
+        this.probeService = Utils.getService(
+          resource,
           ServiceProfile.AUTH_1_PROBE
         );
+
+        // @deprecated - the probe should be on the resource.
+        if (!this.probeService) {
+          this.probeService = this.kioskService.getService(
+            ServiceProfile.AUTH_1_PROBE
+          );
+        }
       }
     }
   }
