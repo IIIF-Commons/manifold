@@ -6,7 +6,7 @@
 
 Stateful utils on top of manifesto. Returns a `helper` object that can be used to navigate a IIIF manifest.
 
-e.g. 
+e.g.
 
 - `getMetadata`: returns all metadata for current image, range, canvas, sequence, manifest)
 - `getCurrentRange`, `getPreviousRange`, `getNextRange`: Used to navigate a flattened range tree (useful for IIIF AV scenarios)
@@ -14,13 +14,11 @@ e.g.
 
 Has an ajax implementation of manifesto's `IExternalResource` (used in the IIIF auth flow).
 
-Getting Started
---
+## Getting Started
 
 ### Documentation
 
 https://iiif-commons.github.io/manifold/
-
 
 ### Developer Setup
 
@@ -30,8 +28,9 @@ https://iiif-commons.github.io/manifold/
 
 ### Publishing Package
 
-1. Bump the version locally using `npm version` on a branch other than `master`. Example: `npm version patch -m 'bump to v3.0.42'`
-1. Push the bump version branch to GitHub and create a pull request to `master`.
-1. After the pull request is merged, checkout `master` and pull the latest changes. `git checkout master && git pull`
-1. Run `npm publish`
-1. Push the git tags created `git push --tags`
+    git checkout master
+    npm version patch
+    git add .
+    git commit -m "Release v1.2.3"
+    git tag v1.2.3
+    git push origin master v1.2.3

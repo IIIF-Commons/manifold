@@ -8,6 +8,7 @@ export interface IManifoldOptions {
   collectionIndex?: number;
   manifestIndex?: number;
   sequenceIndex?: number;
+  canvasId?: string;
   canvasIndex?: number;
   rangeId?: string | null;
 }
