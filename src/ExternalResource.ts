@@ -359,7 +359,13 @@ export class ExternalResource implements IExternalResource {
         // xhr implementation
         const xhr: XMLHttpRequest = new XMLHttpRequest();
         xhr.open("GET", that.probeService.id, true);
-        xhr.withCredentials = true;
+        // This has been disabled as the request should use the access token.
+        // xhr.withCredentials = true;
+
+        if (accessToken) {
+          xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+        }
+
 
         xhr.onload = () => {
           const data = JSON.parse(xhr.responseText);
