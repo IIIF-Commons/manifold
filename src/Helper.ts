@@ -1288,7 +1288,7 @@ export class Helper {
   }
 
   public sortDecadeNodes(rootNode: TreeNode): void {
-    rootNode.nodes = rootNode.nodes.sort(function (a, b) {
+    rootNode.nodes = rootNode.nodes.sort(function(a, b) {
       return a.data.startYear - b.data.startYear;
     });
   }

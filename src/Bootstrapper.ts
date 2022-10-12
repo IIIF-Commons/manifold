@@ -48,9 +48,9 @@ export class Bootstrapper {
   ): void {
     const iiifResource: IIIFResource | null = Utils.parseManifest(json, <
       IManifestoOptions
-      >{
-        locale: bootstrapper._options.locale
-      });
+    >{
+      locale: bootstrapper._options.locale
+    });
 
     if (iiifResource) {
       // only set the root IIIFResource on the first load
