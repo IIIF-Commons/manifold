@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
-    "@iiif/vocabulary": "^1.0.20",
+    "@iiif/vocabulary": "^1.0.23",
     "manifesto.js": "^4.2.6"
   }
 }

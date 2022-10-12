@@ -30,9 +30,13 @@ export class Bootstrapper {
         reject = rej;
       }
 
-      Utils.loadManifest(that._options.manifestUri).then(json => {
-        that._loaded(that, json, resolve, reject);
-      });
+      Utils.loadManifest(that._options.manifestUri)
+        .then(json => {
+          that._loaded(that, json, resolve, reject);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
     });
   }
 
@@ -44,9 +48,9 @@ export class Bootstrapper {
   ): void {
     const iiifResource: IIIFResource | null = Utils.parseManifest(json, <
       IManifestoOptions
-    >{
-      locale: bootstrapper._options.locale
-    });
+      >{
+        locale: bootstrapper._options.locale
+      });
 
     if (iiifResource) {
       // only set the root IIIFResource on the first load
