@@ -53,7 +53,7 @@ export class ExternalResource implements IExternalResource {
       if (!id.endsWith("/")) {
         id += "/";
       }
-      if (service.getProfile() && Utils.isImageProfile(service.getProfile())) {
+      if (service.getProfile() && (Utils.isImageProfile(service.getProfile()) || Utils.isImageServiceType(service.getIIIFResourceType()))) {
         infoUri = id + "info.json";
       }
     }
@@ -313,6 +313,7 @@ export class ExternalResource implements IExternalResource {
   }
 
   public getData(accessToken?: IAccessToken): Promise<ExternalResource> {
+
     const that = this;
     that.data = {};
 

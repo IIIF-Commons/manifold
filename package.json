@@ -45,7 +45,6 @@
   "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
     "@iiif/vocabulary": "^1.0.23",
-    "manifesto": "0.0.4",
-    "manifesto.js": "^4.2.14"
+    "manifesto.js": "4.2.15"
   }
 }
