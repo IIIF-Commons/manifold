@@ -360,16 +360,22 @@ export class ExternalResource implements IExternalResource {
         // xhr implementation
         const xhr: XMLHttpRequest = new XMLHttpRequest();
         xhr.open("GET", that.probeService.id, true);
-        xhr.withCredentials = true;
+        // This has been disabled as the request should use the access token.
+        xhr.withCredentials = false;
+
+        if (accessToken) {
+          xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+        }
+
 
         xhr.onload = () => {
           const data = JSON.parse(xhr.responseText);
           let contentLocation: string = unescape(data.contentLocation);
 
+          that.status = xhr.status;
+
           if (contentLocation !== that.dataUri) {
             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
-          } else {
-            that.status = HTTPStatusCode.OK;
           }
 
           resolve(that);
@@ -460,7 +466,7 @@ export class ExternalResource implements IExternalResource {
         // xhr implementation
         const xhr: XMLHttpRequest = new XMLHttpRequest();
         xhr.open(type, that.dataUri, true);
-        //xhr.withCredentials = true;
+        xhr.withCredentials = false;
         if (accessToken) {
           xhr.setRequestHeader(
             "Authorization",
@@ -469,14 +475,16 @@ export class ExternalResource implements IExternalResource {
         }
 
         xhr.onload = () => {
+
           // if it's a resource without an info.json
           // todo: if resource doesn't have a @profile
           if (!xhr.responseText) {
-            that.status = HTTPStatusCode.OK;
+            that.status = xhr.status || HTTPStatusCode.OK;
             resolve(that);
           } else {
             const data = JSON.parse(xhr.responseText);
-            let uri: string = unescape(data["@id"]);
+            const status = xhr.status;
+            let uri: string = unescape(data["@id"] || data.id);
 
             that.data = data;
             that._parseAuthServices(that.data);
@@ -494,10 +502,10 @@ export class ExternalResource implements IExternalResource {
             }
 
             // if the request was redirected to a degraded version and there's a login service to get the full quality version
-            if (uri !== dataUri && that.loginService) {
+            if (status === HTTPStatusCode.OK && uri !== dataUri && that.loginService) {
               that.status = HTTPStatusCode.MOVED_TEMPORARILY;
             } else {
-              that.status = HTTPStatusCode.OK;
+              that.status = status;
             }
 
             resolve(that);
