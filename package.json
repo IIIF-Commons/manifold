@@ -36,7 +36,7 @@
     "prettier-check": "^2.0.0",
     "rimraf": "^2.6.3",
     "tslint-config-prettier": "^1.18.0",
-    "typedoc": "0.14.0",
+    "typedoc": "0.23.21",
     "typescript": "3.6.3",
     "typescript-tslint-plugin": "^0.5.5",
     "webpack": "^4.28.3",
