@@ -378,6 +378,8 @@ export class ExternalResource implements IExternalResource {
             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
           }
 
+          that.data = data;
+
           resolve(that);
         };
 
