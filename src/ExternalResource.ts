@@ -9,7 +9,7 @@ import {
   IExternalResourceOptions,
   Resource,
   Service,
-  Utils
+  Utils,
 } from "manifesto.js";
 
 export class ExternalResource implements IExternalResource {
@@ -53,7 +53,11 @@ export class ExternalResource implements IExternalResource {
       if (!id.endsWith("/")) {
         id += "/";
       }
-      if (service.getProfile() && (Utils.isImageProfile(service.getProfile()) || Utils.isImageServiceType(service.getIIIFResourceType()))) {
+      if (
+        service.getProfile() &&
+        (Utils.isImageProfile(service.getProfile()) ||
+          Utils.isImageServiceType(service.getIIIFResourceType()))
+      ) {
         infoUri = id + "info.json";
       }
     }
@@ -313,7 +317,6 @@ export class ExternalResource implements IExternalResource {
   }
 
   public getData(accessToken?: IAccessToken): Promise<ExternalResource> {
-
     const that = this;
     that.data = {};
 
@@ -322,6 +325,8 @@ export class ExternalResource implements IExternalResource {
         reject("There is no dataUri to fetch");
         return;
       }
+
+      // console.log("getData (manifold)");
 
       // if the resource has a probe service, use that to get http status code
       if (that.probeService) {
@@ -364,9 +369,11 @@ export class ExternalResource implements IExternalResource {
         xhr.withCredentials = false;
 
         if (accessToken) {
-          xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
+          xhr.setRequestHeader(
+            "Authorization",
+            "Bearer " + accessToken.accessToken
+          );
         }
-
 
         xhr.onload = () => {
           const data = JSON.parse(xhr.responseText);
@@ -477,7 +484,6 @@ export class ExternalResource implements IExternalResource {
         }
 
         xhr.onload = () => {
-
           // if it's a resource without an info.json
           // todo: if resource doesn't have a @profile
           if (!xhr.responseText) {
@@ -504,7 +510,11 @@ export class ExternalResource implements IExternalResource {
             }
 
             // if the request was redirected to a degraded version and there's a login service to get the full quality version
-            if (status === HTTPStatusCode.OK && uri !== dataUri && that.loginService) {
+            if (
+              status === HTTPStatusCode.OK &&
+              uri !== dataUri &&
+              (that.loginService || that.kioskService)
+            ) {
               that.status = HTTPStatusCode.MOVED_TEMPORARILY;
             } else {
               that.status = status;
