@@ -19,7 +19,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
