@@ -46,5 +46,8 @@
     "@edsilv/http-status-codes": "^1.0.3",
     "@iiif/vocabulary": "^1.0.23",
     "manifesto.js": "4.2.17"
+  },
+  "optionalDependencies": {
+    "fsevents": "*"
   }
 }
