@@ -35,4 +35,6 @@ https://iiif-commons.github.io/manifold/
     git tag v1.2.3
     git push origin master v1.2.3
 
-note: make sure you use `"lockfileVersion": 1,` in package-lock.json
+### tips
+
+Use `nvm use 14` before installing anything
