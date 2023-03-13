@@ -9,7 +9,7 @@ import {
   IExternalResourceOptions,
   Resource,
   Service,
-  Utils,
+  Utils
 } from "manifesto.js";
 
 export class ExternalResource implements IExternalResource {
