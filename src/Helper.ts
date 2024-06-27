@@ -298,12 +298,20 @@ export class Helper {
       manifestGroup.addItem(<IMetadataItem>metadataItem);
     }
 
+    const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
+
     if (this.manifest.getAttribution().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.label = new PropertyValue([
         new LocalizedValue("attribution", locale)
       ]);
       metadataItem.value = this.manifest.getAttribution();
+      (<IMetadataItem>metadataItem).isRootLevel = true;
+      manifestGroup.addItem(<IMetadataItem>metadataItem);
+    } else if (requiredStatement) {
+      const item: any = this.parseStatement(requiredStatement);
+      const metadataItem: LabelValuePair = new LabelValuePair(locale);
+      metadataItem.parse(item);
       (<IMetadataItem>metadataItem).isRootLevel = true;
       manifestGroup.addItem(<IMetadataItem>metadataItem);
     }
