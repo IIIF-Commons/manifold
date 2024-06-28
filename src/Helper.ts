@@ -251,6 +251,14 @@ export class Helper {
     return this.manifest.getLicense();
   }
 
+  public getRights(): string | null {
+    if (!this.manifest) {
+      throw new Error(Errors.manifestNotLoaded);
+    }
+
+    return this.manifest.getRights();
+  }
+
   public getLogo(): string | null {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);
@@ -317,6 +325,7 @@ export class Helper {
     }
 
     const license: string | null = this.manifest.getLicense();
+    const rights: string | null = this.manifest.getRights();
 
     if (license) {
       const item: any = {
@@ -325,6 +334,18 @@ export class Helper {
           options && options.licenseFormatter
             ? options.licenseFormatter.format(license)
             : license
+      };
+      const metadataItem: LabelValuePair = new LabelValuePair(locale);
+      metadataItem.parse(item);
+      (<IMetadataItem>metadataItem).isRootLevel = true;
+      manifestGroup.addItem(<IMetadataItem>metadataItem);
+    } else if (rights) {
+      const item: any = {
+        label: "rights",
+        value:
+          options && options.licenseFormatter
+            ? options.licenseFormatter.format(rights)
+            : rights
       };
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.parse(item);
