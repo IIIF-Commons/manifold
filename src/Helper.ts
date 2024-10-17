@@ -306,7 +306,6 @@ export class Helper {
       manifestGroup.addItem(<IMetadataItem>metadataItem);
     }
 
-    const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
 
     if (this.manifest.getAttribution().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
@@ -316,7 +315,11 @@ export class Helper {
       metadataItem.value = this.manifest.getAttribution();
       (<IMetadataItem>metadataItem).isRootLevel = true;
       manifestGroup.addItem(<IMetadataItem>metadataItem);
-    } else if (requiredStatement) {
+    }
+
+    const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
+    
+    if (requiredStatement) {
       const item: any = this.parseStatement(requiredStatement);
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.parse(item);
@@ -325,7 +328,7 @@ export class Helper {
     }
 
     const license: string | null = this.manifest.getLicense();
-    const rights: string | null = this.manifest.getRights();
+    
 
     if (license) {
       const item: any = {
@@ -339,7 +342,11 @@ export class Helper {
       metadataItem.parse(item);
       (<IMetadataItem>metadataItem).isRootLevel = true;
       manifestGroup.addItem(<IMetadataItem>metadataItem);
-    } else if (rights) {
+    }
+
+    const rights: string | null = this.manifest.getRights();
+    
+    if (rights) {
       const item: any = {
         label: "rights",
         value:
