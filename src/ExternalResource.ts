@@ -233,6 +233,13 @@ export class ExternalResource implements IExternalResource {
           ServiceProfile.AUTH_1_TOKEN
         );
 
+        if (!this.probeService) {
+          this.probeService = Utils.getService(
+            resource,
+            ServiceProfile.AUTH_1_PROBE
+          );
+        }
+
         // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
           this.probeService = this.loginService.getService(
@@ -246,6 +253,12 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.externalService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
+        if (!this.probeService) {
+          this.probeService = Utils.getService(
+            resource,
+            ServiceProfile.AUTH_1_PROBE
+          );
+        }
 
         // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
@@ -260,6 +273,12 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.kioskService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
+        if (!this.probeService) {
+          this.probeService = Utils.getService(
+            resource,
+            ServiceProfile.AUTH_1_PROBE
+          );
+        }
 
         // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
