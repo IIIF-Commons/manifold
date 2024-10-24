@@ -18,7 +18,14 @@
     "strictNullChecks": true,
     "resolveJsonModule": true,
     "target": "es5",
-    "types": ["node", "manifesto.js", "@iiif/vocabulary"]
+    "types": [
+      "node",
+      "manifesto.js",
+      "@iiif/vocabulary",
+      "@types/jest"
+    ]
   },
-  "include": ["src/**/*"]
+  "include": [
+    "__tests__/**/*"
+  ]
 }
