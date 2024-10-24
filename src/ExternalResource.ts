@@ -53,11 +53,9 @@ export class ExternalResource implements IExternalResource {
       if (!id.endsWith("/")) {
         id += "/";
       }
-
-      const profile = service.getProfile();
       if (
-        profile &&
-        (Utils.isImageProfile(profile) ||
+        service.getProfile() &&
+        (Utils.isImageProfile(service.getProfile()) ||
           Utils.isImageServiceType(service.getIIIFResourceType()))
       ) {
         infoUri = id + "info.json";
@@ -177,41 +175,22 @@ export class ExternalResource implements IExternalResource {
         }
       }
 
-      const clickThroughService = Utils.getService(
+      this.clickThroughService = Utils.getService(
         resource,
         ServiceProfile.AUTH_1_CLICK_THROUGH
       );
-      if (clickThroughService) {
-        this.clickThroughService = clickThroughService;
-      }
-      const loginService = Utils.getService(
+      this.loginService = Utils.getService(
         resource,
         ServiceProfile.AUTH_1_LOGIN
       );
-      if (loginService) {
-        this.loginService = loginService;
-      }
-      const externalService = Utils.getService(
+      this.externalService = Utils.getService(
         resource,
         ServiceProfile.AUTH_1_EXTERNAL
       );
-      if (externalService) {
-        this.externalService = externalService;
-      }
-      const kioskService = Utils.getService(
+      this.kioskService = Utils.getService(
         resource,
         ServiceProfile.AUTH_1_KIOSK
       );
-      if (kioskService) {
-        this.kioskService = kioskService;
-      }
-      const probeService = Utils.getService(
-        resource,
-        ServiceProfile.AUTH_1_PROBE
-      );
-      if (probeService) {
-        this.probeService = probeService;
-      }
 
       if (this.clickThroughService) {
         this.logoutService = this.clickThroughService.getService(
@@ -220,11 +199,9 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.clickThroughService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
-        if (!this.probeService) {
-          this.probeService = this.clickThroughService.getService(
-            ServiceProfile.AUTH_1_PROBE
-          );
-        }
+        this.probeService = this.clickThroughService.getService(
+          ServiceProfile.AUTH_1_PROBE
+        );
       } else if (this.loginService) {
         this.logoutService = this.loginService.getService(
           ServiceProfile.AUTH_1_LOGOUT
@@ -233,12 +210,10 @@ export class ExternalResource implements IExternalResource {
           ServiceProfile.AUTH_1_TOKEN
         );
 
-        if (!this.probeService) {
-          this.probeService = Utils.getService(
-            resource,
-            ServiceProfile.AUTH_1_PROBE
-          );
-        }
+        this.probeService = Utils.getService(
+          resource,
+          ServiceProfile.AUTH_1_PROBE
+        );
 
         // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
@@ -253,12 +228,10 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.externalService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
-        if (!this.probeService) {
-          this.probeService = Utils.getService(
-            resource,
-            ServiceProfile.AUTH_1_PROBE
-          );
-        }
+        this.probeService = Utils.getService(
+          resource,
+          ServiceProfile.AUTH_1_PROBE
+        );
 
         // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
@@ -273,12 +246,10 @@ export class ExternalResource implements IExternalResource {
         this.tokenService = this.kioskService.getService(
           ServiceProfile.AUTH_1_TOKEN
         );
-        if (!this.probeService) {
-          this.probeService = Utils.getService(
-            resource,
-            ServiceProfile.AUTH_1_PROBE
-          );
-        }
+        this.probeService = Utils.getService(
+          resource,
+          ServiceProfile.AUTH_1_PROBE
+        );
 
         // @deprecated - the probe should be on the resource.
         if (!this.probeService) {
