@@ -19,10 +19,10 @@
     "resolveJsonModule": true,
     "target": "es5",
     "types": [
-        "node",
-        "manifesto.js",
-        "@iiif/vocabulary",
-        "@types/jest"
+      "node",
+      "manifesto.js",
+      "@iiif/vocabulary",
+      "@types/jest"
     ]
   },
   "include": [
