@@ -48,7 +48,7 @@
     "@edsilv/http-status-codes": "^1.0.3",
     "@iiif/vocabulary": "^1.0.23",
     "@types/jest": "^25.2.3",
-    "jest": "^25.5.4",
+    "jest": "^29.7.0",
     "manifesto.js": "4.2.20",
     "ts-jest": "^25.5.1"
   },
