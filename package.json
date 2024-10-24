@@ -15,6 +15,8 @@
     "build": "npm run lint:all && npm run clean && npm run build:commonjs && npm run build:esmodule && npm run build:umd && npm run build:var && npm run build:types",
     "clean": "rimraf -rf dist-umd dist-commonjs dist-esmodule dist-var types",
     "lint:all": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "prepublishOnly": "npm run build",
     "watch": "npm run build:esmodule -- --watch"
   },
@@ -45,7 +47,10 @@
   "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
     "@iiif/vocabulary": "^1.0.23",
-    "manifesto.js": "4.2.20"
+    "@types/jest": "^25.2.3",
+    "jest": "^25.5.4",
+    "manifesto.js": "4.2.20",
+    "ts-jest": "^25.5.1"
   },
   "optionalDependencies": {
     "fsevents": "*"
