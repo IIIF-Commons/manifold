@@ -306,7 +306,6 @@ export class Helper {
       manifestGroup.addItem(<IMetadataItem>metadataItem);
     }
 
-
     if (this.manifest.getAttribution().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.label = new PropertyValue([
