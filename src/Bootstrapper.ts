@@ -30,9 +30,13 @@ export class Bootstrapper {
         reject = rej;
       }
 
-      Utils.loadManifest(that._options.manifestUri).then(json => {
-        that._loaded(that, json, resolve, reject);
-      });
+      Utils.loadManifest(that._options.manifestUri)
+        .then(json => {
+          that._loaded(that, json, resolve, reject);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
     });
   }
 

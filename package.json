@@ -1,13 +1,13 @@
 {
   "name": "@iiif/manifold",
-  "version": "2.0.4-pre-4",
+  "version": "2.0.31",
   "description": "",
   "main": "./dist-umd/manifold.js",
   "module": "./dist-esmodule/index.js",
   "types": "./dist-esmodule/index.d.ts",
   "scripts": {
     "build:commonjs": "tsc",
-    "build:docs": "rimraf -rf docs && typedoc --out docs --name manifold --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --module commonjs src/ && touch docs/.nojekyll",
+    "build:docs": "rimraf -rf docs && typedoc --out docs --name manifold --theme default --ignoreCompilerErrors --experimentalDecorators --emitDecoratorMetadata --target ES6 --moduleResolution node --preserveConstEnums --stripInternal --suppressExcessPropertyErrors --module commonjs src/ && touch docs/.nojekyll",
     "build:esmodule": "tsc -m es6 --outDir dist-esmodule",
     "build:types": "npx dts-bundle-generator --umd-module-name manifold -o types/index.d.ts dist-esmodule/index.d.ts",
     "build:umd": "webpack",
@@ -17,7 +17,8 @@
     "lint:all": "prettier --write \"./src/**/*.{js,jsx,json,css,ts,tsx}\"",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "watch": "npm run build:esmodule -- --watch"
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,7 @@
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
     "cross-env": "^5.2.0",
-    "dts-bundle-generator": "^2.0.0",
+    "dts-bundle-generator": "^9.5.1",
     "prettier": "^1.19.1",
     "prettier-check": "^2.0.0",
     "rimraf": "^2.6.3",
@@ -45,10 +46,13 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
-    "@iiif/vocabulary": "^1.0.20",
-    "@types/jest": "^26.0.20",
-    "jest": "^26.6.3",
-    "manifesto.js": "4.2.1",
-    "ts-jest": "^26.5.3"
+    "@iiif/vocabulary": "^1.0.23",
+    "@types/jest": "^25.2.3",
+    "jest": "^25.5.4",
+    "manifesto.js": "4.2.20",
+    "ts-jest": "^25.5.1"
+  },
+  "optionalDependencies": {
+    "fsevents": "*"
   }
 }

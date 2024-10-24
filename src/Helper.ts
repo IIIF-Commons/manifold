@@ -54,6 +54,16 @@ export class Helper {
     this.manifestIndex = this.options.manifestIndex || 0;
     this.sequenceIndex = this.options.sequenceIndex || 0;
     this.canvasIndex = this.options.canvasIndex || 0;
+
+    if (this.options.canvasId) {
+      const canvasIndex: number | null = this.getCanvasIndexById(
+        this.options.canvasId
+      );
+
+      if (canvasIndex !== null) {
+        this.canvasIndex = canvasIndex;
+      }
+    }
   }
 
   // getters //
@@ -334,6 +344,83 @@ export class Helper {
     }
   }
 
+  public getAllRequiredStatements(): Array<
+    ILabelValuePair & { source: "Range" | "Canvas" | "Manifest" | "Collection" }
+  > {
+    const statements: Array<ILabelValuePair & {
+      source: "Range" | "Canvas" | "Manifest" | "Collection";
+    }> = [];
+
+    const range = this.getCurrentRange();
+    if (range) {
+      // @todo remove - BC for manifesto.
+      const rangeStatement = (range as any).getRequiredStatement
+        ? (range as any).getRequiredStatement()
+        : null;
+      if (rangeStatement) {
+        statements.push({
+          ...this.parseStatement(rangeStatement),
+          source: "Range"
+        });
+      }
+    }
+
+    const canvas = this.getCurrentCanvas();
+    if (canvas) {
+      // @todo remove - BC for manifesto.
+      const canvasStatement = (canvas as any).getRequiredStatement
+        ? (canvas as any).getRequiredStatement()
+        : null;
+      if (canvasStatement) {
+        statements.push({
+          ...this.parseStatement(canvasStatement),
+          source: "Canvas"
+        });
+      }
+    }
+
+    if (this.manifest) {
+      const manifestStatement = this.manifest.getRequiredStatement();
+      if (manifestStatement) {
+        if (manifestStatement) {
+          statements.push({
+            ...this.parseStatement(manifestStatement),
+            source: "Manifest"
+          });
+        }
+      }
+    }
+
+    return statements;
+  }
+
+  public getMostSpecificRequiredStatement(): ILabelValuePair | null {
+    const all = this.getAllRequiredStatements();
+
+    const range = all.find(statement => statement.source === "Range");
+    if (range) {
+      return range;
+    }
+
+    const canvas = all.find(statement => statement.source === "Canvas");
+    if (canvas) {
+      return canvas;
+    }
+
+    const manifest = all.find(statement => statement.source === "Manifest");
+    if (manifest) {
+      return manifest;
+    }
+
+    // This helper does not have access to the collection I don't think.
+    // const collection = all.find(statement => statement.source === 'Collection');
+    // if (collection) {
+    //   return collection;
+    // }
+
+    return null;
+  }
+
   public getRequiredStatement(): ILabelValuePair | null {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);
@@ -342,16 +429,18 @@ export class Helper {
     const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
 
     if (requiredStatement) {
-      return {
-        label: requiredStatement.label ? requiredStatement.getLabel() : "",
-        value:
-          requiredStatement.value && requiredStatement.value.length
-            ? requiredStatement.getValue()
-            : ""
-      };
+      return this.parseStatement(requiredStatement);
     }
 
     return null;
+  }
+
+  parseStatement(statement: LabelValuePair) {
+    return {
+      label: statement.label ? statement.getLabel() : "",
+      value:
+        statement.value && statement.value.length ? statement.getValue() : ""
+    };
   }
 
   private _parseMetadataOptions(
@@ -450,6 +539,7 @@ export class Helper {
     return null;
   }
 
+  /** @deprecated Use getAccompanyingCanvas instead */
   public getPosterCanvas(): Canvas | null {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);
@@ -458,11 +548,36 @@ export class Helper {
     return this.manifest.getPosterCanvas();
   }
 
+  public getAccompanyingCanvas(): Canvas | null {
+    if (!this.manifest) {
+      throw new Error(Errors.manifestNotLoaded);
+    }
+
+    return this.manifest.getAccompanyingCanvas();
+  }
+
+  /** @deprecated Use getAccompanyingCanvasImage instead */
   public getPosterImage(): string | null {
     const posterCanvas: Canvas | null = this.getPosterCanvas();
 
     if (posterCanvas) {
       const content: Annotation[] = posterCanvas.getContent();
+
+      if (content && content.length) {
+        const annotation: Annotation = content[0];
+        const body: AnnotationBody[] = annotation.getBody();
+        return body[0].id;
+      }
+    }
+
+    return null;
+  }
+
+  public getAccompanyingCanvasImage(): string | null {
+    const accompanyingCanvas: Canvas | null = this.getAccompanyingCanvas();
+
+    if (accompanyingCanvas) {
+      const content: Annotation[] = accompanyingCanvas.getContent();
 
       if (content && content.length) {
         const annotation: Annotation = content[0];
@@ -700,7 +815,7 @@ export class Helper {
     return this.getCurrentSequence().getStartCanvasIndex();
   }
 
-  public getThumbs(width: number, height: number): Thumb[] {
+  public getThumbs(width: number, height?: number): Thumb[] {
     return this.getCurrentSequence().getThumbs(width, height);
   }
 
