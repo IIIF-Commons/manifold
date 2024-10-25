@@ -1,0 +1,308 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif",
+  "type": "Manifest",
+  "label": {
+    "none": ["Quartet in F major, Op. 77, No. 2"]
+  },
+  "metadata": [
+    {
+      "label": {
+        "none": ["Contributor"]
+      },
+      "value": {
+        "none": [
+          "Genualdi, Joseph (Contributor)",
+          "Hersh, Stefan (Contributor)",
+          "Solomonow, Rami (Contributor)",
+          "Costanza, Christopher (Contributor)"
+        ]
+      }
+    },
+    {
+      "label": {
+        "none": ["Creator"]
+      },
+      "value": {
+        "none": ["Haydn, Joseph"]
+      }
+    },
+    {
+      "label": {
+        "none": ["Date"]
+      },
+      "value": {
+        "none": ["April 14, 1997"]
+      }
+    },
+    {
+      "label": {
+        "none": ["Department"]
+      },
+      "value": {
+        "none": ["Music Library"]
+      }
+    },
+    {
+      "label": {
+        "none": ["Last Modified"]
+      },
+      "value": {
+        "none": ["2022-02-07T17:45:25.653185Z"]
+      }
+    },
+    {
+      "label": {
+        "none": ["Notes"]
+      },
+      "value": {
+        "none": [
+          "Joseph Genualdi; Stefan Hersh, violin; Rami Solomonow, viola; Christopher Costanza, cello (Performers)"
+        ]
+      }
+    },
+    {
+      "label": {
+        "none": ["Rights Statement"]
+      },
+      "value": {
+        "none": ["In Copyright - Educational Use Permitted"]
+      }
+    },
+    {
+      "label": {
+        "none": ["Subject"]
+      },
+      "value": {
+        "none": ["Chicago Chamber Musicians", "Chamber music groups"]
+      }
+    }
+  ],
+  "requiredStatement": {
+    "label": {
+      "none": ["Attribution"]
+    },
+    "value": {
+      "none": [
+        "Courtesy of Northwestern University Libraries",
+        "The audio recordings on this web site are from material in the collections of the Music Library of Northwestern University Libraries, are provided for use by its students, faculty and staff, and by other researchers visiting this site, for research consultation and scholarly purposes only. Further distribution and/or any commercial use of the audio recordings from this site is not permitted."
+      ]
+    }
+  },
+  "rights": "http://rightsstatements.org/vocab/InC-EDU/1.0/",
+  "thumbnail": [
+    {
+      "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24/thumbnail",
+      "type": "Image",
+      "format": "image/jpeg",
+      "height": 300,
+      "width": 300
+    }
+  ],
+  "seeAlso": [
+    {
+      "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24",
+      "type": "Dataset",
+      "format": "application/json",
+      "label": {
+        "none": ["Northwestern University Libraries Digital Collections API"]
+      }
+    }
+  ],
+  "homepage": [
+    {
+      "id": "https://dc.library.northwestern.edu/items/5be4a014-8ae0-46a5-b459-c1d36e003f24",
+      "type": "Text",
+      "format": "text/html",
+      "label": {
+        "none": [
+          "Homepage at Northwestern University Libraries Digital Collections"
+        ]
+      }
+    }
+  ],
+  "partOf": [
+    {
+      "id": "https://api.dc.library.northwestern.edu/api/v2/collections/2933302a-a629-4e3b-81ed-db7a54b33a8c?as=iiif",
+      "type": "Collection",
+      "label": {
+        "none": ["Chicago Chamber Musicians Archive, 1989-2010"]
+      },
+      "summary": {
+        "none": [
+          "Audio recordings of Chicago Chamber Musicians concerts and performances. "
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/0",
+      "type": "Canvas",
+      "height": 100,
+      "width": 100,
+      "duration": 458.194,
+      "label": {
+        "none": ["Allegro moderato"]
+      },
+      "items": [
+        {
+          "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/0/annotation-page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/0/annotation/0",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/0",
+              "body": {
+                "id": "https://meadow-streaming.rdc.library.northwestern.edu/3f/d7/8f/6a/-4/1b/7-/41/f4/-8/9f/1-/42/ef/e6/68/28/6d/Joseph_Haydn_-_Quartet_No._14_in_F_Major_Op._77_No._2_-_I._Allegro_moderato_-_4.14.97.m3u8",
+                "type": "Sound",
+                "format": "application/x-mpegurl",
+                "height": 100,
+                "width": 100,
+                "duration": 458.194
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/1",
+      "type": "Canvas",
+      "height": 100,
+      "width": 100,
+      "duration": 300.482,
+      "label": {
+        "none": ["Menuetto:  Presto, ma non troppo"]
+      },
+      "items": [
+        {
+          "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/1/annotation-page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/1/annotation/0",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/1",
+              "body": {
+                "id": "https://meadow-streaming.rdc.library.northwestern.edu/42/f9/35/aa/-0/de/1-/4c/79/-8/d7/f-/7c/a9/74/c0/e2/d6/Joseph_Haydn_-_Quartet_No._14_in_F_Major_Op._77_No._2_-_II._Menuetto_Presto_ma_non_troppo_-_4.14.97.m3u8",
+                "type": "Sound",
+                "format": "application/x-mpegurl",
+                "height": 100,
+                "width": 100,
+                "duration": 300.482
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/2",
+      "type": "Canvas",
+      "height": 100,
+      "width": 100,
+      "duration": 483.096,
+      "label": {
+        "none": ["Andante"]
+      },
+      "items": [
+        {
+          "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/2/annotation-page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/2/annotation/0",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/2",
+              "body": {
+                "id": "https://meadow-streaming.rdc.library.northwestern.edu/b5/9e/cb/42/-6/70/0-/40/aa/-8/86/4-/07/ae/3d/ae/17/63/Joseph_Haydn_-_Quartet_No._14_in_F_Major_Op._77_No._2_-_III._Andante_-_4.14.97.m3u8",
+                "type": "Sound",
+                "format": "application/x-mpegurl",
+                "height": 100,
+                "width": 100,
+                "duration": 483.096
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/3",
+      "type": "Canvas",
+      "height": 100,
+      "width": 100,
+      "duration": 410.051,
+      "label": {
+        "none": ["Finale:  Vivace assai"]
+      },
+      "items": [
+        {
+          "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/3/annotation-page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/3/annotation/0",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://api.dc.library.northwestern.edu/api/v2/works/5be4a014-8ae0-46a5-b459-c1d36e003f24?as=iiif/canvas/access/3",
+              "body": {
+                "id": "https://meadow-streaming.rdc.library.northwestern.edu/f9/19/59/f9/-d/52/6-/4e/1d/-a/4c/0-/38/f7/94/42/a5/a7/Joseph_Haydn_-_Quartet_No._14_in_F_Major_Op._77_No._2_-_IV._Finale-Vivace_assai_-_4.14.97.m3u8",
+                "type": "Sound",
+                "format": "application/x-mpegurl",
+                "height": 100,
+                "width": 100,
+                "duration": 410.051
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provider": [
+    {
+      "id": "https://www.library.northwestern.edu/",
+      "type": "Agent",
+      "label": {
+        "none": ["Northwestern University Libraries"]
+      },
+      "homepage": [
+        {
+          "id": "https://dc.library.northwestern.edu/",
+          "type": "Text",
+          "label": {
+            "none": [
+              "Northwestern University Libraries Digital Collections Homepage"
+            ]
+          },
+          "format": "text/html",
+          "language": ["en"]
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://iiif.dc.library.northwestern.edu/iiif/2/00000000-0000-0000-0000-000000000003/full/pct:50/0/default.webp",
+          "type": "Image",
+          "format": "image/webp",
+          "height": 139,
+          "width": 1190
+        }
+      ]
+    }
+  ],
+  "logo": [
+    {
+      "id": "https://iiif.dc.library.northwestern.edu/iiif/2/00000000-0000-0000-0000-000000000003/full/pct:50/0/default.webp",
+      "type": "Image",
+      "format": "image/webp",
+      "height": 139,
+      "width": 1190
+    }
+  ]
+}

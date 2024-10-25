@@ -1,0 +1,384 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "requiredStatement": {
+    "label": {
+      "en": ["Rights Note"]
+    },
+    "value": {
+      "en": [
+        "This material is made available for education and research purposes. The Harry Ransom Center does not own the rights for this item; it cannot grant or deny permission to use this material.  Copyright law protects unpublished as well as published materials. Rights holders for these materials may be listed in the WATCH file: http://norman.hrc.utexas.edu/watch/.  It is your responsibility to determine the rights status and secure whatever permission may be needed for the use of this item."
+      ]
+    }
+  },
+  "partOf": [
+    {
+      "format": "application/json",
+      "label": {
+        "en": ["IIIF Collection Manifest"]
+      },
+      "id": "https://norman.hrc.utexas.edu/notDM/collectionManifest/p15878coll1v3",
+      "type": "Collection"
+    }
+  ],
+  "seeAlso": [
+    {
+      "format": "text/html",
+      "label": {
+        "en": ["CONTENTdm Collection"]
+      },
+      "id": "https://hrc.contentdm.oclc.org/cdm/landingpage/collection/p15878coll1",
+      "type": "Text"
+    }
+  ],
+  "rights": "http://rightsstatements.org/vocab/InC/1.0/",
+  "provider": [
+    {
+      "logo": [
+        {
+          "format": "image/gif",
+          "width": 78,
+          "id": "https://norman.hrc.utexas.edu/includes/images/hrc-logo-iiif.jpg",
+          "height": 43,
+          "type": "Image"
+        }
+      ],
+      "label": {
+        "en": ["Harry Ransom Center"]
+      },
+      "homepage": [
+        {
+          "format": "text/html",
+          "label": {
+            "en": ["Harry Ransom Center"]
+          },
+          "id": "https://www.hrc.utexas.edu",
+          "type": "Text"
+        }
+      ],
+      "id": "https://www.hrc.utexas.edu/about/",
+      "type": "Agent"
+    }
+  ],
+  "logo": [
+    {
+      "format": "image/gif",
+      "width": 78,
+      "id": "https://norman.hrc.utexas.edu/includes/images/hrc-logo-iiif.jpg",
+      "height": 43,
+      "type": "Image"
+    }
+  ],
+  "label": {
+    "en": ["\"Criminal Syndicalism\" case, McComb, Mississippi"]
+  },
+  "id": "https://norman.hrc.utexas.edu/notDM/objectManifest/p15878coll1v3/37",
+  "items": [
+    {
+      "partOf": [
+        {
+          "format": "application/json",
+          "label": {
+            "en": ["IIIF Object Manifest"]
+          },
+          "id": "https://norman.hrc.utexas.edu/notDM/objectManifest/p15878coll1v3/37",
+          "type": "Manifest"
+        }
+      ],
+      "label": {
+        "en": ["File 1"]
+      },
+      "thumbnail": [
+        {
+          "format": "image/png",
+          "service": [
+            {
+              "profile": "http://iiif.io/api/image/2/level0.json",
+              "id": "https://norman.hrc.utexas.edu/includes/images/audio",
+              "type": "ImageService2"
+            }
+          ],
+          "id": "https://norman.hrc.utexas.edu/includes/images/audio.png",
+          "type": "Image"
+        }
+      ],
+      "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/33",
+      "items": [
+        {
+          "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/33?page",
+          "items": [
+            {
+              "target": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/33",
+              "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/33?content",
+              "motivation": "painting",
+              "type": "Annotation",
+              "body": {
+                "format": "audio/mp3",
+                "id": "https://norman.hrc.utexas.edu/CDMmedia/p15878coll1/34.mp3",
+                "type": "Sound",
+                "duration": 1004
+              }
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "type": "Canvas",
+      "duration": 1004
+    },
+    {
+      "partOf": [
+        {
+          "format": "application/json",
+          "label": {
+            "en": ["IIIF Object Manifest"]
+          },
+          "id": "https://norman.hrc.utexas.edu/notDM/objectManifest/p15878coll1v3/37",
+          "type": "Manifest"
+        }
+      ],
+      "label": {
+        "en": ["File 2"]
+      },
+      "thumbnail": [
+        {
+          "format": "image/png",
+          "service": [
+            {
+              "profile": "http://iiif.io/api/image/2/level0.json",
+              "id": "https://norman.hrc.utexas.edu/includes/images/audio",
+              "type": "ImageService2"
+            }
+          ],
+          "id": "https://norman.hrc.utexas.edu/includes/images/audio.png",
+          "type": "Image"
+        }
+      ],
+      "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/34",
+      "items": [
+        {
+          "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/34?page",
+          "items": [
+            {
+              "target": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/34",
+              "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/34?content",
+              "motivation": "painting",
+              "type": "Annotation",
+              "body": {
+                "format": "audio/mp3",
+                "id": "https://norman.hrc.utexas.edu/CDMmedia/p15878coll1/35.mp3",
+                "type": "Sound",
+                "duration": 971
+              }
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "type": "Canvas",
+      "duration": 971
+    },
+    {
+      "partOf": [
+        {
+          "format": "application/json",
+          "label": {
+            "en": ["IIIF Object Manifest"]
+          },
+          "id": "https://norman.hrc.utexas.edu/notDM/objectManifest/p15878coll1v3/37",
+          "type": "Manifest"
+        }
+      ],
+      "label": {
+        "en": ["File 3"]
+      },
+      "width": 2064,
+      "thumbnail": [
+        {
+          "format": "image/jpeg",
+          "service": [
+            {
+              "profile": "http://iiif.io/api/image/2/level2.json",
+              "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/35",
+              "type": "ImageService2"
+            }
+          ],
+          "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/35/full/102,100/0/default.jpg",
+          "type": "Image"
+        }
+      ],
+      "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/35",
+      "items": [
+        {
+          "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/35?page",
+          "items": [
+            {
+              "target": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/35",
+              "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/35?content",
+              "motivation": "painting",
+              "type": "Annotation",
+              "body": {
+                "format": "image/jpeg",
+                "width": 2064,
+                "service": [
+                  {
+                    "profile": "http://iiif.io/api/image/2/level2.json",
+                    "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/35",
+                    "type": "ImageService2"
+                  }
+                ],
+                "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/35/full/full/0/default.jpg",
+                "height": 2114,
+                "type": "Image"
+              }
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "height": 2114,
+      "type": "Canvas"
+    },
+    {
+      "partOf": [
+        {
+          "format": "application/json",
+          "label": {
+            "en": ["IIIF Object Manifest"]
+          },
+          "id": "https://norman.hrc.utexas.edu/notDM/objectManifest/p15878coll1v3/37",
+          "type": "Manifest"
+        }
+      ],
+      "label": {
+        "en": ["File 4"]
+      },
+      "width": 1342,
+      "thumbnail": [
+        {
+          "format": "image/jpeg",
+          "service": [
+            {
+              "profile": "http://iiif.io/api/image/2/level2.json",
+              "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/36",
+              "type": "ImageService2"
+            }
+          ],
+          "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/36/full/100,100/0/default.jpg",
+          "type": "Image"
+        }
+      ],
+      "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/36",
+      "items": [
+        {
+          "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/36?page",
+          "items": [
+            {
+              "target": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/36",
+              "id": "https://norman.hrc.utexas.edu/notDM/canvasInfo/p15878coll1v3/37/36?content",
+              "motivation": "painting",
+              "type": "Annotation",
+              "body": {
+                "format": "image/jpeg",
+                "width": 1342,
+                "service": [
+                  {
+                    "profile": "http://iiif.io/api/image/2/level2.json",
+                    "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/36",
+                    "type": "ImageService2"
+                  }
+                ],
+                "id": "https://hrc.contentdm.oclc.org/digital/iiif/p15878coll1/36/full/full/0/default.jpg",
+                "height": 1355,
+                "type": "Image"
+              }
+            }
+          ],
+          "type": "AnnotationPage"
+        }
+      ],
+      "height": 1355,
+      "type": "Canvas"
+    }
+  ],
+  "metadata": [
+    {
+      "label": {
+        "en": ["Creator"]
+      },
+      "value": {
+        "en": [
+          "Beecher, John, 1904-1980, recordist; Beecher, John, 1904-1980, speaker; Sweeney, Dennis, speaker; Hughes, Cephas, speaker; Thomas, Helena, speaker; Anderson, Christine, speaker; Banks, Louise, speaker; Junk, Ursula, speaker"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Date"]
+      },
+      "value": {
+        "en": ["1964 October 19"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Description"]
+      },
+      "value": {
+        "en": [
+          "Track 1: John Beecher and members of Council of Federated Organizations (COFO) meet with high school students arrested on charge of criminal syndicalism, and their parents, after their release from jail in McComb, Mississippi. Beecher interviews the group regarding conditions in the jail. The group sings several spirituals. Track 2: Meeting, continued."
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Subject"]
+      },
+      "value": {
+        "en": [
+          "Civil rights movements--Southern States; Criminal syndicalism; McComb (Miss.); Race discrimination; Race relations; Segregation; Spirituals (Songs); Voter registration"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Language"]
+      },
+      "value": {
+        "en": ["English"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Format"]
+      },
+      "value": {
+        "en": ["Reel-to-reel audiotapes"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Extent"]
+      },
+      "value": {
+        "en": ["1 reel"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Duration"]
+      },
+      "value": {
+        "en": ["Track 1: 16:44; Track 2: 16:11"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Identifier"]
+      },
+      "value": {
+        "en": ["R 0124"]
+      }
+    }
+  ],
+  "type": "Manifest"
+}
