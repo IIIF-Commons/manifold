@@ -1,6 +1,6 @@
 {
   "name": "@iiif/manifold",
-  "version": "2.0.31",
+  "version": "2.1.0",
   "description": "",
   "main": "./dist-umd/manifold.js",
   "module": "./dist-esmodule/index.js",
