@@ -317,7 +317,7 @@ export class Helper {
     }
 
     const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
-    
+
     if (requiredStatement) {
       const item: any = this.parseStatement(requiredStatement);
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
@@ -327,7 +327,6 @@ export class Helper {
     }
 
     const license: string | null = this.manifest.getLicense();
-    
 
     if (license) {
       const item: any = {
@@ -344,7 +343,7 @@ export class Helper {
     }
 
     const rights: string | null = this.manifest.getRights();
-    
+
     if (rights) {
       const item: any = {
         label: "rights",
