@@ -3,7 +3,6 @@ import { ExternalResource } from '../src/ExternalResource';
 
 const blAvAuthNew = require('./fixtures/bl-av-auth.json');
 const blAvAuth = require('./fixtures/prev-auth.json');
-// const nwRightsLogoReqStatement = require('./fixtures/nw-rights-logo-reqStatement.json')
 const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqStatement.json')
 
 
