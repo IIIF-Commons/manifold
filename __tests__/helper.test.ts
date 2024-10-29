@@ -3,6 +3,7 @@ import { ExternalResource } from '../src/ExternalResource';
 
 const blAvAuthNew = require('./fixtures/bl-av-auth.json');
 const blAvAuth = require('./fixtures/prev-auth.json');
+const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqStatement.json')
 
 
 function mockFetch(status: number, data?: any) {
@@ -31,6 +32,74 @@ function mockFetch(status: number, data?: any) {
 
 describe('Helper', () => {
 
+  const v3metadataFixture = utexasRightsLogoReqStatement;
+
+  test('Rights got from v3 manifest', async () => {
+    const helper = await loadManifestJson(v3metadataFixture, {
+      manifestUri: v3metadataFixture.id
+    });
+
+    expect(helper).toBeDefined();
+
+    const rights = helper.getRights();
+
+    expect(rights).toBeDefined();
+    expect(rights).toBe('http://rightsstatements.org/vocab/InC/1.0/');
+  })
+
+  test('Required Statement got from v3 manifest', async () => {
+    const helper = await loadManifestJson(v3metadataFixture, {
+      manifestUri: v3metadataFixture.id
+    });
+
+    expect(helper).toBeDefined();
+
+    const reqStatement = helper.getRequiredStatement();
+
+    expect(reqStatement).toBeDefined();
+
+    if (reqStatement) {
+      expect(reqStatement.value).toBe("This material is made available for education and research purposes. The Harry Ransom Center does not own the rights for this item; it cannot grant or deny permission to use this material.  Copyright law protects unpublished as well as published materials. Rights holders for these materials may be listed in the WATCH file: http://norman.hrc.utexas.edu/watch/.  It is your responsibility to determine the rights status and secure whatever permission may be needed for the use of this item.")
+    }
+  })
+
+  test('Logo got from v3 manifest', async () => {
+    const helper = await loadManifestJson(v3metadataFixture, {
+      manifestUri: v3metadataFixture.id
+    });
+
+    expect(helper).toBeDefined();
+
+    const logo = helper.getLogo();
+    expect(logo).toBeDefined();
+    expect(logo).toBe("https://norman.hrc.utexas.edu/includes/images/hrc-logo-iiif.jpg");
+  })
+
+  test('v3 metadata group includes rights, logo, requiredStatement', async () => {
+    const helper = await loadManifestJson(v3metadataFixture, {
+      manifestUri: v3metadataFixture.id
+    });
+
+    expect(helper).toBeDefined();
+
+    const metadataGroups = helper.getMetadata();
+
+    const hasRights = metadataGroups.some(metadataGroup => 
+      metadataGroup.items.some(item => item.getLabel() === 'rights'))
+
+    expect(hasRights).toBe(true);
+
+    const hasLogo = metadataGroups.some(metadataGroup => 
+      metadataGroup.items.some(item => item.getLabel() === 'logo'))
+
+    expect(hasLogo).toBe(true);
+
+    const hasReqStatement = metadataGroups.some(metadataGroup => 
+      metadataGroup.items.some(item => item.getLabel() === 'Rights Note'))
+
+    expect(hasReqStatement).toBe(true);
+
+  })
 
   test('New format works using service profile', async () => {
 
