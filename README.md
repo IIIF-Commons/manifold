@@ -34,7 +34,3 @@ https://iiif-commons.github.io/manifold/
     git commit -m "Release v1.2.3"
     git tag v1.2.3
     git push origin master v1.2.3
-
-### tips
-
-Use `nvm use 14` before installing anything
