@@ -21,10 +21,8 @@ module.exports = {
         'dist-umd/',
         'dist-var/',
     ],
-    globals: {
-        'ts-jest': {
-            tsconfig: 'tsconfig.test.json',
-        },
+    transform: {
+        '^.+.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }],
     },
     // globals: {
     //     window: {},
