@@ -1,6 +1,6 @@
 # manifold
 
-[![Build Status](https://travis-ci.org/IIIF-Commons/manifold.svg?branch=master)](https://travis-ci.org/IIIF-Commons/manifold)
+[![Build Status](https://github.com/IIIF-Commons/manifold/actions/workflows/build-test.yml/badge.svg?branch=master)](https://github.com/IIIF-Commons/manifold/actions/workflows/build-test.yml)
 
     npm install @iiif/manifold --save
 
