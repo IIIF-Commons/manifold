@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Manifold Test</title>
+        <script src="../dist-umd/manifold.js"></script>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #output {
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+    </style>
+    </head>
+    <body>
+        <h1>Manifold Test</h1>
+        <label for="manifest-url">Enter manifest URL to use the helper object
+            (manifoldHelper) in the console:</label><br>
+        <input type="text" id="manifest-url" size="50"
+            value="https://iiif.wellcomecollection.org/presentation/v2/b18035978">
+        <button onclick="loadManifest()">Load</button>
+
+        <div id="output"></div>
+
+        <script>
+        let manifoldHelper;
+
+        function loadManifest() {
+        const manifestUrl = document.getElementById("manifest-url").value;
+
+        if (!manifestUrl) {
+            alert("Please enter a valid IIIF manifest URL.");
+            return;
+        }
+
+        manifold
+            .loadManifest({
+                manifestUri: manifestUrl,
+                collectionIndex: 0,
+                manifestIndex: 0,
+                locale: "en",
+            })
+            .then(function (helper) {
+                console.log("manifoldHelper loaded");
+                manifoldHelper = helper;
+
+                // display the helper object in the output div
+                // document.getElementById('output').textContent = JSON.stringify(helper, null, 2);
+            })
+            .catch(function (error) {
+                console.error("Error loading manifest:", error);
+                alert("Error loading manifest. Check the console for details.");
+            });
+        }
+    </script>
+
+    </body>
+</html>

@@ -26,6 +26,13 @@ https://iiif-commons.github.io/manifold/
     npm install
     npm run build
 
+### Testing the build
+The build can be run and tested in the browser console by running
+
+    npm start
+
+and navigating to examples/index.html.
+
 ### Publishing Package
 
     git checkout master
