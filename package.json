@@ -42,7 +42,7 @@
     "typedoc": "0.14.0",
     "typescript": "^5",
     "typescript-tslint-plugin": "^0.5.5",
-    "webpack": "^4.28.3",
+    "webpack": "^5.96.1",
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
