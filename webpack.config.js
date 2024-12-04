@@ -19,7 +19,7 @@ const config = {
         library: 'manifold',
         umdNamedDefine: true
     },
-    mode: 'development',
+    mode: 'production',
     // Add resolve for `tsx` and `ts` files, otherwise Webpack would
     // only look for common JavaScript file extension (.js)
     resolve: {
