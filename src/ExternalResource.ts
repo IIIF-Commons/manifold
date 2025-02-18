@@ -70,7 +70,7 @@ export class ExternalResource implements IExternalResource {
     const images: Annotation[] = canvas.getImages();
     let infoUri: string | null = null;
 
-    // presentation 3
+    // presentation 3 or 4
     if (content && content.length) {
       const annotation: Annotation = content[0];
       const annotationBody: AnnotationBody[] = annotation.getBody();
@@ -87,7 +87,9 @@ export class ExternalResource implements IExternalResource {
         }
 
         // no image services. return the image id
-        return annotationBody[0].id;
+        return typeof annotationBody[0].getResourceID === "function"
+          ? annotationBody[0].getResourceID()
+          : annotationBody[0].id;
       }
 
       return null;

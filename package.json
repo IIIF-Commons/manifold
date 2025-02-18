@@ -51,7 +51,7 @@
     "@types/jest": "^25.2.3",
     "jest": "^29",
     "jest-environment-jsdom": "^29.7.0",
-    "manifesto.js": "4.2.21",
+    "manifesto.js": "https://github.com/JulieWinchester/manifesto.git#annotation_body",
     "ts-jest": "^29"
   },
   "optionalDependencies": {
