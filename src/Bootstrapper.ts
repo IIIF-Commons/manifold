@@ -6,7 +6,7 @@ import {
   IIIFResource,
   IManifestoOptions,
   Manifest,
-  Utils
+  Utils,
 } from "manifesto.js";
 
 export class Bootstrapper {
@@ -31,7 +31,7 @@ export class Bootstrapper {
       }
 
       Utils.loadManifest(that._options.manifestUri)
-        .then(json => {
+        .then((json) => {
           that._loaded(that, json, resolve, reject);
         })
         .catch((error: any) => {
@@ -64,7 +64,7 @@ export class Bootstrapper {
     const iiifResource: IIIFResource | null = Utils.parseManifest(json, <
       IManifestoOptions
     >{
-      locale: bootstrapper._options.locale
+      locale: bootstrapper._options.locale,
     });
 
     if (iiifResource) {
