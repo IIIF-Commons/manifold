@@ -10,7 +10,7 @@ import { MultiSelectableRange } from "./MultiSelectableRange";
 import {
   ServiceProfile,
   ViewingHint,
-  ViewingDirection
+  ViewingDirection,
 } from "@iiif/vocabulary/dist-commonjs";
 import { Errors } from "./Errors";
 import {
@@ -29,7 +29,7 @@ import {
   TreeNode,
   TreeNodeType,
   Utils,
-  PropertyValue
+  PropertyValue,
 } from "manifesto.js";
 
 export class Helper {
@@ -168,11 +168,12 @@ export class Helper {
       canvas.ranges = <Range[]>(
         this.manifest
           .getAllRanges()
-          .filter(range =>
+          .filter((range) =>
             range
               .getCanvasIds()
               .some(
-                cid => Utils.normaliseUrl(cid) === Utils.normaliseUrl(canvas.id)
+                (cid) =>
+                  Utils.normaliseUrl(cid) === Utils.normaliseUrl(canvas.id)
               )
           )
       );
@@ -299,7 +300,7 @@ export class Helper {
     if (this.manifest.getDescription().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.label = new PropertyValue([
-        new LocalizedValue("description", locale)
+        new LocalizedValue("description", locale),
       ]);
       metadataItem.value = this.manifest.getDescription();
       (<IMetadataItem>metadataItem).isRootLevel = true;
@@ -309,14 +310,15 @@ export class Helper {
     if (this.manifest.getAttribution().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.label = new PropertyValue([
-        new LocalizedValue("attribution", locale)
+        new LocalizedValue("attribution", locale),
       ]);
       metadataItem.value = this.manifest.getAttribution();
       (<IMetadataItem>metadataItem).isRootLevel = true;
       manifestGroup.addItem(<IMetadataItem>metadataItem);
     }
 
-    const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
+    const requiredStatement: LabelValuePair | null =
+      this.manifest.getRequiredStatement();
 
     if (requiredStatement) {
       const item: any = this.parseStatement(requiredStatement);
@@ -334,7 +336,7 @@ export class Helper {
         value:
           options && options.licenseFormatter
             ? options.licenseFormatter.format(license)
-            : license
+            : license,
       };
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.parse(item);
@@ -350,7 +352,7 @@ export class Helper {
         value:
           options && options.licenseFormatter
             ? options.licenseFormatter.format(rights)
-            : rights
+            : rights,
       };
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.parse(item);
@@ -361,7 +363,7 @@ export class Helper {
     if (this.manifest.getLogo()) {
       const item: any = {
         label: "logo",
-        value: '<img alt="logo" src="' + this.manifest.getLogo() + '"/>'
+        value: '<img alt="logo" src="' + this.manifest.getLogo() + '"/>',
       };
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.parse(item);
@@ -381,9 +383,11 @@ export class Helper {
   public getAllRequiredStatements(): Array<
     ILabelValuePair & { source: "Range" | "Canvas" | "Manifest" | "Collection" }
   > {
-    const statements: Array<ILabelValuePair & {
-      source: "Range" | "Canvas" | "Manifest" | "Collection";
-    }> = [];
+    const statements: Array<
+      ILabelValuePair & {
+        source: "Range" | "Canvas" | "Manifest" | "Collection";
+      }
+    > = [];
 
     const range = this.getCurrentRange();
     if (range) {
@@ -394,7 +398,7 @@ export class Helper {
       if (rangeStatement) {
         statements.push({
           ...this.parseStatement(rangeStatement),
-          source: "Range"
+          source: "Range",
         });
       }
     }
@@ -408,7 +412,7 @@ export class Helper {
       if (canvasStatement) {
         statements.push({
           ...this.parseStatement(canvasStatement),
-          source: "Canvas"
+          source: "Canvas",
         });
       }
     }
@@ -419,7 +423,7 @@ export class Helper {
         if (manifestStatement) {
           statements.push({
             ...this.parseStatement(manifestStatement),
-            source: "Manifest"
+            source: "Manifest",
           });
         }
       }
@@ -431,17 +435,17 @@ export class Helper {
   public getMostSpecificRequiredStatement(): ILabelValuePair | null {
     const all = this.getAllRequiredStatements();
 
-    const range = all.find(statement => statement.source === "Range");
+    const range = all.find((statement) => statement.source === "Range");
     if (range) {
       return range;
     }
 
-    const canvas = all.find(statement => statement.source === "Canvas");
+    const canvas = all.find((statement) => statement.source === "Canvas");
     if (canvas) {
       return canvas;
     }
 
-    const manifest = all.find(statement => statement.source === "Manifest");
+    const manifest = all.find((statement) => statement.source === "Manifest");
     if (manifest) {
       return manifest;
     }
@@ -460,7 +464,8 @@ export class Helper {
       throw new Error(Errors.manifestNotLoaded);
     }
 
-    const requiredStatement: LabelValuePair | null = this.manifest.getRequiredStatement();
+    const requiredStatement: LabelValuePair | null =
+      this.manifest.getRequiredStatement();
 
     if (requiredStatement) {
       return this.parseStatement(requiredStatement);
@@ -473,7 +478,7 @@ export class Helper {
     return {
       label: statement.label ? statement.getLabel() : "",
       value:
-        statement.value && statement.value.length ? statement.getValue() : ""
+        statement.value && statement.value.length ? statement.getValue() : "",
     };
   }
 
@@ -556,9 +561,7 @@ export class Helper {
         0
       ) as MultiSelectableRange[];
       this._multiSelectState.canvases = <MultiSelectableCanvas[]>(
-        this.getCurrentSequence()
-          .getCanvases()
-          .slice(0)
+        this.getCurrentSequence().getCanvases().slice(0)
       );
     }
 
@@ -716,13 +719,13 @@ export class Helper {
   // maybe make this optional.
   // not sure why deleting the nodes key from each node is necessary
   private _flattenTree(root: TreeNode, key: string): TreeNode[] {
-    let flatten: TreeNode[] = [root]; //[Object.assign({}, root)];
+    const flatten: TreeNode[] = [root]; //[Object.assign({}, root)];
     //delete flatten[0][key];
 
     if (root[key] && root[key].length > 0) {
       return flatten.concat(
         root[key]
-          .map(child => this._flattenTree(child, key))
+          .map((child) => this._flattenTree(child, key))
           .reduce((a, b) => a.concat(b), [])
       );
     }
@@ -830,7 +833,7 @@ export class Helper {
 
     if (flattenedTree) {
       const manifests: TreeNode[] = flattenedTree.filter(
-        n => n.data.type === TreeNodeType.MANIFEST
+        (n) => n.data.type === TreeNodeType.MANIFEST
       );
 
       this.createDecadeNodes(sortedTree, flattenedTree);
@@ -907,7 +910,7 @@ export class Helper {
       }
     }
 
-    let sortedTree: TreeNode = new TreeNode();
+    const sortedTree: TreeNode = new TreeNode();
 
     switch (sortType.toString()) {
       case TreeSortType.DATE.toString():
@@ -932,7 +935,7 @@ export class Helper {
     const flattenedTree: TreeNode[] | null = this.getFlattenedTree(tree);
 
     return flattenedTree
-      ? flattenedTree.some(n => !isNaN(<any>n.navDate))
+      ? flattenedTree.some((n) => !isNaN(<any>n.navDate))
       : false;
   }
 
@@ -941,7 +944,8 @@ export class Helper {
       throw new Error(Errors.manifestNotLoaded);
     }
 
-    let viewingDirection: ViewingDirection | null = this.getCurrentSequence().getViewingDirection();
+    let viewingDirection: ViewingDirection | null =
+      this.getCurrentSequence().getViewingDirection();
 
     if (!viewingDirection) {
       viewingDirection = this.manifest.getViewingDirection();
@@ -955,7 +959,8 @@ export class Helper {
       throw new Error(Errors.manifestNotLoaded);
     }
 
-    let viewingHint: ViewingHint | null = this.getCurrentSequence().getViewingHint();
+    let viewingHint: ViewingHint | null =
+      this.getCurrentSequence().getViewingHint();
 
     if (!viewingHint) {
       viewingHint = this.manifest.getViewingHint();
@@ -989,7 +994,8 @@ export class Helper {
   }
 
   public isBottomToTop(): boolean {
-    const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+    const viewingDirection: ViewingDirection | null =
+      this.getViewingDirection();
 
     if (viewingDirection) {
       return viewingDirection === ViewingDirection.BOTTOM_TO_TOP;
@@ -1033,7 +1039,8 @@ export class Helper {
   }
 
   public isLeftToRight(): boolean {
-    const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+    const viewingDirection: ViewingDirection | null =
+      this.getViewingDirection();
 
     if (viewingDirection) {
       return viewingDirection === ViewingDirection.LEFT_TO_RIGHT;
@@ -1087,7 +1094,8 @@ export class Helper {
   }
 
   public isRightToLeft(): boolean {
-    const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+    const viewingDirection: ViewingDirection | null =
+      this.getViewingDirection();
 
     if (viewingDirection) {
       return viewingDirection === ViewingDirection.RIGHT_TO_LEFT;
@@ -1097,7 +1105,8 @@ export class Helper {
   }
 
   public isTopToBottom(): boolean {
-    const viewingDirection: ViewingDirection | null = this.getViewingDirection();
+    const viewingDirection: ViewingDirection | null =
+      this.getViewingDirection();
 
     if (viewingDirection) {
       return viewingDirection === ViewingDirection.TOP_TO_BOTTOM;
@@ -1278,7 +1287,7 @@ export class Helper {
       "September",
       "October",
       "November",
-      "December"
+      "December",
     ];
     return months[node.navDate.getMonth()];
   }
@@ -1322,7 +1331,7 @@ export class Helper {
   }
 
   public sortDecadeNodes(rootNode: TreeNode): void {
-    rootNode.nodes = rootNode.nodes.sort(function(a, b) {
+    rootNode.nodes = rootNode.nodes.sort(function (a, b) {
       return a.data.startYear - b.data.startYear;
     });
   }

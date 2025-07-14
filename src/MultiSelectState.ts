@@ -33,16 +33,16 @@ export class MultiSelectState {
   }
 
   public getAllSelectedCanvases(): MultiSelectableCanvas[] {
-    return this.canvases.filter(c => c.multiSelected);
+    return this.canvases.filter((c) => c.multiSelected);
   }
 
   public getAllSelectedRanges(): MultiSelectableRange[] {
-    return this.ranges.filter(r => r.multiSelected);
+    return this.ranges.filter((r) => r.multiSelected);
   }
 
   public getCanvasById(id: string): MultiSelectableCanvas {
     return this.canvases.filter(
-      c => Utils.normaliseUrl(c.id) === Utils.normaliseUrl(id)
+      (c) => Utils.normaliseUrl(c.id) === Utils.normaliseUrl(id)
     )[0];
   }
 
@@ -71,7 +71,7 @@ export class MultiSelectState {
 
   public selectCanvas(canvas: MultiSelectableCanvas, selected: boolean): void {
     const c: MultiSelectableCanvas = this.canvases.filter(
-      c => c.id === canvas.id
+      (c) => c.id === canvas.id
     )[0];
     c.multiSelected = selected;
   }
@@ -92,7 +92,7 @@ export class MultiSelectState {
 
   public selectRange(range: MultiSelectableRange, selected: boolean): void {
     const r: MultiSelectableRange = this.ranges.filter(
-      r => r.id === range.id
+      (r) => r.id === range.id
     )[0];
     r.multiSelected = selected;
     const canvases: MultiSelectableCanvas[] = <MultiSelectableCanvas[]>(
