@@ -37,6 +37,7 @@ and navigating to examples/index.html.
 
     git checkout master
     npm version patch
+    npm run docs
     git add .
     git commit -m "Release v1.2.3"
     git tag v1.2.3
