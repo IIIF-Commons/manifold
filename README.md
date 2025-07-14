@@ -1,6 +1,6 @@
 # manifold
 
-[![Build Status](https://github.com/IIIF-Commons/manifold/actions/workflows/build-test.yml/badge.svg?branch=master)](https://github.com/IIIF-Commons/manifold/actions/workflows/build-test.yml)
+[![Build Status](https://github.com/IIIF-Commons/manifold/actions/workflows/build-test.yml/badge.svg?branch=main)](https://github.com/IIIF-Commons/manifold/actions/workflows/build-test.yml)
 
     npm install @iiif/manifold --save
 
@@ -35,10 +35,10 @@ and navigating to examples/index.html.
 
 ### Publishing Package
 
-    git checkout master
+    git checkout main
     npm version patch
     npm run docs
     git add .
     git commit -m "Release v1.2.3"
     git tag v1.2.3
-    git push origin master v1.2.3
+    git push origin main v1.2.3
