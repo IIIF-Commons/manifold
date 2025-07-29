@@ -976,7 +976,7 @@ export class Helper {
     }
 
     let behavior: Behavior | null =
-      this.getCurrentSequence().getBehavior();
+      this.getCurrentRange().getBehavior();
 
     if (!behavior) {
       behavior = this.manifest.getBehavior();
