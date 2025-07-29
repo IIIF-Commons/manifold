@@ -1031,6 +1031,12 @@ export class Helper {
       return viewingHint === ViewingHint.CONTINUOUS;
     }
 
+    const behavior: Behavior | null = this.getBehavior();
+
+    if (behavior) {
+      return behavior === Behavior.CONTINUOUS;
+    }
+
     return false;
   }
 
