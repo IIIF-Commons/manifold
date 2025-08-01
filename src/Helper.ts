@@ -8,6 +8,7 @@ import { MultiSelectableCanvas } from "./MultiSelectableCanvas";
 import { TreeSortType } from "./TreeSortType";
 import { MultiSelectableRange } from "./MultiSelectableRange";
 import {
+  Behavior,
   ServiceProfile,
   ViewingHint,
   ViewingDirection,
@@ -969,6 +970,21 @@ export class Helper {
     return viewingHint;
   }
 
+  public getBehavior(): Behavior | null {
+    if (!this.manifest) {
+      throw new Error(Errors.manifestNotLoaded);
+    }
+
+    let behavior: Behavior | null =
+      this.getCurrentRange()?.getBehavior() ?? null;
+
+    if (!behavior) {
+      behavior = this.manifest.getBehavior();
+    }
+
+    return behavior;
+  }
+
   // inquiries //
 
   public hasParentCollection(): boolean {
@@ -1013,6 +1029,12 @@ export class Helper {
 
     if (viewingHint) {
       return viewingHint === ViewingHint.CONTINUOUS;
+    }
+
+    const behavior: Behavior | null = this.getBehavior();
+
+    if (behavior) {
+      return behavior === Behavior.CONTINUOUS;
     }
 
     return false;
