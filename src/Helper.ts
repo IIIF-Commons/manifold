@@ -780,6 +780,10 @@ export class Helper {
       service = this.manifest.getService(ServiceProfile.SEARCH_1);
     }
 
+    if (!service) {
+      service = this.manifest.getService(ServiceProfile.SEARCH_2);
+    }
+
     return service;
   }
 
