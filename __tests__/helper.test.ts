@@ -4,7 +4,7 @@ import { ExternalResource } from '../src/ExternalResource';
 const blAvAuthNew = require('./fixtures/bl-av-auth.json');
 const blAvAuth = require('./fixtures/prev-auth.json');
 const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqStatement.json');
-const searchService2 = require('./fixtures/search-service-2.json')
+const searchService2 = require('./fixtures/search-service-2.json');
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
