@@ -84,6 +84,12 @@ export class Helper {
           ServiceProfile.SEARCH_1_AUTO_COMPLETE
         );
       }
+
+      if (!autoCompleteService) {
+        autoCompleteService = service.getService(
+          ServiceProfile.SEARCH_2_AUTO_COMPLETE
+        );
+      }
     }
 
     return autoCompleteService;
