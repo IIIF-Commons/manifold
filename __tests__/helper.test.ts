@@ -3,8 +3,8 @@ import { ExternalResource } from '../src/ExternalResource';
 
 const blAvAuthNew = require('./fixtures/bl-av-auth.json');
 const blAvAuth = require('./fixtures/prev-auth.json');
-const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqStatement.json')
-
+const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqStatement.json');
+const searchService2 = require('./fixtures/search-service-2.json');
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
@@ -31,6 +31,21 @@ function mockFetch(status: number, data?: any) {
 }
 
 describe('Helper', () => {
+
+    test('Search Service 2 got from manifest', async () => {
+    const helper = await loadManifestJson(searchService2, {
+      manifestUri: searchService2.id
+    });
+
+    expect(helper).toBeDefined();
+
+    const searchService = helper.getSearchService();
+
+    expect(searchService).toBeDefined();
+    if (searchService) {
+      expect(searchService.id).toBe('https://bl-annosearch.onrender.com/m0001/search');
+    };
+  })
 
   const v3metadataFixture = utexasRightsLogoReqStatement;
 

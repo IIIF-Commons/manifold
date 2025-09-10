@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
-    "@iiif/vocabulary": "^1.0.28",
+    "@iiif/vocabulary": "^1.0.30",
     "@types/jest": "^30.0.0",
     "eslint": "^9.30.1",
     "eslint-config-prettier": "^10.1.5",
