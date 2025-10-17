@@ -5,6 +5,8 @@ const blAvAuthNew = require('./fixtures/bl-av-auth.json');
 const blAvAuth = require('./fixtures/prev-auth.json');
 const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqStatement.json');
 const searchService2 = require('./fixtures/search-service-2.json');
+const riksarkivetAltoAnnotations = require('./fixtures/riksarkivet.json');
+const cookbookAnnotationsEmbedded = require('./fixtures/cookbook-annotations-embedded.json');
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
@@ -31,6 +33,33 @@ function mockFetch(status: number, data?: any) {
 }
 
 describe('Helper', () => {
+
+   test('hasAnnotations returns false when no canvas has annotations', async () => {
+    const helper = await loadManifestJson(utexasRightsLogoReqStatement, {
+      manifestUri: utexasRightsLogoReqStatement.id
+    });
+
+    expect(helper).toBeDefined();
+    expect(helper.hasAnnotations()).toBe(false);
+  });
+
+  test('hasAnnotations returns true when manifest has ALTO annotations in seeAlso on any canvas', async () => {
+    const helper = await loadManifestJson(riksarkivetAltoAnnotations, {
+      manifestUri: riksarkivetAltoAnnotations.id
+    });
+
+    expect(helper).toBeDefined();
+    expect(helper.hasAnnotations()).toBe(true);
+  });
+
+  test('hasAnnotations returns true when manifest has embedded W3C annotations on any canvas', async () => {
+    const helper = await loadManifestJson(cookbookAnnotationsEmbedded, {
+      manifestUri: cookbookAnnotationsEmbedded.id
+    });
+
+    expect(helper).toBeDefined();
+    expect(helper.hasAnnotations()).toBe(true);
+  });
 
     test('Search Service 2 got from manifest', async () => {
     const helper = await loadManifestJson(searchService2, {

@@ -1030,6 +1030,34 @@ export class Helper {
     return false;
   }
 
+  public hasAnnotations(): boolean {
+    const canvases: Canvas[] = this.getCanvases();
+
+    for (let i = 0; i < canvases.length; i++) {
+      const canvas = canvases[i];
+
+      // Check for annotations on any canvas
+      const annotations = canvas.getAnnotations();
+      if (annotations && annotations.length > 0) {
+        return true;
+      }
+
+      // Check for ALTO file in seeAlso on any canvas
+      const seeAlso = canvas.getProperty("seeAlso");
+
+      if (seeAlso && seeAlso.length > 0) {
+        for (let j = 0; j < seeAlso.length; j++) {
+          const item = seeAlso[j];
+          if (item.profile.includes("alto")) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
   public isCanvasIndexOutOfRange(index: number): boolean {
     return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
   }
