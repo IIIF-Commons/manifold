@@ -1045,9 +1045,10 @@ export class Helper {
       // Check for ALTO file in seeAlso on any canvas
       const seeAlso = canvas.getProperty("seeAlso");
 
-      if (seeAlso && seeAlso.length > 0) {
-        for (let j = 0; j < seeAlso.length; j++) {
-          const item = seeAlso[j];
+      if (seeAlso) {
+        const items = Array.isArray(seeAlso) ? seeAlso : [seeAlso];
+        for (let j = 0; j < items.length; j++) {
+          const item = items[j];
           if (item.profile.includes("alto")) {
             return true;
           }
