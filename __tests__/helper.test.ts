@@ -7,6 +7,7 @@ const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqS
 const searchService2 = require('./fixtures/search-service-2.json');
 const riksarkivetAltoAnnotations = require('./fixtures/riksarkivet.json');
 const cookbookAnnotationsEmbedded = require('./fixtures/cookbook-annotations-embedded.json');
+const wunder = require('./fixtures/wunder-pres2.json');
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
@@ -34,7 +35,16 @@ function mockFetch(status: number, data?: any) {
 
 describe('Helper', () => {
 
-   test('hasAnnotations returns false when no canvas has annotations', async () => {
+  test('hasAnnotations returns true for single seeAlso object on pres2 manifest', async () => {
+    const helper = await loadManifestJson(wunder, {
+      manifestUri: wunder.id
+    });
+
+    expect(helper).toBeDefined();
+    expect(helper.hasAnnotations()).toBe(true);
+  });
+
+  test('hasAnnotations returns false when no canvas has annotations', async () => {
     const helper = await loadManifestJson(utexasRightsLogoReqStatement, {
       manifestUri: utexasRightsLogoReqStatement.id
     });
