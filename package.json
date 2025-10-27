@@ -1,6 +1,6 @@
 {
   "name": "@iiif/manifold",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "description": "",
   "main": "./dist-umd/manifold.js",
   "module": "./dist-esmodule/index.js",
@@ -33,7 +33,7 @@
     "url": "https://github.com/iiif-commons/manifold/issues"
   },
   "homepage": "https://github.com/iiif-commons/manifold#readme",
-   "dependencies": {
+  "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
     "@iiif/vocabulary": "^1.0.30",
     "manifesto.js": "^4.2.24"
