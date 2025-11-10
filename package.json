@@ -36,7 +36,7 @@
   "dependencies": {
     "@edsilv/http-status-codes": "^1.0.3",
     "@iiif/vocabulary": "^1.0.30",
-    "manifesto.js": "^4.2.24"
+    "manifesto.js": "^4.3.0"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
