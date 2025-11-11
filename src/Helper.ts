@@ -225,6 +225,20 @@ export class Helper {
     return null;
   }
 
+  public getSummary(): string | null {
+    if (!this.manifest) {
+      throw new Error(Errors.manifestNotLoaded);
+    }
+
+    const summary = this.manifest.getSummary();
+
+    if (summary) {
+      return summary.getValue(this.options.locale);
+    }
+
+    return null;
+  }
+
   public getLabel(): string | null {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);
@@ -304,12 +318,12 @@ export class Helper {
       manifestGroup.addMetadata(manifestMetadata, true);
     }
 
-    if (this.manifest.getDescription().length) {
+    if (this.manifest.getSummary().length) {
       const metadataItem: LabelValuePair = new LabelValuePair(locale);
       metadataItem.label = new PropertyValue([
-        new LocalizedValue("description", locale),
+        new LocalizedValue("Summary", locale),
       ]);
-      metadataItem.value = this.manifest.getDescription();
+      metadataItem.value = this.manifest.getSummary();
       (<IMetadataItem>metadataItem).isRootLevel = true;
       manifestGroup.addItem(<IMetadataItem>metadataItem);
     }
