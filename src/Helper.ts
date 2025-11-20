@@ -304,29 +304,6 @@ export class Helper {
     return manifestType;
   }
 
-  private _labelStringFromPair(item: LabelValuePair, locale: string): string {
-    if (item.label) {
-      const labelAny = item.label as any;
-      if (typeof labelAny.getValue === "function") {
-        return (labelAny.getValue(locale) || "").toString();
-      }
-      return String(labelAny || "");
-    }
-    return "";
-  }
-
-  public hasMetadataLabel(
-    metadata: LabelValuePair[],
-    wantedLabel: string,
-    locale: string = this.options.locale as string
-  ): boolean {
-    const wanted = wantedLabel.toLowerCase();
-    return metadata.some((item) => {
-      const label = this._labelStringFromPair(item, locale).toLowerCase();
-      return label === wanted;
-    });
-  }
-
   public getMetadata(options?: MetadataOptions): MetadataGroup[] {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);
@@ -342,11 +319,31 @@ export class Helper {
     }
 
     //include summary if no description in metadata
-    if (!this.hasMetadataLabel(manifestMetadata, "description")) {
-      if (this.manifest.getSummary().length) {
+    if (this.manifest.getSummary().length) {
+      let descriptionMatches = false;
+      let description = "";
+      for (let i = 0; i < manifestMetadata.length; i++) {
+        const item = manifestMetadata[i];
+        let labelText = "";
+        labelText = String((item as any).getLabel() || "").trim();
+        if (labelText.toLowerCase() === "description") {
+          description = String((item as any).getValue(locale) || "").trim();
+          break;
+        }
+      }
+      const summaryText = String(
+        (this.manifest.getSummary() as any).getValue(locale) || ""
+      ).trim();
+      if (summaryText === description) {
+        descriptionMatches = true;
+      }
+
+      if (!descriptionMatches) {
+        const isNonEnglish = (locale || "").split("-")[0] !== "en";
+        const labelText = isNonEnglish ? "description" : "Summary";
         const metadataItem: LabelValuePair = new LabelValuePair(locale);
         metadataItem.label = new PropertyValue([
-          new LocalizedValue("Summary", locale),
+          new LocalizedValue(labelText, locale),
         ]);
         metadataItem.value = this.manifest.getSummary();
         (<IMetadataItem>metadataItem).isRootLevel = true;
