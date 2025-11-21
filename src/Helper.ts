@@ -318,27 +318,26 @@ export class Helper {
       manifestGroup.addMetadata(manifestMetadata, true);
     }
 
-    //include summary if no description in metadata
-    if (this.manifest.getSummary().length) {
+    // include summary if no description in metadata
+    const summaryText = String(
+      (this.manifest.getSummary() as any).getValue(locale) || ""
+    ).trim();
+    if (summaryText.length > 0) {
       let descriptionMatches = false;
       let description = "";
       for (let i = 0; i < manifestMetadata.length; i++) {
         const item = manifestMetadata[i];
-        let labelText = "";
-        labelText = String((item as any).getLabel() || "").trim();
-        if (labelText.toLowerCase() === "description") {
-          description = String((item as any).getValue(locale) || "").trim();
+        description = String((item as any).getValue(locale) || "").trim();
+        if (description.length > 0 && summaryText === description) {
+          descriptionMatches = true;
           break;
         }
       }
-      const summaryText = String(
-        (this.manifest.getSummary() as any).getValue(locale) || ""
-      ).trim();
-      if (summaryText === description) {
-        descriptionMatches = true;
-      }
 
       if (!descriptionMatches) {
+        // If the locale is set to English, describe this as "Summary." Use the legacy "description" for
+        // other languages to ensure back-compatibility with existing i18n. We may wish to revisit
+        // this in the future!
         const isNonEnglish = (locale || "").split("-")[0] !== "en";
         const labelText = isNonEnglish ? "description" : "Summary";
         const metadataItem: LabelValuePair = new LabelValuePair(locale);
