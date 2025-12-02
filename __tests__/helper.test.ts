@@ -8,6 +8,7 @@ const searchService2 = require('./fixtures/search-service-2.json');
 const riksarkivetAltoAnnotations = require('./fixtures/riksarkivet.json');
 const cookbookAnnotationsEmbedded = require('./fixtures/cookbook-annotations-embedded.json');
 const wunder = require('./fixtures/wunder-pres2.json');
+const bride = require('./fixtures/bride.json');
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
@@ -34,6 +35,14 @@ function mockFetch(status: number, data?: any) {
 }
 
 describe('Helper', () => {
+  
+  test('getSummary returns summary for bride manifest', async () => {
+    const helper = await loadManifestJson(bride, {
+      manifestUri: bride.id
+    });
+    expect(helper).toBeDefined();
+    expect(helper.getSummary()=="<p><p>OC PS2394 .M642 1883 [xiv], 144, 126, [4] p. ; 18 cm. First set of unnumbered pages are a series list; second set are a publisher's catalog.</p></p>");
+  });
 
   test('hasAnnotations returns true for single seeAlso object on pres2 manifest', async () => {
     const helper = await loadManifestJson(wunder, {
