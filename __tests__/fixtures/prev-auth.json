@@ -4,16 +4,12 @@
     "http://www.w3.org/ns/anno.jsonld",
     "http://iiif.io/api/presentation/3/context.json"
   ],
-  "behavior": [
-    "auto-advance"
-  ],
+  "behavior": ["auto-advance"],
   "homepage": {
     "format": "text/html",
     "id": "http://access.bl.uk/item/viewer/ark:/81055/vdc_100060861119.0x000002",
     "label": {
-      "en": [
-        "View at the British Library"
-      ]
+      "en": ["View at the British Library"]
     },
     "type": "Text"
   },
@@ -110,17 +106,13 @@
         }
       ],
       "label": {
-        "en": [
-          "Tape 1 Side 1"
-        ]
+        "en": ["Tape 1 Side 1"]
       },
       "type": "Canvas"
     }
   ],
   "label": {
-    "en": [
-      "C538/2/28 Sidetrax - Hills, 6.10.90"
-    ]
+    "en": ["C538/2/28 Sidetrax - Hills, 6.10.90"]
   },
   "logo": [
     {
@@ -131,81 +123,55 @@
   "metadata": [
     {
       "label": {
-        "en": [
-          "Full title"
-        ]
+        "en": ["Full title"]
       },
       "value": {
-        "en": [
-          "Sidetrax - Hills, 6.10.90"
-        ]
+        "en": ["Sidetrax - Hills, 6.10.90"]
       }
     },
     {
       "label": {
-        "en": [
-          "Collection"
-        ]
+        "en": ["Collection"]
       },
       "value": {
-        "en": [
-          "Jazz FM Tapes"
-        ]
+        "en": ["Jazz FM Tapes"]
       }
     },
     {
       "label": {
-        "en": [
-          "Format"
-        ]
+        "en": ["Format"]
       },
       "value": {
-        "en": [
-          "1 tape reel 18 cm 19 cm/sec stereo"
-        ]
+        "en": ["1 tape reel 18 cm 19 cm/sec stereo"]
       }
     },
     {
       "label": {
-        "en": [
-          "Usage"
-        ]
+        "en": ["Usage"]
       },
       "value": {
-        "en": [
-          "<span>Rights unassigned - staff access only</span>"
-        ]
+        "en": ["<span>Rights unassigned - staff access only</span>"]
       }
     },
     {
       "label": {
-        "en": [
-          "Held by"
-        ]
+        "en": ["Held by"]
       },
       "value": {
-        "en": [
-          "The British Library"
-        ]
+        "en": ["The British Library"]
       }
     },
     {
       "label": {
-        "en": [
-          "Digitised by"
-        ]
+        "en": ["Digitised by"]
       },
       "value": {
-        "en": [
-          "The British Library, 2018"
-        ]
+        "en": ["The British Library, 2018"]
       }
     },
     {
       "label": {
-        "en": [
-          "Digitisation funded by"
-        ]
+        "en": ["Digitisation funded by"]
       },
       "value": {
         "en": [
@@ -215,33 +181,23 @@
     },
     {
       "label": {
-        "en": [
-          "Identifier"
-        ]
+        "en": ["Identifier"]
       },
       "value": {
-        "en": [
-          "C538/2/28"
-        ]
+        "en": ["C538/2/28"]
       }
     },
     {
       "label": {
-        "en": [
-          "Shelfmark"
-        ]
+        "en": ["Shelfmark"]
       },
       "value": {
-        "en": [
-          "C538/2/28"
-        ]
+        "en": ["C538/2/28"]
       }
     },
     {
       "label": {
-        "en": [
-          "Link to catalogue"
-        ]
+        "en": ["Link to catalogue"]
       },
       "value": {
         "en": [
@@ -251,14 +207,10 @@
     },
     {
       "label": {
-        "en": [
-          "Contents"
-        ]
+        "en": ["Contents"]
       },
       "value": {
-        "en": [
-          "1) 10'48.- 2) e.o.s. 14'12 (to 17'10)"
-        ]
+        "en": ["1) 10'48.- 2) e.o.s. 14'12 (to 17'10)"]
       }
     }
   ],
@@ -287,9 +239,7 @@
       }
     ],
     "label": {
-      "en": [
-        "world"
-      ]
+      "en": ["world"]
     },
     "type": "Canvas",
     "width": 962
