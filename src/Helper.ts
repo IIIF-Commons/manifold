@@ -211,6 +211,9 @@ export class Helper {
     return this.getSequenceByIndex(this.sequenceIndex as number);
   }
 
+  /**
+   * @deprecated Use getSummary instead
+   */
   public getDescription(): string | null {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);

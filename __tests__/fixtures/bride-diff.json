@@ -163,6 +163,14 @@
                     "<span><a href=\"http://localhost/Record/vudl:173\">More Details</a><br /><a href=\"http://localhost/Item/vudl:173\">Permanent Link</a></span>"
                 ]
             }
+        },
+        {
+            "label": {
+                "en": [
+                    "Description"
+                ]
+            },
+            "value": "fnord"
         }
     ],
     "summary": {
