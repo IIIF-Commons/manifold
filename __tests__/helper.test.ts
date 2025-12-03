@@ -1,13 +1,13 @@
-import { loadManifestJson } from '../src';
-import { ExternalResource } from '../src/ExternalResource';
+import { loadManifestJson } from "../src";
+import { ExternalResource } from "../src/ExternalResource";
 
-const blAvAuthNew = require('./fixtures/bl-av-auth.json');
-const blAvAuth = require('./fixtures/prev-auth.json');
-const utexasRightsLogoReqStatement = require('./fixtures/utexas-rights-logo-reqStatement.json');
-const searchService2 = require('./fixtures/search-service-2.json');
-const riksarkivetAltoAnnotations = require('./fixtures/riksarkivet.json');
-const cookbookAnnotationsEmbedded = require('./fixtures/cookbook-annotations-embedded.json');
-const wunder = require('./fixtures/wunder-pres2.json');
+const blAvAuthNew = require("./fixtures/bl-av-auth.json");
+const blAvAuth = require("./fixtures/prev-auth.json");
+const utexasRightsLogoReqStatement = require("./fixtures/utexas-rights-logo-reqStatement.json");
+const searchService2 = require("./fixtures/search-service-2.json");
+const riksarkivetAltoAnnotations = require("./fixtures/riksarkivet.json");
+const cookbookAnnotationsEmbedded = require("./fixtures/cookbook-annotations-embedded.json");
+const wunder = require("./fixtures/wunder-pres2.json");
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
@@ -26,54 +26,53 @@ function mockFetch(status: number, data?: any) {
   window.XMLHttpRequest = jest.fn().mockImplementation(xhrMockClass);
 
   setTimeout(() => {
-    if (xhrMockObj['onload']) {
+    if (xhrMockObj["onload"]) {
       // @ts-ignore
-      xhrMockObj['onload']();
+      xhrMockObj["onload"]();
     }
   }, 0);
 }
 
-describe('Helper', () => {
-
-  test('hasAnnotations returns true for single seeAlso object on pres2 manifest', async () => {
+describe("Helper", () => {
+  test("hasAnnotations returns true for single seeAlso object on pres2 manifest", async () => {
     const helper = await loadManifestJson(wunder, {
-      manifestUri: wunder.id
+      manifestUri: wunder.id,
     });
 
     expect(helper).toBeDefined();
     expect(helper.hasAnnotations()).toBe(true);
   });
 
-  test('hasAnnotations returns false when no canvas has annotations', async () => {
+  test("hasAnnotations returns false when no canvas has annotations", async () => {
     const helper = await loadManifestJson(utexasRightsLogoReqStatement, {
-      manifestUri: utexasRightsLogoReqStatement.id
+      manifestUri: utexasRightsLogoReqStatement.id,
     });
 
     expect(helper).toBeDefined();
     expect(helper.hasAnnotations()).toBe(false);
   });
 
-  test('hasAnnotations returns true when manifest has ALTO annotations in seeAlso on any canvas', async () => {
+  test("hasAnnotations returns true when manifest has ALTO annotations in seeAlso on any canvas", async () => {
     const helper = await loadManifestJson(riksarkivetAltoAnnotations, {
-      manifestUri: riksarkivetAltoAnnotations.id
+      manifestUri: riksarkivetAltoAnnotations.id,
     });
 
     expect(helper).toBeDefined();
     expect(helper.hasAnnotations()).toBe(true);
   });
 
-  test('hasAnnotations returns true when manifest has embedded W3C annotations on any canvas', async () => {
+  test("hasAnnotations returns true when manifest has embedded W3C annotations on any canvas", async () => {
     const helper = await loadManifestJson(cookbookAnnotationsEmbedded, {
-      manifestUri: cookbookAnnotationsEmbedded.id
+      manifestUri: cookbookAnnotationsEmbedded.id,
     });
 
     expect(helper).toBeDefined();
     expect(helper.hasAnnotations()).toBe(true);
   });
 
-    test('Search Service 2 got from manifest', async () => {
+  test("Search Service 2 got from manifest", async () => {
     const helper = await loadManifestJson(searchService2, {
-      manifestUri: searchService2.id
+      manifestUri: searchService2.id,
     });
 
     expect(helper).toBeDefined();
@@ -82,15 +81,17 @@ describe('Helper', () => {
 
     expect(searchService).toBeDefined();
     if (searchService) {
-      expect(searchService.id).toBe('https://bl-annosearch.onrender.com/m0001/search');
-    };
-  })
+      expect(searchService.id).toBe(
+        "https://bl-annosearch.onrender.com/m0001/search"
+      );
+    }
+  });
 
   const v3metadataFixture = utexasRightsLogoReqStatement;
 
-  test('Rights got from v3 manifest', async () => {
+  test("Rights got from v3 manifest", async () => {
     const helper = await loadManifestJson(v3metadataFixture, {
-      manifestUri: v3metadataFixture.id
+      manifestUri: v3metadataFixture.id,
     });
 
     expect(helper).toBeDefined();
@@ -98,12 +99,12 @@ describe('Helper', () => {
     const rights = helper.getRights();
 
     expect(rights).toBeDefined();
-    expect(rights).toBe('http://rightsstatements.org/vocab/InC/1.0/');
-  })
+    expect(rights).toBe("http://rightsstatements.org/vocab/InC/1.0/");
+  });
 
-  test('Required Statement got from v3 manifest', async () => {
+  test("Required Statement got from v3 manifest", async () => {
     const helper = await loadManifestJson(v3metadataFixture, {
-      manifestUri: v3metadataFixture.id
+      manifestUri: v3metadataFixture.id,
     });
 
     expect(helper).toBeDefined();
@@ -113,52 +114,57 @@ describe('Helper', () => {
     expect(reqStatement).toBeDefined();
 
     if (reqStatement) {
-      expect(reqStatement.value).toBe("This material is made available for education and research purposes. The Harry Ransom Center does not own the rights for this item; it cannot grant or deny permission to use this material.  Copyright law protects unpublished as well as published materials. Rights holders for these materials may be listed in the WATCH file: http://norman.hrc.utexas.edu/watch/.  It is your responsibility to determine the rights status and secure whatever permission may be needed for the use of this item.")
+      expect(reqStatement.value).toBe(
+        "This material is made available for education and research purposes. The Harry Ransom Center does not own the rights for this item; it cannot grant or deny permission to use this material.  Copyright law protects unpublished as well as published materials. Rights holders for these materials may be listed in the WATCH file: http://norman.hrc.utexas.edu/watch/.  It is your responsibility to determine the rights status and secure whatever permission may be needed for the use of this item."
+      );
     }
-  })
+  });
 
-  test('Logo got from v3 manifest', async () => {
+  test("Logo got from v3 manifest", async () => {
     const helper = await loadManifestJson(v3metadataFixture, {
-      manifestUri: v3metadataFixture.id
+      manifestUri: v3metadataFixture.id,
     });
 
     expect(helper).toBeDefined();
 
     const logo = helper.getLogo();
     expect(logo).toBeDefined();
-    expect(logo).toBe("https://norman.hrc.utexas.edu/includes/images/hrc-logo-iiif.jpg");
-  })
+    expect(logo).toBe(
+      "https://norman.hrc.utexas.edu/includes/images/hrc-logo-iiif.jpg"
+    );
+  });
 
-  test('v3 metadata group includes rights, logo, requiredStatement', async () => {
+  test("v3 metadata group includes rights, logo, requiredStatement", async () => {
     const helper = await loadManifestJson(v3metadataFixture, {
-      manifestUri: v3metadataFixture.id
+      manifestUri: v3metadataFixture.id,
     });
 
     expect(helper).toBeDefined();
 
     const metadataGroups = helper.getMetadata();
 
-    const hasRights = metadataGroups.some(metadataGroup => 
-      metadataGroup.items.some(item => item.getLabel() === 'rights'))
+    const hasRights = metadataGroups.some((metadataGroup) =>
+      metadataGroup.items.some((item) => item.getLabel() === "rights")
+    );
 
     expect(hasRights).toBe(true);
 
-    const hasLogo = metadataGroups.some(metadataGroup => 
-      metadataGroup.items.some(item => item.getLabel() === 'logo'))
+    const hasLogo = metadataGroups.some((metadataGroup) =>
+      metadataGroup.items.some((item) => item.getLabel() === "logo")
+    );
 
     expect(hasLogo).toBe(true);
 
-    const hasReqStatement = metadataGroups.some(metadataGroup => 
-      metadataGroup.items.some(item => item.getLabel() === 'Rights Note'))
+    const hasReqStatement = metadataGroups.some((metadataGroup) =>
+      metadataGroup.items.some((item) => item.getLabel() === "Rights Note")
+    );
 
     expect(hasReqStatement).toBe(true);
+  });
 
-  })
-
-  test('New format works using service profile', async () => {
-
+  test("New format works using service profile", async () => {
     const helper = await loadManifestJson(blAvAuthNew, {
-      manifestUri: blAvAuth.id
+      manifestUri: blAvAuth.id,
     });
 
     expect(helper).toBeDefined();
@@ -187,13 +193,11 @@ describe('Helper', () => {
     expect(externalResource.dataUri).not.toBe(null);
     expect(externalResource.isProbed).toBe(true);
     expect(externalResource.isResponseHandled).toBe(false);
+  });
 
-  })
-
-  test('previous format still works using service profile', async () => {
-
+  test("previous format still works using service profile", async () => {
     const helper = await loadManifestJson(blAvAuth, {
-      manifestUri: blAvAuth.id
+      manifestUri: blAvAuth.id,
     });
 
     expect(helper).toBeDefined();
@@ -222,7 +226,5 @@ describe('Helper', () => {
     expect(externalResource.dataUri).not.toBe(null);
     expect(externalResource.isProbed).toBe(true);
     expect(externalResource.isResponseHandled).toBe(false);
-
-  })
-
+  });
 });
