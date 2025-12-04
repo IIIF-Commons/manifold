@@ -85,11 +85,10 @@ describe("Helper", () => {
       locale: "cy",
     });
     const metadataGroups = helper.getMetadata();
-    const summary = [getMetadataValue(metadataGroups, "summary")];
-    const description = [getMetadataValue(metadataGroups, "description")];
-    console.log(description[0]);
-    expect(description[0]).toEqual(["fnord", "Bride of the Tomb"]);
-    expect(summary[0]).toEqual([]);
+    const summary = getMetadataValue(metadataGroups, "summary");
+    const description = getMetadataValue(metadataGroups, "description");
+    expect(description).toEqual(["fnord", "Bride of the Tomb"]);
+    expect(summary).toEqual([]);
   });
 
   test("hasAnnotations returns true for single seeAlso object on pres2 manifest", async () => {
