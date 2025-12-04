@@ -73,10 +73,10 @@ describe("Helper", () => {
       manifestUri: brideDiff.id,
     });
     const metadataGroups = helper.getMetadata();
-    const summary = [getMetadataValue(metadataGroups, "summary")];
-    const description = [getMetadataValue(metadataGroups, "description")];
-    expect(description[0]).toEqual(["fnord"]);
-    expect(summary[0]).toEqual(["Bride of the Tomb"]);
+    const summary = getMetadataValue(metadataGroups, "summary");
+    const description = getMetadataValue(metadataGroups, "description");
+    expect(description).toEqual(["fnord"]);
+    expect(summary).toEqual(["Bride of the Tomb"]);
   });
 
   test("getMetadata records summary as Description when locale is not En in metadata for brideDiff manifest", async () => {
