@@ -62,10 +62,10 @@ describe("Helper", () => {
       locale: "cy",
     });
     const metadataGroups = helper.getMetadata();
-    const summary = [getMetadataValue(metadataGroups, "summary")];
-    const description = [getMetadataValue(metadataGroups, "description")];
-    expect(description[0]).toEqual(["Bride of the Tomb"]);
-    expect(summary[0]).toEqual([]);
+    const summary = getMetadataValue(metadataGroups, "summary");
+    const description = getMetadataValue(metadataGroups, "description");
+    expect(description).toEqual(["Bride of the Tomb"]);
+    expect(summary).toEqual([]);
   });
 
   test("getMetadata records summary as summary when no duplicate value present in metadata for brideDiff manifest", async () => {
