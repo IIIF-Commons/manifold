@@ -6,88 +6,60 @@
   "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100063181190.0x000002/manifest.json",
   "type": "Manifest",
   "label": {
-    "en": [
-      "George Evans / Basil Bunting"
-    ]
+    "en": ["George Evans / Basil Bunting"]
   },
   "metadata": [
     {
       "label": {
-        "en": [
-          "Full title"
-        ]
+        "en": ["Full title"]
       },
       "value": {
-        "en": [
-          "George Evans / Basil Bunting"
-        ]
+        "en": ["George Evans / Basil Bunting"]
       }
     },
     {
       "label": {
-        "en": [
-          "Collection"
-        ]
+        "en": ["Collection"]
       },
       "value": {
-        "en": [
-          "Robert Hampson tapes"
-        ]
+        "en": ["Robert Hampson tapes"]
       }
     },
     {
       "label": {
-        "en": [
-          "Format"
-        ]
+        "en": ["Format"]
       },
       "value": {
-        "en": [
-          "1 compact cassette"
-        ]
+        "en": ["1 compact cassette"]
       }
     },
     {
       "label": {
-        "en": [
-          "Usage"
-        ]
+        "en": ["Usage"]
       },
       "value": {
-        "en": [
-          "<span>Rights unassigned  staff access only</span>"
-        ]
+        "en": ["<span>Rights unassigned  staff access only</span>"]
       }
     },
     {
       "label": {
-        "en": [
-          "Held by"
-        ]
+        "en": ["Held by"]
       },
       "value": {
-        "en": [
-          "The British Library"
-        ]
+        "en": ["The British Library"]
       }
     },
     {
       "label": {
-        "en": [
-          "Digitised by"
-        ]
+        "en": ["Digitised by"]
       },
       "value": {
-        "en": [
-          "The British Library 2018"
-        ]
+        "en": ["The British Library 2018"]
       }
     },
     {
       "label": {
-        "en": [
-          "Digitisation funded by"
-        ]
+        "en": ["Digitisation funded by"]
       },
       "value": {
         "en": [
@@ -97,33 +69,23 @@
     },
     {
       "label": {
-        "en": [
-          "Identifier"
-        ]
+        "en": ["Identifier"]
       },
       "value": {
-        "en": [
-          "C1700/01"
-        ]
+        "en": ["C1700/01"]
       }
     },
     {
       "label": {
-        "en": [
-          "Shelfmark"
-        ]
+        "en": ["Shelfmark"]
       },
       "value": {
-        "en": [
-          "C1700/01"
-        ]
+        "en": ["C1700/01"]
       }
     },
     {
       "label": {
-        "en": [
-          "Link to catalogue"
-        ]
+        "en": ["Link to catalogue"]
       },
       "value": {
         "en": [
@@ -134,9 +96,7 @@
   ],
   "requiredStatement": {
     "label": {
-      "en": [
-        "Copyright and Usage"
-      ]
+      "en": ["Copyright and Usage"]
     },
     "value": {
       "en": [
@@ -149,9 +109,7 @@
       "id": "https://www.bl.uk/about-us",
       "type": "Agent",
       "label": {
-        "en": [
-          "The British Library"
-        ]
+        "en": ["The British Library"]
       },
       "homepage": [
         {
@@ -159,9 +117,7 @@
           "type": "Text",
           "format": "text/html",
           "label": {
-            "en": [
-              "The British Library"
-            ]
+            "en": ["The British Library"]
           }
         }
       ],
@@ -185,14 +141,10 @@
         ]
       },
       "header": {
-        "en": [
-          "Please Log-In"
-        ]
+        "en": ["Please Log-In"]
       },
       "label": {
-        "en": [
-          "Login to The British Library"
-        ]
+        "en": ["Login to The British Library"]
       },
       "service": [
         {
@@ -214,23 +166,17 @@
       "type": "Text",
       "format": "text/html",
       "label": {
-        "en": [
-          "View at the British Library"
-        ]
+        "en": ["View at the British Library"]
       }
     }
   ],
-  "behavior": [
-    "auto-advance"
-  ],
+  "behavior": ["auto-advance"],
   "items": [
     {
       "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100063181190.0x000004",
       "type": "Canvas",
       "label": {
-        "en": [
-          "Tape 1 Side 1"
-        ]
+        "en": ["Tape 1 Side 1"]
       },
       "duration": 2808.8800000000001,
       "items": [
@@ -297,9 +243,7 @@
       "id": "https://api.bl.uk/metadata/iiif/ark:/81055/vdc_100063181190.0x000005",
       "type": "Canvas",
       "label": {
-        "en": [
-          "Tape 1 Side 2"
-        ]
+        "en": ["Tape 1 Side 2"]
       },
       "duration": 1090.28,
       "items": [
