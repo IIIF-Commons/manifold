@@ -48,7 +48,7 @@ jobs:
 
       - name: Set tag
         id: tagName
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
       # Ensure npm 11.5.1 or later is installed
       - name: Update npm
