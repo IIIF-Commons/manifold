@@ -1,0 +1,596 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "type": "Manifest",
+  "id": "http://localhost/Item/vudl:173/Manifest",
+  "label": {
+    "en": [
+      "The bride of the tomb ; and, Queenie's terrible secret / by Mrs. Alex. McVeigh Miller."
+    ]
+  },
+  "metadata": [
+    {
+      "label": {
+        "en": ["Full Title"]
+      },
+      "value": {
+        "en": [
+          "<span>The bride of the tomb ; and, Queenie&#039;s terrible secret / by Mrs. Alex. McVeigh Miller.</span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Author"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?lookfor=author_facet%3A%22Miller%2C+Alex.+McVeigh%2C+Mrs.%22\">Miller, Alex. McVeigh, Mrs.</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Contributor"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?filter[]=author2:Street+and+Smith+Publications.\">Street and Smith Publications.</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Date Added"]
+      },
+      "value": {
+        "en": ["<span>2 October 2025</span>"]
+      }
+    },
+    {
+      "label": {
+        "en": ["Format"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?filter[]=format:Book\">Book</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Language"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?filter[]=language:English\">English</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Publish Date"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?filter[]=dc_date_str:1883\">1883</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Publisher"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?filter[]=publisher:New+York+%3A+Street+%26+Smith\">New York : Street &amp; Smith</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Series"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?type=Series&lookfor=%22Eagle+series%22\">Eagle series</a> &gt; <a href=\"http://localhost/Search/Results?type=Series&lookfor=%22Eagle+series+no.+426%22\">no. 426</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Source"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?filter[]=dc_source_str_mv:Dime+Novel+and+Popular+Literature\">Dime Novel and Popular Literature</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Alternate Title"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?filter[]=title_alt:Queenie%27s+terrible+secret\">Queenie&#039;s terrible secret</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Topic"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Search/Results?type=Subject&lookfor=%22Popular+literature%22\">Popular literature</a> &gt; <a href=\"http://localhost/Search/Results?type=Subject&lookfor=%22Popular+literature+Specimens.%22\">Specimens.</a><br /><a href=\"http://localhost/Search/Results?type=Subject&lookfor=%22Dime+novels%22\">Dime novels</a> &gt; <a href=\"http://localhost/Search/Results?type=Subject&lookfor=%22Dime+novels+Specimens.%22\">Specimens.</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["About"]
+      },
+      "value": {
+        "en": [
+          "<span><a href=\"http://localhost/Record/vudl:173\">More Details</a><br /><a href=\"http://localhost/Item/vudl:173\">Permanent Link</a></span>"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": ["Description"]
+      },
+      "value": "fnord"
+    }
+  ],
+  "summary": {
+    "en": ["Bride of the Tomb"]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": ["ATTRIBUTION"]
+    },
+    "value": {
+      "en": [
+        "<span>Digital Library@Villanova University<br /><br /><b>Disclaimers</b>: <br /><a href=\"https://digital.library.villanova.edu/copyright.html#liability\">Disclaimer of Liability</a><br /><a href=\"https://digital.library.villanova.edu/copyright.html#endorsement\">Disclaimer of Endorsement</a><br /><br /><b>License</b>: <br /><a href=\"https://digital.library.villanova.edu/rights.html\">Rights Information</a></span>"
+      ]
+    }
+  },
+  "seeAlso": [
+    {
+      "id": "http://localhost/Item/vudl:173",
+      "type": "Text",
+      "format": "text/html",
+      "label": {
+        "en": ["More Details"]
+      }
+    }
+  ],
+  "items": [
+    {
+      "type": "Canvas",
+      "id": "http://localhost/Item/vudl:173/Canvas/p0",
+      "label": {
+        "en": ["Front cover"]
+      },
+      "rendering": [
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:175/MASTER",
+          "format": "image/tiff",
+          "label": {
+            "en": ["Original source file - 20.63 MB"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:175/OCR-DIRTY",
+          "format": "text/plain",
+          "label": {
+            "en": ["Raw OCR Data"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:175/MASTER-MD",
+          "format": "application/xml",
+          "label": {
+            "en": ["Technical Metadata"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:181/MASTER",
+          "format": "application/pdf",
+          "label": {
+            "en": ["PDF"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost/files/vudl:175/THUMBNAIL",
+          "type": "Image",
+          "format": "image/png"
+        }
+      ],
+      "height": 3110,
+      "width": 2318,
+      "items": [
+        {
+          "id": "http://localhost/Record/vudl:173",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost/files/vudl:175/LARGE",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:8182/iiif/2/vudl%3A175",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "id": "http://localhost:8182/iiif/2/vudl%3A175",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "height": 3110,
+              "width": 2318,
+              "target": "http://localhost/Item/vudl:173/Canvas/p0",
+              "thumbnail": [
+                {
+                  "id": "http://localhost/files/vudl:175/THUMBNAIL",
+                  "type": "Image",
+                  "format": "image/png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Canvas",
+      "id": "http://localhost/Item/vudl:173/Canvas/p1",
+      "label": {
+        "en": ["Inside front cover"]
+      },
+      "rendering": [
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:176/MASTER",
+          "format": "image/tiff",
+          "label": {
+            "en": ["Original source file - 19.00 MB"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:176/OCR-DIRTY",
+          "format": "text/plain",
+          "label": {
+            "en": ["Raw OCR Data"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:176/MASTER-MD",
+          "format": "application/xml",
+          "label": {
+            "en": ["Technical Metadata"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:181/MASTER",
+          "format": "application/pdf",
+          "label": {
+            "en": ["PDF"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost/files/vudl:176/THUMBNAIL",
+          "type": "Image",
+          "format": "image/png"
+        }
+      ],
+      "height": 3055,
+      "width": 2174,
+      "items": [
+        {
+          "id": "http://localhost/Record/vudl:173",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost/files/vudl:176/LARGE",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:8182/iiif/2/vudl%3A176",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "id": "http://localhost:8182/iiif/2/vudl%3A176",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "height": 3055,
+              "width": 2174,
+              "target": "http://localhost/Item/vudl:173/Canvas/p1",
+              "thumbnail": [
+                {
+                  "id": "http://localhost/files/vudl:176/THUMBNAIL",
+                  "type": "Image",
+                  "format": "image/png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Canvas",
+      "id": "http://localhost/Item/vudl:173/Canvas/p2",
+      "label": {
+        "en": ["[i]"]
+      },
+      "rendering": [
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:177/MASTER",
+          "format": "image/tiff",
+          "label": {
+            "en": ["Original source file - 18.24 MB"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:177/OCR-DIRTY",
+          "format": "text/plain",
+          "label": {
+            "en": ["Raw OCR Data"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:177/MASTER-MD",
+          "format": "application/xml",
+          "label": {
+            "en": ["Technical Metadata"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:181/MASTER",
+          "format": "application/pdf",
+          "label": {
+            "en": ["PDF"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost/files/vudl:177/THUMBNAIL",
+          "type": "Image",
+          "format": "image/png"
+        }
+      ],
+      "height": 3040,
+      "width": 2097,
+      "items": [
+        {
+          "id": "http://localhost/Record/vudl:173",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost/files/vudl:177/LARGE",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:8182/iiif/2/vudl%3A177",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "id": "http://localhost:8182/iiif/2/vudl%3A177",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "height": 3040,
+              "width": 2097,
+              "target": "http://localhost/Item/vudl:173/Canvas/p2",
+              "thumbnail": [
+                {
+                  "id": "http://localhost/files/vudl:177/THUMBNAIL",
+                  "type": "Image",
+                  "format": "image/png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Canvas",
+      "id": "http://localhost/Item/vudl:173/Canvas/p3",
+      "label": {
+        "en": ["[ii]"]
+      },
+      "rendering": [
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:178/MASTER",
+          "format": "image/tiff",
+          "label": {
+            "en": ["Original source file - 18.92 MB"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:178/OCR-DIRTY",
+          "format": "text/plain",
+          "label": {
+            "en": ["Raw OCR Data"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:178/MASTER-MD",
+          "format": "application/xml",
+          "label": {
+            "en": ["Technical Metadata"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:181/MASTER",
+          "format": "application/pdf",
+          "label": {
+            "en": ["PDF"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost/files/vudl:178/THUMBNAIL",
+          "type": "Image",
+          "format": "image/png"
+        }
+      ],
+      "height": 3040,
+      "width": 2175,
+      "items": [
+        {
+          "id": "http://localhost/Record/vudl:173",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost/files/vudl:178/LARGE",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:8182/iiif/2/vudl%3A178",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "id": "http://localhost:8182/iiif/2/vudl%3A178",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "height": 3040,
+              "width": 2175,
+              "target": "http://localhost/Item/vudl:173/Canvas/p3",
+              "thumbnail": [
+                {
+                  "id": "http://localhost/files/vudl:178/THUMBNAIL",
+                  "type": "Image",
+                  "format": "image/png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Canvas",
+      "id": "http://localhost/Item/vudl:173/Canvas/p4",
+      "label": {
+        "en": ["[iii]"]
+      },
+      "rendering": [
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:179/MASTER",
+          "format": "image/tiff",
+          "label": {
+            "en": ["Original source file - 18.40 MB"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:179/OCR-DIRTY",
+          "format": "text/plain",
+          "label": {
+            "en": ["Raw OCR Data"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:179/MASTER-MD",
+          "format": "application/xml",
+          "label": {
+            "en": ["Technical Metadata"]
+          }
+        },
+        {
+          "type": "rendering",
+          "id": "http://localhost/files/vudl:181/MASTER",
+          "format": "application/pdf",
+          "label": {
+            "en": ["PDF"]
+          }
+        }
+      ],
+      "thumbnail": [
+        {
+          "id": "http://localhost/files/vudl:179/THUMBNAIL",
+          "type": "Image",
+          "format": "image/png"
+        }
+      ],
+      "height": 3040,
+      "width": 2115,
+      "items": [
+        {
+          "id": "http://localhost/Record/vudl:173",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://localhost/files/vudl:179/LARGE",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "http://localhost:8182/iiif/2/vudl%3A179",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "id": "http://localhost:8182/iiif/2/vudl%3A179",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "height": 3040,
+              "width": 2115,
+              "target": "http://localhost/Item/vudl:173/Canvas/p4",
+              "thumbnail": [
+                {
+                  "id": "http://localhost/files/vudl:179/THUMBNAIL",
+                  "type": "Image",
+                  "format": "image/png"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

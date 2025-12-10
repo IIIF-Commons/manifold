@@ -211,6 +211,9 @@ export class Helper {
     return this.getSequenceByIndex(this.sequenceIndex as number);
   }
 
+  /**
+   * @deprecated Use getSummary instead
+   */
   public getDescription(): string | null {
     if (!this.manifest) {
       throw new Error(Errors.manifestNotLoaded);
@@ -220,6 +223,20 @@ export class Helper {
 
     if (description) {
       return description.getValue(this.options.locale);
+    }
+
+    return null;
+  }
+
+  public getSummary(): string | null {
+    if (!this.manifest) {
+      throw new Error(Errors.manifestNotLoaded);
+    }
+
+    const summary = this.manifest.getSummary();
+
+    if (summary) {
+      return summary.getValue(this.options.locale);
     }
 
     return null;
@@ -304,14 +321,36 @@ export class Helper {
       manifestGroup.addMetadata(manifestMetadata, true);
     }
 
-    if (this.manifest.getDescription().length) {
-      const metadataItem: LabelValuePair = new LabelValuePair(locale);
-      metadataItem.label = new PropertyValue([
-        new LocalizedValue("description", locale),
-      ]);
-      metadataItem.value = this.manifest.getDescription();
-      (<IMetadataItem>metadataItem).isRootLevel = true;
-      manifestGroup.addItem(<IMetadataItem>metadataItem);
+    // include summary if no description in metadata
+    const summaryText = String(
+      (this.manifest.getSummary() as any).getValue(locale) || ""
+    ).trim();
+    if (summaryText.length > 0) {
+      let descriptionMatches = false;
+      let description = "";
+      for (let i = 0; i < manifestMetadata.length; i++) {
+        const item = manifestMetadata[i];
+        description = String((item as any).getValue(locale) || "").trim();
+        if (description.length > 0 && summaryText === description) {
+          descriptionMatches = true;
+          break;
+        }
+      }
+
+      if (!descriptionMatches) {
+        // If the locale is set to English, describe this as "Summary." Use the legacy "description" for
+        // other languages to ensure back-compatibility with existing i18n. We may wish to revisit
+        // this in the future!
+        const isNonEnglish = (locale || "").split("-")[0] !== "en";
+        const labelText = isNonEnglish ? "description" : "Summary";
+        const metadataItem: LabelValuePair = new LabelValuePair(locale);
+        metadataItem.label = new PropertyValue([
+          new LocalizedValue(labelText, locale),
+        ]);
+        metadataItem.value = this.manifest.getSummary();
+        (<IMetadataItem>metadataItem).isRootLevel = true;
+        manifestGroup.addItem(<IMetadataItem>metadataItem);
+      }
     }
 
     if (this.manifest.getAttribution().length) {

@@ -8,6 +8,8 @@ const searchService2 = require("./fixtures/search-service-2.json");
 const riksarkivetAltoAnnotations = require("./fixtures/riksarkivet.json");
 const cookbookAnnotationsEmbedded = require("./fixtures/cookbook-annotations-embedded.json");
 const wunder = require("./fixtures/wunder-pres2.json");
+const brideMatch = require("./fixtures/bride-match.json");
+const brideDiff = require("./fixtures/bride-diff.json");
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
@@ -33,7 +35,62 @@ function mockFetch(status: number, data?: any) {
   }, 0);
 }
 
+function getMetadataValue(metadataGroups: any[], metaLabel: string) {
+  const metaValue: any[] = [];
+  metadataGroups.forEach((group) => {
+    group.items.forEach((item) => {
+      const labelText =
+        item.label?.getValue?.("en-GB") ??
+        item.label?.getValue?.() ??
+        item.label?.toString?.();
+      if (labelText && labelText.trim().toLowerCase() === metaLabel) {
+        metaValue.push(
+          item.value?.getValue?.("en-GB") ??
+            item.value?.getValue?.() ??
+            item.value?.toString?.()
+        );
+      }
+    });
+  });
+  return metaValue;
+}
+
 describe("Helper", () => {
+  test("getMetadata records summary as description when duplicate value present in metadata for brideMatch manifest", async () => {
+    const helper = await loadManifestJson(brideMatch, {
+      manifestUri: brideMatch.id,
+      locale: "cy",
+    });
+    const metadataGroups = helper.getMetadata();
+    const summary = getMetadataValue(metadataGroups, "summary");
+    const description = getMetadataValue(metadataGroups, "description");
+    expect(description).toEqual(["Bride of the Tomb"]);
+    expect(summary).toEqual([]);
+  });
+
+  test("getMetadata records summary as summary when no duplicate value present in metadata for brideDiff manifest", async () => {
+    const helper = await loadManifestJson(brideDiff, {
+      manifestUri: brideDiff.id,
+    });
+    const metadataGroups = helper.getMetadata();
+    const summary = getMetadataValue(metadataGroups, "summary");
+    const description = getMetadataValue(metadataGroups, "description");
+    expect(description).toEqual(["fnord"]);
+    expect(summary).toEqual(["Bride of the Tomb"]);
+  });
+
+  test("getMetadata records summary as Description when locale is not En in metadata for brideDiff manifest", async () => {
+    const helper = await loadManifestJson(brideDiff, {
+      manifestUri: brideDiff.id,
+      locale: "cy",
+    });
+    const metadataGroups = helper.getMetadata();
+    const summary = getMetadataValue(metadataGroups, "summary");
+    const description = getMetadataValue(metadataGroups, "description");
+    expect(description).toEqual(["fnord", "Bride of the Tomb"]);
+    expect(summary).toEqual([]);
+  });
+
   test("hasAnnotations returns true for single seeAlso object on pres2 manifest", async () => {
     const helper = await loadManifestJson(wunder, {
       manifestUri: wunder.id,
