@@ -4,6 +4,10 @@ on:
   push:
     tags: ['v*']
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,14 +44,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Set tag
         id: tagName
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
+      # Ensure npm 11.5.1 or later is installed
+      - name: Update npm
+        run: npm install -g npm@latest
+
       - run: npm ci
       - run: npm run build
-
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish
