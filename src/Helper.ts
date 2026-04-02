@@ -1036,6 +1036,11 @@ export class Helper {
     return behavior;
   }
 
+  public getChoices(): AnnotationBody[] {
+    const canvas = this.getCurrentCanvas();
+    return canvas.getChoices();
+  }
+
   // inquiries //
 
   public hasParentCollection(): boolean {
