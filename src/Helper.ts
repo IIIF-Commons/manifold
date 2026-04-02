@@ -1041,6 +1041,12 @@ export class Helper {
     return canvas.getChoices();
   }
 
+  public getActiveChoice(): AnnotationBody | null {
+    const choices = this.getChoices();
+    if (!choices.length) return null;
+    return choices[this.choiceIndex] ?? null;
+  }
+
   // inquiries //
 
   public hasParentCollection(): boolean {
