@@ -10,5 +10,6 @@ export interface IManifoldOptions {
   sequenceIndex?: number;
   canvasId?: string;
   canvasIndex?: number;
+  choiceIndex?: number;
   rangeId?: string | null;
 }

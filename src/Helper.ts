@@ -37,6 +37,7 @@ export class Helper {
   private _multiSelectState: MultiSelectState;
 
   public canvasIndex: number;
+  public choiceIndex: number;
   public collectionIndex: number;
   public iiifResource: IIIFResource | undefined;
   public manifestUri: string;
@@ -55,6 +56,7 @@ export class Helper {
     this.manifestIndex = this.options.manifestIndex || 0;
     this.sequenceIndex = this.options.sequenceIndex || 0;
     this.canvasIndex = this.options.canvasIndex || 0;
+    this.choiceIndex = this.options.choiceIndex || 0;
 
     if (this.options.canvasId) {
       const canvasIndex: number | null = this.getCanvasIndexById(
@@ -1246,6 +1248,11 @@ export class Helper {
 
   public isVerticallyAligned(): boolean {
     return this.isTopToBottom() || this.isBottomToTop();
+  }
+
+  public hasChoices(): boolean {
+    const canvas = this.getCurrentCanvas();
+    return canvas.getChoices().length > 0;
   }
 
   // dates //
