@@ -2,10 +2,6 @@ module.exports = {
     preset: 'ts-jest/presets/js-with-babel',
     testEnvironment: 'jsdom',
     cacheDirectory: 'node_modules/.jest-cache',
-    testPathIgnorePatterns: [
-        '/node_modules/',
-        '/.yalc/',
-    ],
     coveragePathIgnorePatterns: [
         '/node_modules/',
         '/coverage/',
