@@ -1262,8 +1262,7 @@ export class Helper {
   }
 
   public hasChoices(): boolean {
-    const canvas = this.getCurrentCanvas();
-    return canvas.getChoices().length > 0;
+    return this.getChoices().length > 0;
   }
 
   // dates //
