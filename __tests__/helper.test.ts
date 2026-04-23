@@ -10,6 +10,7 @@ const cookbookAnnotationsEmbedded = require("./fixtures/cookbook-annotations-emb
 const wunder = require("./fixtures/wunder-pres2.json");
 const brideMatch = require("./fixtures/bride-match.json");
 const brideDiff = require("./fixtures/bride-diff.json");
+const choice = require("./fixtures/choice.json");
 
 function mockFetch(status: number, data?: any) {
   const xhrMockObj = {
@@ -283,5 +284,69 @@ describe("Helper", () => {
     expect(externalResource.dataUri).not.toBe(null);
     expect(externalResource.isProbed).toBe(true);
     expect(externalResource.isResponseHandled).toBe(false);
+  });
+
+  test("hasChoices returns true for choice manifest", async () => {
+    const helper = await loadManifestJson(choice, {
+      manifestUri: choice.id,
+    });
+
+    expect(helper).toBeDefined();
+    expect(helper.hasChoices()).toBe(true);
+  });
+
+  test("getChoices returns correct number of choices", async () => {
+    const helper = await loadManifestJson(choice, {
+      manifestUri: choice.id,
+    });
+
+    const choices = helper.getChoices();
+    expect(choices).toBeDefined();
+    expect(choices.length).toBe(2);
+  });
+
+  test("getChoices returns items with correct labels", async () => {
+    const helper = await loadManifestJson(choice, {
+      manifestUri: choice.id,
+    });
+
+    const choices = helper.getChoices();
+    expect(choices[0].getLabel().getValue()).toBe("Natural Light");
+    expect(choices[1].getLabel().getValue()).toBe("X-Ray");
+  });
+
+  test("getActiveChoice returns first choice by default", async () => {
+    const helper = await loadManifestJson(choice, {
+      manifestUri: choice.id,
+    });
+
+    const activeChoice = helper.getActiveChoice();
+    expect(activeChoice).toBeDefined();
+    expect(activeChoice?.getLabel().getValue()).toBe("Natural Light");
+  });
+
+  test("getActiveChoice returns correct choice after choiceIndex update", async () => {
+    const helper = await loadManifestJson(choice, {
+      manifestUri: choice.id,
+    });
+
+    helper.choiceIndex = 1;
+    expect(helper.getActiveChoice()?.getLabel().getValue()).toBe("X-Ray");
+  });
+
+  test("hasChoices returns false for non-choice manifest", async () => {
+    const helper = await loadManifestJson(utexasRightsLogoReqStatement, {
+      manifestUri: utexasRightsLogoReqStatement.id,
+    });
+
+    expect(helper.hasChoices()).toBe(false);
+  });
+
+  test("getActiveChoice returns null when no choices present", async () => {
+    const helper = await loadManifestJson(utexasRightsLogoReqStatement, {
+      manifestUri: utexasRightsLogoReqStatement.id,
+    });
+
+    expect(helper.getActiveChoice()).toBeNull();
   });
 });
