@@ -9,8 +9,17 @@ import {
   Utils,
 } from "manifesto.js";
 
+const MAX_COLLECTION_DEPTH = 10;
+
+function loadError(message: string, url?: string): Error {
+  const error: any = new Error(message);
+  error.url = url;
+  return error;
+}
+
 export class Bootstrapper {
   private _options: IManifoldOptions;
+  private _visited: Set<string> = new Set<string>();
 
   constructor(options: IManifoldOptions) {
     this._options = options;
@@ -61,6 +70,10 @@ export class Bootstrapper {
     resolve: (helper: Helper) => void,
     reject: (error: any) => void
   ): void {
+    if (bootstrapper._options.manifestUri) {
+      bootstrapper._visited.add(bootstrapper._options.manifestUri);
+    }
+
     const iiifResource: IIIFResource | null = Utils.parseManifest(json, <
       IManifestoOptions
     >{
@@ -101,10 +114,6 @@ export class Bootstrapper {
           (<Collection>iiifResource)
             .getCollectionByIndex(collectionIndex)
             .then((collection: Collection) => {
-              if (!collection) {
-                reject("Collection index not found");
-              }
-
               // Special case: we're trying to load the first manifest of the
               // specified collection, but the collection has no manifests but does have
               // subcollections. Thus, we should dive in until we find something
@@ -114,19 +123,36 @@ export class Bootstrapper {
                 manifestIndex === 0 &&
                 collection.getTotalCollections() > 0
               ) {
+                if (bootstrapper._visited.has(collection.id)) {
+                  reject(
+                    loadError("Collection contains itself", collection.id)
+                  );
+                  return;
+                }
+                if (bootstrapper._visited.size > MAX_COLLECTION_DEPTH) {
+                  reject(
+                    loadError(
+                      "Collections are nested too deeply",
+                      collection.id
+                    )
+                  );
+                  return;
+                }
                 bootstrapper._options.collectionIndex = 0;
                 bootstrapper._options.manifestUri = collection.id;
                 bootstrapper.bootstrap(resolve, reject);
-              } else if (manifestIndex !== undefined) {
-                collection
-                  .getManifestByIndex(manifestIndex)
-                  .then((manifest: Manifest) => {
-                    bootstrapper._options.manifest = manifest;
-                    const helper: Helper = new Helper(bootstrapper._options);
-                    resolve(helper);
-                  });
+                return;
               }
-            });
+
+              return collection
+                .getManifestByIndex(manifestIndex as number)
+                .then((manifest: Manifest) => {
+                  bootstrapper._options.manifest = manifest;
+                  const helper: Helper = new Helper(bootstrapper._options);
+                  resolve(helper);
+                });
+            })
+            .catch(reject);
         } else {
           (<Collection>iiifResource)
             .getManifestByIndex(bootstrapper._options.manifestIndex as number)
@@ -134,7 +160,8 @@ export class Bootstrapper {
               bootstrapper._options.manifest = manifest;
               const helper: Helper = new Helper(bootstrapper._options);
               resolve(helper);
-            });
+            })
+            .catch(reject);
         }
       } else {
         bootstrapper._options.manifest = <Manifest>iiifResource;
@@ -142,7 +169,12 @@ export class Bootstrapper {
         resolve(helper);
       }
     } else {
-      console.error("Unable to load IIIF resource");
+      reject(
+        loadError(
+          "Unable to load IIIF resource",
+          bootstrapper._options.manifestUri
+        )
+      );
     }
   }
 }
