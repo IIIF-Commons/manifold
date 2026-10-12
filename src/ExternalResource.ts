@@ -12,6 +12,25 @@ import {
   Utils,
 } from "manifesto.js";
 
+// Returns null for invalid JSON and for JSON that isn't an object (e.g. `null`, `42`).
+function parseJsonObject(text: string): any | null {
+  try {
+    const data = JSON.parse(text);
+    return data !== null && typeof data === "object" ? data : null;
+  } catch {
+    return null;
+  }
+}
+
+function isSuccess(status: number): boolean {
+  return status >= 200 && status < 300;
+}
+
+// An unusable body on an HTTP error is reported as the HTTP error, not bad JSON.
+function unusableBodyReason(status: number): "invalid-json" | "http" {
+  return isSuccess(status) ? "invalid-json" : "http";
+}
+
 export class ExternalResource implements IExternalResource {
   public authAPIVersion: number;
   public authHoldingPage: any = null;
@@ -30,6 +49,7 @@ export class ExternalResource implements IExternalResource {
   public probeService: Service | null = null;
   public restrictedService: Service | null = null;
   public status: number;
+  public timeout: number = 0;
   public tokenService: Service | null = null;
   public width: number;
 
@@ -295,6 +315,35 @@ export class ExternalResource implements IExternalResource {
     }
   }
 
+  private _resolveWithError(
+    xhr: XMLHttpRequest,
+    url: string,
+    reason: "invalid-json" | "http" | "network" | "timeout" | "abort",
+    resolve: (resource: ExternalResource) => void
+  ): void {
+    this._setError(xhr, url, reason);
+    resolve(this);
+  }
+
+  private _setError(
+    xhr: XMLHttpRequest,
+    url: string,
+    reason: "invalid-json" | "http" | "network" | "timeout" | "abort"
+  ): void {
+    const messages = {
+      "invalid-json": "Invalid JSON response",
+      http: "HTTP error",
+      network: "Network error",
+      timeout: "Request timed out",
+      abort: "Request aborted",
+    };
+    const error: any = new Error(messages[reason]);
+    error.url = url;
+    error.reason = reason;
+    this.status = xhr.status;
+    this.error = error;
+  }
+
   public isAccessControlled(): boolean {
     if (
       this.clickThroughService ||
@@ -319,10 +368,11 @@ export class ExternalResource implements IExternalResource {
   public getData(accessToken?: IAccessToken): Promise<ExternalResource> {
     const that = this;
     that.data = {};
+    that.error = undefined;
 
     return new Promise<ExternalResource>((resolve, reject) => {
       if (!that.dataUri) {
-        reject("There is no dataUri to fetch");
+        reject(new Error("There is no dataUri to fetch"));
         return;
       }
 
@@ -332,41 +382,12 @@ export class ExternalResource implements IExternalResource {
       if (that.probeService) {
         that.isProbed = true;
 
-        // leaving this in for reference until the XHR version is fully tested
-        // $.ajax(<JQueryAjaxSettings>{
-        //     url: that.probeService.id,
-        //     type: 'GET',
-        //     dataType: 'json',
-        //     beforeSend: (xhr) => {
-        //         if (accessToken) {
-        //             xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-        //         }
-        //     }
-        // }).done((data: any) => {
-
-        //     let contentLocation: string = unescape(data.contentLocation);
-
-        //     if (contentLocation !== that.dataUri) {
-        //         that.status = HTTPStatusCode.MOVED_TEMPORARILY;
-        //     } else {
-        //         that.status = HTTPStatusCode.OK;
-        //     }
-
-        //     resolve(that);
-
-        // }).fail((error) => {
-
-        //     that.status = error.status;
-        //     that.error = error;
-        //     resolve(that);
-
-        // });
-
-        // xhr implementation
+        const probeUri: string = that.probeService.id;
         const xhr: XMLHttpRequest = new XMLHttpRequest();
-        xhr.open("GET", that.probeService.id, true);
+        xhr.open("GET", probeUri, true);
         // This has been disabled as the request should use the access token.
         xhr.withCredentials = false;
+        xhr.timeout = that.timeout;
 
         if (accessToken) {
           xhr.setRequestHeader(
@@ -376,12 +397,26 @@ export class ExternalResource implements IExternalResource {
         }
 
         xhr.onload = () => {
-          const data = JSON.parse(xhr.responseText);
-          const contentLocation: string = unescape(data.contentLocation);
+          const data = parseJsonObject(xhr.responseText);
+          if (!data) {
+            that._resolveWithError(
+              xhr,
+              probeUri,
+              unusableBodyReason(xhr.status),
+              resolve
+            );
+            return;
+          }
 
           that.status = xhr.status;
 
-          if (contentLocation !== that.dataUri) {
+          if (!isSuccess(xhr.status)) {
+            that._setError(xhr, probeUri, "http");
+          } else if (
+            // Only a successful probe can point at a lower tier of tiered access.
+            data.contentLocation &&
+            unescape(data.contentLocation) !== that.dataUri
+          ) {
             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
           }
 
@@ -390,10 +425,12 @@ export class ExternalResource implements IExternalResource {
           resolve(that);
         };
 
-        xhr.onerror = () => {
-          that.status = xhr.status;
-          resolve(that);
-        };
+        xhr.onerror = () =>
+          that._resolveWithError(xhr, probeUri, "network", resolve);
+        xhr.ontimeout = () =>
+          that._resolveWithError(xhr, probeUri, "timeout", resolve);
+        xhr.onabort = () =>
+          that._resolveWithError(xhr, probeUri, "abort", resolve);
 
         xhr.send();
       } else {
@@ -417,65 +454,11 @@ export class ExternalResource implements IExternalResource {
           type = "HEAD";
         }
 
-        // leaving this in for reference until the XHR version is fully tested
-        // $.ajax(<JQueryAjaxSettings>{
-        //     url: that.dataUri,
-        //     type: type,
-        //     dataType: 'json',
-        //     beforeSend: (xhr) => {
-        //         if (accessToken) {
-        //             xhr.setRequestHeader("Authorization", "Bearer " + accessToken.accessToken);
-        //         }
-        //     }
-        // }).done((data: any) => {
-
-        //     // if it's a resource without an info.json
-        //     // todo: if resource doesn't have a @profile
-        //     if (!data) {
-        //         that.status = HTTPStatusCode.OK;
-        //         resolve(that);
-        //     } else {
-        //         let uri: string = unescape(data['@id']);
-
-        //         that.data = data;
-        //         that._parseAuthServices(that.data);
-
-        //         // remove trailing /info.json
-        //         if (uri.endsWith('/info.json')){
-        //             uri = uri.substr(0, uri.lastIndexOf('/'));
-        //         }
-
-        //         let dataUri: string | null = that.dataUri;
-
-        //         if (dataUri && dataUri.endsWith('/info.json')){
-        //             dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
-        //         }
-
-        //         // if the request was redirected to a degraded version and there's a login service to get the full quality version
-        //         if (uri !== dataUri && that.loginService) {
-        //             that.status = HTTPStatusCode.MOVED_TEMPORARILY;
-        //         } else {
-        //             that.status = HTTPStatusCode.OK;
-        //         }
-
-        //         resolve(that);
-        //     }
-
-        // }).fail((error) => {
-
-        //     that.status = error.status;
-        //     that.error = error;
-        //     if (error.responseJSON){
-        //         that._parseAuthServices(error.responseJSON);
-        //     }
-        //     resolve(that);
-
-        // });
-
-        // xhr implementation
+        const dataUri: string = that.dataUri;
         const xhr: XMLHttpRequest = new XMLHttpRequest();
-        xhr.open(type, that.dataUri, true);
+        xhr.open(type, dataUri, true);
         xhr.withCredentials = false;
+        xhr.timeout = that.timeout;
         if (accessToken) {
           xhr.setRequestHeader(
             "Authorization",
@@ -488,31 +471,55 @@ export class ExternalResource implements IExternalResource {
           // todo: if resource doesn't have a @profile
           if (!xhr.responseText) {
             that.status = xhr.status || HTTPStatusCode.OK;
+            if (!isSuccess(that.status)) {
+              that._setError(xhr, dataUri, "http");
+            }
             resolve(that);
           } else {
-            const data = JSON.parse(xhr.responseText);
+            const data = parseJsonObject(xhr.responseText);
+            if (!data) {
+              that._resolveWithError(
+                xhr,
+                dataUri,
+                unusableBodyReason(xhr.status),
+                resolve
+              );
+              return;
+            }
             const status = xhr.status;
-            let uri: string = unescape(data["@id"] || data.id);
+            const id: string | undefined = data["@id"] || data.id;
+            let uri: string | null = id ? unescape(id) : null;
 
             that.data = data;
-            that._parseAuthServices(that.data);
+            try {
+              that._parseAuthServices(that.data);
+            } catch {
+              that._resolveWithError(
+                xhr,
+                dataUri,
+                unusableBodyReason(status),
+                resolve
+              );
+              return;
+            }
             that._parseDescriptorDimensions(that.data);
 
             // remove trailing /info.json
-            if (uri.endsWith("/info.json")) {
+            if (uri && uri.endsWith("/info.json")) {
               uri = uri.substr(0, uri.lastIndexOf("/"));
             }
 
-            let dataUri: string | null = that.dataUri;
+            let baseUri: string = dataUri;
 
-            if (dataUri && dataUri.endsWith("/info.json")) {
-              dataUri = dataUri.substr(0, dataUri.lastIndexOf("/"));
+            if (baseUri.endsWith("/info.json")) {
+              baseUri = baseUri.substr(0, baseUri.lastIndexOf("/"));
             }
 
-            // if the request was redirected to a degraded version and there's a login service to get the full quality version
+            // if the request was redirected to a lower tier of tiered access and there's a login service to get the full version
             if (
               status === HTTPStatusCode.OK &&
-              uri !== dataUri &&
+              uri !== null &&
+              uri !== baseUri &&
               (that.loginService || that.kioskService)
             ) {
               that.status = HTTPStatusCode.MOVED_TEMPORARILY;
@@ -520,17 +527,29 @@ export class ExternalResource implements IExternalResource {
               that.status = status;
             }
 
+            if (!isSuccess(status)) {
+              that._setError(xhr, dataUri, "http");
+            }
+
             resolve(that);
           }
         };
 
         xhr.onerror = () => {
-          that.status = xhr.status;
-          if (xhr.responseText) {
-            that._parseAuthServices(JSON.parse(xhr.responseText));
+          const data = parseJsonObject(xhr.responseText);
+          if (data) {
+            try {
+              that._parseAuthServices(data);
+            } catch {
+              // Auth services on an error body are optional.
+            }
           }
-          resolve(that);
+          that._resolveWithError(xhr, dataUri, "network", resolve);
         };
+        xhr.ontimeout = () =>
+          that._resolveWithError(xhr, dataUri, "timeout", resolve);
+        xhr.onabort = () =>
+          that._resolveWithError(xhr, dataUri, "abort", resolve);
 
         xhr.send();
       }
